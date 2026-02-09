@@ -2728,15 +2728,25 @@ function registerServiceWorker() {
         registration.unregister();
       }
       
-      // Register new service worker
+      // Register new service worker with CORRECT path
       window.addEventListener('load', function() {
-        // Register with proper scope
-        navigator.serviceWorker.register('./sw (6).js', { scope: './' })
+        navigator.serviceWorker.register('sw.js', { scope: './' })
           .then(function(registration) {
-            console.log('Service Worker registered with scope:', registration.scope);
+            console.log('Service Worker registered successfully with scope:', registration.scope);
             
             // Check for updates
             registration.update();
+            
+            // Force service worker activation
+            if (registration.active) {
+              console.log('Service Worker is active');
+            } else if (registration.installing) {
+              registration.installing.addEventListener('statechange', function() {
+                if (this.state === 'activated') {
+                  console.log('Service Worker activated');
+                }
+              });
+            }
           })
           .catch(function(error) {
             console.log('Service Worker registration failed:', error);
