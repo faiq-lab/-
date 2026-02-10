@@ -318,6 +318,51 @@ button:hover {
   background:#dc2626;
   transform: scale(1.05);
 }
+
+/* Delivery Settings Section */
+.delivery-settings {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 12px 0;
+  border: 1px solid #e2e8f0;
+}
+
+.delivery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.delivery-input-group {
+  margin-bottom: 12px;
+}
+
+.delivery-input-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.delivery-input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: #1e293b;
+}
+
+.delivery-input-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
 @media (max-width:480px){
   .holidayItem{
     grid-template-columns:1fr;
@@ -328,6 +373,9 @@ button:hover {
   }
   .social-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .delivery-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -439,6 +487,68 @@ input[type="file"]:hover {
 h2 i {
   color: #667eea;
 }
+
+/* Success Message */
+.success-message {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 2000;
+  max-width: 300px;
+  animation: slideDown 0.5s ease;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+@keyframes slideDown {
+  from { top: -100px; opacity: 0; }
+  to { top: 20px; opacity: 1; }
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loading-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255,255,255,0.3);
+  border-top: 4px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -447,18 +557,27 @@ h2 i {
 <body>
 <div class="wrap">
 
+<!-- Success Message -->
+<div class="success-message" id="successMessage"></div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">Creating your digital card...</div>
+</div>
+
 <div class="form-section">
 <h2><i class="fas fa-user" style="color:#667eea;"></i> Profile Information</h2>
 <input type="file" id="profileImage" accept="image/*">
-<input id="fullName" placeholder="Full Name">
-<input id="phoneNumber" placeholder="Phone Number" type="tel">
+<input id="fullName" placeholder="Full Name (Required)" required>
+<input id="phoneNumber" placeholder="Phone Number (Required)" type="tel" required>
 <input id="email" placeholder="Email Address" type="email">
 <input id="address" placeholder="Business Address">
 </div>
 
 <div class="form-section">
 <h2><i class="fas fa-building" style="color:#667eea;"></i> Business Details</h2>
-<input id="businessName" placeholder="Business Title">
+<input id="businessName" placeholder="Business Title (Required)" required>
 <textarea id="businessAbout" placeholder="About your business" rows="4"></textarea>
 
 <h2 style="margin-top:25px"><i class="fas fa-link" style="color:#667eea;"></i> Website & Social Media</h2>
@@ -509,6 +628,41 @@ h2 i {
 <button type="button" class="addHolidayBtn" onclick="addHoliday()">+ Add Holiday</button>
 </div>
 
+<!-- DELIVERY SETTINGS SECTION -->
+<div class="form-section">
+<h2><i class="fas fa-truck" style="color:#667eea;"></i> Delivery Settings</h2>
+
+<div class="delivery-settings">
+  <div class="delivery-input-group">
+    <label for="deliveryChargeCity">Delivery Charge - Within City (PKR)</label>
+    <input type="number" id="deliveryChargeCity" placeholder="e.g., 150" min="0" value="150">
+  </div>
+  
+  <div class="delivery-input-group">
+    <label for="deliveryChargeOther">Delivery Charge - Other Cities (PKR)</label>
+    <input type="number" id="deliveryChargeOther" placeholder="e.g., 300" min="0" value="300">
+  </div>
+  
+  <div class="delivery-grid">
+    <div class="delivery-input-group">
+      <label for="deliveryTimeCity">Delivery Time - Within City</label>
+      <input type="text" id="deliveryTimeCity" placeholder="e.g., 1-2 days" value="1-2 days">
+    </div>
+    
+    <div class="delivery-input-group">
+      <label for="deliveryTimeOther">Delivery Time - Other Cities</label>
+      <input type="text" id="deliveryTimeOther" placeholder="e.g., 3-5 days" value="3-5 days">
+    </div>
+  </div>
+  
+  <div class="delivery-input-group">
+    <label for="freeDeliveryMin">Free Delivery Minimum Order (PKR)</label>
+    <input type="number" id="freeDeliveryMin" placeholder="e.g., 2000" min="0" value="2000">
+    <small style="color:#64748b;display:block;margin-top:4px;">Orders above this amount get free delivery</small>
+  </div>
+</div>
+</div>
+
 <div class="form-section">
 <h2><i class="fas fa-gift" style="color:#667eea;"></i> Products & Offers</h2>
 <div id="offersForm"></div>
@@ -521,7 +675,7 @@ h2 i {
   <i class="fas fa-credit-card"></i> Configure Payment & WhatsApp
 </button>
 
-<button type="button" onclick="generate()" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);margin-top:24px">
+<button type="button" onclick="generate()" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);margin-top:24px" id="generateButton">
  <i class="fas fa-magic"></i> Generate Digital Card
 </button>
 </div>
@@ -582,6 +736,27 @@ const db = supabase.createClient(
  "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
 
+// Show success message
+function showSuccess(message) {
+  const successMessage = document.getElementById('successMessage');
+  successMessage.textContent = message;
+  successMessage.style.display = 'block';
+  
+  setTimeout(() => {
+    successMessage.style.display = 'none';
+  }, 3000);
+}
+
+// Show loading overlay
+function showLoading() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+// Hide loading overlay
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
 // Initialize business hours
 const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 days.forEach(d => {
@@ -630,7 +805,7 @@ function addHoliday() {
  holidayItem.className = 'holidayItem';
  holidayItem.innerHTML = `
   <input type="text" class="holidayName" placeholder="E.g., Eid ul-Fitr">
-  <input type="date" class="holidayDate">
+  <input type="date" class="holidayDate" value="${new Date().toISOString().split('T')[0]}">
   <button type="button" class="removeHoliday" onclick="removeHoliday(this)">×</button>
  `;
  container.appendChild(holidayItem);
@@ -730,143 +905,176 @@ async function savePaymentMethods() {
   }
   
   localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
-  alert('✅ Payment methods saved! WhatsApp configured professionally.');
+  showSuccess('✅ Payment methods saved! WhatsApp configured professionally.');
   closePaymentModal();
 }
 
-// Generate card
+// Generate card - MAIN FUNCTION
 async function generate(){
- if(!fullName.value || !phoneNumber.value){
+ // Validate required fields
+ if(!document.getElementById('fullName').value || !document.getElementById('phoneNumber').value){
   alert("Name & Phone number are required");
   return;
  }
 
- const id = crypto.randomUUID();
+ if(!document.getElementById('businessName').value){
+  alert("Business title is required");
+  return;
+ }
 
- // Collect business hours
- const businessHoursArray = [];
- const dayBoxes = document.querySelectorAll(".dayBox");
- dayBoxes.forEach(box => {
-  const open = box.querySelector(".dayOpen").checked;
-  const status = box.querySelector(".dayStatus").value;
-  const start = box.querySelector(".dayStart").value;
-  const end = box.querySelector(".dayEnd").value;
-  
-  businessHoursArray.push({
-   open: open && status === 'open',
-   status: status,
-   start: (open && status === 'open') ? start : null,
-   end: (open && status === 'open') ? end : null
-  });
- });
+ showLoading();
 
- // Collect holidays
- const holidaysArray = [];
- const holidayItems = document.querySelectorAll(".holidayItem");
- holidayItems.forEach(item => {
-  const name = item.querySelector(".holidayName").value;
-  const date = item.querySelector(".holidayDate").value;
-  if(name.trim() && date) {
-   holidaysArray.push({
-    name: name.trim(),
-    date: date
+ try {
+   const id = crypto.randomUUID();
+
+   // Collect business hours
+   const businessHoursArray = [];
+   const dayBoxes = document.querySelectorAll(".dayBox");
+   dayBoxes.forEach(box => {
+    const open = box.querySelector(".dayOpen").checked;
+    const status = box.querySelector(".dayStatus").value;
+    const start = box.querySelector(".dayStart").value;
+    const end = box.querySelector(".dayEnd").value;
+    
+    businessHoursArray.push({
+     open: open && status === 'open',
+     status: status,
+     start: (open && status === 'open') ? start : null,
+     end: (open && status === 'open') ? end : null
+    });
    });
-  }
- });
 
- // Collect products
- const productsArray = [];
- const productBoxes = document.querySelectorAll(".offer-box");
- 
- for(let i = 0; i < productBoxes.length; i++){
-  const box = productBoxes[i];
-  const title = box.querySelector(".productTitle").value;
-  const desc = box.querySelector(".productDesc").value;
-  const file = box.querySelector(".productImg").files[0];
-  const originalPrice = box.querySelector(".originalPrice").value;
-  const discountPrice = box.querySelector(".discountPrice").value;
-  
-  if(title || desc || file){
-   const badges = Array.from(box.querySelectorAll("input[type=checkbox]:checked"))
-    .map(cb => cb.value);
+   // Collect holidays
+   const holidaysArray = [];
+   const holidayItems = document.querySelectorAll(".holidayItem");
+   holidayItems.forEach(item => {
+    const name = item.querySelector(".holidayName").value;
+    const date = item.querySelector(".holidayDate").value;
+    if(name.trim() && date) {
+     holidaysArray.push({
+      name: name.trim(),
+      date: date
+     });
+    }
+   });
+
+   // Collect products
+   const productsArray = [];
+   const productBoxes = document.querySelectorAll(".offer-box");
    
-   const productData = {
-    title: title || "",
-    desc: desc || "",
-    originalPrice: originalPrice || null,
-    discountPrice: discountPrice || null,
-    badges: badges,
-    image: ""
+   for(let i = 0; i < productBoxes.length; i++){
+    const box = productBoxes[i];
+    const title = box.querySelector(".productTitle").value;
+    const desc = box.querySelector(".productDesc").value;
+    const file = box.querySelector(".productImg").files[0];
+    const originalPrice = box.querySelector(".originalPrice").value;
+    const discountPrice = box.querySelector(".discountPrice").value;
+    
+    if(title || desc || file){
+     const badges = Array.from(box.querySelectorAll("input[type=checkbox]:checked"))
+      .map(cb => cb.value);
+     
+     const productData = {
+      title: title || "",
+      desc: desc || "",
+      originalPrice: originalPrice || null,
+      discountPrice: discountPrice || null,
+      badges: badges,
+      image: ""
+     };
+     
+     if(file){
+      productData.image = await resizeImage(file);
+     }
+     
+     productsArray.push(productData);
+    }
+   }
+
+   // Load payment methods
+   let paymentMethods = {
+     whatsapp: { active: false, number: '', greeting: '' },
+     jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' }
    };
    
-   if(file){
-    productData.image = await resizeImage(file);
+   const savedPayment = localStorage.getItem('paymentMethods');
+   if(savedPayment) {
+     paymentMethods = JSON.parse(savedPayment);
    }
+
+   // Social Media
+   const socialMedia = {
+     facebook: document.getElementById('facebook').value.trim(),
+     instagram: document.getElementById('instagram').value.trim(),
+     twitter: document.getElementById('twitter').value.trim(),
+     linkedin: document.getElementById('linkedin').value.trim(),
+     youtube: document.getElementById('youtube').value.trim(),
+     tiktok: document.getElementById('tiktok').value.trim()
+   };
+
+   // Delivery Settings
+   const deliverySettings = {
+     deliveryChargeCity: parseInt(document.getElementById('deliveryChargeCity').value) || 150,
+     deliveryChargeOther: parseInt(document.getElementById('deliveryChargeOther').value) || 300,
+     deliveryTimeCity: document.getElementById('deliveryTimeCity').value.trim() || "1-2 days",
+     deliveryTimeOther: document.getElementById('deliveryTimeOther').value.trim() || "3-5 days",
+     freeDeliveryMin: parseInt(document.getElementById('freeDeliveryMin').value) || 2000
+   };
+
+   // Prepare card data
+   const cardData = {
+    name: document.getElementById('fullName').value.trim(),
+    phone: document.getElementById('phoneNumber').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    address: document.getElementById('address').value.trim(),
+    website: document.getElementById('website').value.trim(),
+    businessName: document.getElementById('businessName').value.trim(),
+    business: {
+     about: document.getElementById('businessAbout').value.trim()
+    },
+    socialMedia: socialMedia,
+    businessHours: businessHoursArray,
+    holidays: holidaysArray,
+    products: productsArray,
+    payments: paymentMethods,
+    deliverySettings: deliverySettings,
+    ecommerce: true
+   };
+
+   // Add profile image
+   if(document.getElementById('profileImage').files[0]){
+    cardData.profileImage = await resizeImage(document.getElementById('profileImage').files[0]);
+   }
+
+   // Save to Supabase
+   const { data: inserted, error } = await db.from("cards").insert({
+     id: id,
+     data: JSON.stringify(cardData)
+   }).select().single();
+
+   if(error){
+     hideLoading();
+     console.error("Supabase error:", error);
+     alert("Failed to save card: " + error.message);
+     return;
+   }
+
+   // Store ID and redirect
+   localStorage.setItem("lastCardId", inserted.id);
    
-   productsArray.push(productData);
-  }
+   hideLoading();
+   showSuccess('✅ Digital card created successfully! Redirecting...');
+   
+   // Redirect after short delay
+   setTimeout(() => {
+     location.href = "card.html?id=" + inserted.id;
+   }, 1500);
+
+ } catch (error) {
+   hideLoading();
+   console.error("Error generating card:", error);
+   alert("An error occurred while creating your digital card. Please try again.");
  }
-
- // Load payment methods
- let paymentMethods = {
-   whatsapp: { active: false, number: '', greeting: '' },
-   jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' }
- };
- 
- const savedPayment = localStorage.getItem('paymentMethods');
- if(savedPayment) {
-   paymentMethods = JSON.parse(savedPayment);
- }
-
- // Social Media
- const socialMedia = {
-   facebook: document.getElementById('facebook').value.trim(),
-   instagram: document.getElementById('instagram').value.trim(),
-   twitter: document.getElementById('twitter').value.trim(),
-   linkedin: document.getElementById('linkedin').value.trim(),
-   youtube: document.getElementById('youtube').value.trim(),
-   tiktok: document.getElementById('tiktok').value.trim()
- };
-
- // Prepare card data
- const cardData = {
-  name: fullName.value.trim(),
-  phone: phoneNumber.value.trim(),
-  email: email.value.trim(),
-  address: address.value.trim(),
-  website: website.value.trim(),
-  businessName: businessName.value.trim(),
-  business: {
-   about: businessAbout.value.trim()
-  },
-  socialMedia: socialMedia,
-  businessHours: businessHoursArray,
-  holidays: holidaysArray,
-  products: productsArray,
-  payments: paymentMethods,
-  ecommerce: true
- };
-
- // Add profile image
- if(profileImage.files[0]){
-  cardData.profileImage = await resizeImage(profileImage.files[0]);
- }
-
- // Save to Supabase
- const { data: inserted, error } = await db.from("cards").insert({
-   id: id,
-   data: JSON.stringify(cardData)
- }).select().single();
-
- if(error){
-   console.error("Supabase error:", error);
-   alert("Failed to save card: " + error.message);
-   return;
- }
-
- // Store ID and redirect
- localStorage.setItem("lastCardId", inserted.id);
- location.href = "card.html?id=" + inserted.id;
 }
 
 // Initialize
@@ -880,6 +1088,42 @@ document.addEventListener('DOMContentLoaded', function() {
   holidayDateFields.forEach(field => {
     if(!field.value) {
       field.value = today;
+    }
+  });
+  
+  // Add one initial product
+  addOffer();
+  
+  // Form validation
+  const generateButton = document.getElementById('generateButton');
+  const requiredFields = ['fullName', 'phoneNumber', 'businessName'];
+  
+  function validateForm() {
+    let isValid = true;
+    requiredFields.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (!field.value.trim()) {
+        isValid = false;
+        field.style.borderColor = '#ef4444';
+      } else {
+        field.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+      }
+    });
+    return isValid;
+  }
+  
+  // Validate on input
+  requiredFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    field.addEventListener('input', validateForm);
+  });
+  
+  // Validate before generating
+  generateButton.addEventListener('click', function(e) {
+    if (!validateForm()) {
+      e.preventDefault();
+      showSuccess('❌ Please fill in all required fields (marked in red)');
+      return false;
     }
   });
 });
