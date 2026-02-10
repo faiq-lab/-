@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
+<!-- Add manifest link -->
+<link rel="manifest" href="manifest.json">
+
 <!-- All CSS styles remain exactly the same -->
 <style>
 /* ALL CSS FROM ORIGINAL FILE REMAINS EXACTLY THE SAME */
@@ -204,6 +207,25 @@ body {
   font-weight: 700;
 }
 
+/* ===== UPDATED: FIXED HEADER WITH BACKGROUND ===== */
+.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 480px;
+  height: 80px;
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(30px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1001;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
 /* ===== UPDATED: CENTERED HEADER ICONS ===== */
 .header-icons {
   position: absolute;
@@ -275,6 +297,95 @@ body {
   100% { transform: scale(1); }
 }
 
+/* ===== FACEBOOK-STYLE NOTIFICATION DRAWER ===== */
+.notification-drawer {
+  position: fixed;
+  top: 0;
+  right: -350px;
+  width: 320px;
+  height: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px);
+  border-left: 1px solid var(--glass-border);
+  box-shadow: -10px 0 40px rgba(0,0,0,0.2);
+  z-index: 2000;
+  transition: var(--transition-slow);
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-drawer.open {
+  right: 0;
+}
+
+.notification-header {
+  padding: 25px;
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.notification-count {
+  background: var(--danger-gradient);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notification-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.notification-item {
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  border-left: 4px solid #667eea;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.notification-item:hover {
+  background: #f1f5f9;
+  transform: translateX(-5px);
+}
+
+.notification-item.unread {
+  background: #e0f2fe;
+  border-left: 4px solid #3b82f6;
+}
+
+.notification-time {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.notification-actions {
+  padding: 15px;
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 10px;
+}
+
 /* Status Modal */
 .delivery-modal-overlay {
   position: fixed;
@@ -304,6 +415,7 @@ body {
 }
 
 #homePage {
+  padding-top: 100px; /* Added padding for fixed header */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
@@ -316,6 +428,7 @@ body {
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-md);
+  margin-top: 60px; /* Space for fixed header */
 }
 
 .welcome-text {
@@ -807,6 +920,7 @@ body {
 }
 
 #productsPage {
+  padding-top: 100px; /* Added padding for fixed header */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
@@ -866,6 +980,7 @@ body {
 }
 
 #cartPage {
+  padding-top: 100px; /* Added padding for fixed header */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
@@ -1081,6 +1196,7 @@ body {
 }
 
 #aboutPage {
+  padding-top: 100px; /* Added padding for fixed header */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
@@ -1171,6 +1287,7 @@ body {
 }
 
 #contactPage {
+  padding-top: 100px; /* Added padding for fixed header */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
@@ -1320,7 +1437,7 @@ body {
 
 .back-btn {
   position: absolute;
-  top: 20px;
+  top: 100px; /* Adjusted for fixed header */
   left: 20px;
   width: 45px;
   height: 45px;
@@ -1426,6 +1543,15 @@ body {
     width: 40px;
     height: 40px;
   }
+  
+  .notification-drawer {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .back-btn {
+    top: 90px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -1477,6 +1603,10 @@ body {
   .social-links {
     background: var(--lighter-color);
     border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .header-container {
+    background: rgba(30, 41, 59, 0.95);
   }
 }
 
@@ -1923,11 +2053,69 @@ body {
   transform: scale(1.1);
   background: rgba(255, 255, 255, 0.3);
 }
+
+/* ===== ANIMATIONS FOR NOTIFICATIONS ===== */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
 </style>
 </head>
 
 <body>
 <div class="app-container">
+  <!-- Fixed Header -->
+  <div class="header-container">
+    <!-- Centered Header Icons -->
+    <div class="header-icons">
+      <!-- Notification Bell -->
+      <div class="header-icon-btn" onclick="toggleNotificationDrawer()" title="Notifications">
+        <i class="fas fa-bell" id="notificationBell"></i>
+        <div class="delivery-badge" id="notificationBadge" style="display:none;">!</div>
+      </div>
+      
+      <!-- Delivery Status Icon -->
+      <div class="header-icon-btn" id="deliveryStatusBtn" onclick="checkDeliveryStatus()" title="Delivery Status">
+        <i class="fas fa-truck" id="deliveryIcon"></i>
+        <div class="delivery-badge" id="deliveryBadge" style="display:none;"></div>
+      </div>
+      
+      <!-- Login/Logout Icon -->
+      <div class="header-icon-btn" id="loginBtn" onclick="toggleLogin()" title="Login/Logout">
+        <i class="fas fa-sign-in-alt" id="loginIcon"></i>
+      </div>
+    </div>
+    
+    <!-- Share Button (Top Right) -->
+    <div class="share-btn" onclick="shareBusiness()" title="Share Business">
+      <i class="fas fa-share-alt"></i>
+    </div>
+  </div>
+
+  <!-- Facebook-style Notification Drawer -->
+  <div class="notification-drawer" id="notificationDrawer">
+    <div class="notification-header">
+      <h3><i class="fas fa-bell"></i> Notifications <span class="notification-count" id="notificationCount">0</span></h3>
+      <button onclick="toggleNotificationDrawer()" style="background: none; border: none; font-size: 24px; color: var(--dark-color); cursor: pointer;">×</button>
+    </div>
+    <div class="notification-content" id="notificationList">
+      <!-- Notifications will load here -->
+    </div>
+    <div class="notification-actions">
+      <button onclick="markAllNotificationsAsRead()" style="flex:1; padding: 10px; background: #f1f5f9; border: none; border-radius: 8px; font-weight: 700; color: #64748b; cursor: pointer;">
+        Mark All Read
+      </button>
+      <button onclick="enableNotifications()" style="flex:1; padding: 10px; background: var(--primary-gradient); border: none; border-radius: 8px; font-weight: 700; color: white; cursor: pointer;">
+        Enable Alerts
+      </button>
+    </div>
+  </div>
+
   <!-- Image Zoom Overlay -->
   <div class="image-zoom-overlay" id="imageZoomOverlay" onclick="closeImageZoom()">
     <img src="" class="image-zoom-content" id="zoomedImage">
@@ -1958,26 +2146,7 @@ body {
 
   <!-- Home Page -->
   <div id="homePage" class="page">
-    <!-- Share Button (Top Right) -->
-    <div class="share-btn" onclick="shareBusiness()" title="Share Business">
-      <i class="fas fa-share-alt"></i>
-    </div>
-    
     <div class="app-header">
-      <!-- Centered Header Icons -->
-      <div class="header-icons">
-        <!-- Delivery Status Icon -->
-        <div class="header-icon-btn" id="deliveryStatusBtn" onclick="checkDeliveryStatus()">
-          <i class="fas fa-truck" id="deliveryIcon"></i>
-          <div class="delivery-badge" id="deliveryBadge" style="display:none;"></div>
-        </div>
-        
-        <!-- Login/Logout Icon -->
-        <div class="header-icon-btn" id="loginBtn" onclick="toggleLogin()">
-          <i class="fas fa-sign-in-alt" id="loginIcon"></i>
-        </div>
-      </div>
-      
       <div class="welcome-text">
         <h1 id="businessHeader">Welcome</h1>
         <p>Premium business at your fingertips</p>
@@ -2478,6 +2647,391 @@ const supa = supabase.createClient(
   "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
 
+// ===== DUAL NOTIFICATION SYSTEM =====
+let notificationPermission = false;
+let innerNotifications = [];
+let unreadNotifications = 0;
+
+// Register Service Worker
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('sw.js');
+      console.log('Service Worker registered:', registration);
+      return registration;
+    } catch (error) {
+      console.error('Service Worker registration failed:', error);
+    }
+  }
+  return null;
+}
+
+// Toggle Facebook-style notification drawer
+function toggleNotificationDrawer() {
+  const drawer = document.getElementById('notificationDrawer');
+  if (drawer.classList.contains('open')) {
+    drawer.classList.remove('open');
+  } else {
+    drawer.classList.add('open');
+    loadNotificationDrawer();
+  }
+}
+
+// Load notifications into drawer
+function loadNotificationDrawer() {
+  const list = document.getElementById('notificationList');
+  const count = document.getElementById('notificationCount');
+  
+  if (innerNotifications.length === 0) {
+    list.innerHTML = `
+      <div style="text-align: center; padding: 40px;">
+        <i class="fas fa-bell-slash" style="font-size: 60px; color: #cbd5e1; margin-bottom: 20px;"></i>
+        <h3 style="color: var(--dark-color); margin-bottom: 10px;">No notifications yet</h3>
+        <p style="color: #64748b;">Your notifications will appear here</p>
+        <button onclick="enableNotifications()" style="margin-top: 20px; padding: 10px 20px; background: var(--primary-gradient); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;">
+          Enable Alerts
+        </button>
+      </div>
+    `;
+    count.textContent = '0';
+    return;
+  }
+  
+  let html = '';
+  innerNotifications.forEach(notif => {
+    const timeAgo = getTimeAgo(notif.time);
+    const icon = getNotificationIconByType(notif.type);
+    
+    html += `
+      <div class="notification-item ${notif.read ? '' : 'unread'}" onclick="markNotificationAsRead(${notif.id})">
+        <div style="display: flex; align-items: start; gap: 12px;">
+          <div style="font-size: 20px; color: ${getNotificationColorByType(notif.type)}">${icon}</div>
+          <div style="flex: 1;">
+            <div style="font-weight: 800; color: var(--dark-color); font-size: 13px; margin-bottom: 4px;">${notif.title}</div>
+            <div style="color: #64748b; font-size: 12px; line-height: 1.4;">${notif.message}</div>
+            <div class="notification-time">
+              <i class="fas fa-clock" style="font-size: 10px;"></i>
+              <span>${timeAgo}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  list.innerHTML = html;
+  count.textContent = unreadNotifications > 9 ? '9+' : unreadNotifications;
+}
+
+// Get time ago string
+function getTimeAgo(date) {
+  const now = new Date();
+  const diffMs = now - new Date(date);
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return new Date(date).toLocaleDateString();
+}
+
+// Get notification icon by type
+function getNotificationIconByType(type) {
+  const icons = {
+    'success': '✅',
+    'warning': '⚠️',
+    'error': '❌',
+    'info': 'ℹ️',
+    'delivery': '🚚',
+    'order': '📦',
+    'system': '🔔'
+  };
+  return icons[type] || icons.info;
+}
+
+// Get notification color by type
+function getNotificationColorByType(type) {
+  const colors = {
+    'success': '#10b981',
+    'warning': '#f59e0b',
+    'error': '#ef4444',
+    'info': '#3b82f6',
+    'delivery': '#8b5cf6',
+    'order': '#8b5cf6',
+    'system': '#667eea'
+  };
+  return colors[type] || colors.info;
+}
+
+// Mark notification as read
+function markNotificationAsRead(id) {
+  const index = innerNotifications.findIndex(n => n.id === id);
+  if (index !== -1 && !innerNotifications[index].read) {
+    innerNotifications[index].read = true;
+    unreadNotifications--;
+    saveInnerNotifications();
+    updateNotificationBellCount();
+    loadNotificationDrawer();
+  }
+}
+
+// Mark all notifications as read
+function markAllNotificationsAsRead() {
+  innerNotifications.forEach(n => n.read = true);
+  unreadNotifications = 0;
+  saveInnerNotifications();
+  updateNotificationBellCount();
+  loadNotificationDrawer();
+  showNotification('✅ All notifications marked as read');
+}
+
+// Save notifications to localStorage
+function saveInnerNotifications() {
+  isolatedLocalStorage.setItem('innerNotifications', JSON.stringify(innerNotifications));
+}
+
+// Load notifications from localStorage
+function loadInnerNotifications() {
+  const saved = isolatedLocalStorage.getItem('innerNotifications');
+  if (saved) {
+    innerNotifications = JSON.parse(saved);
+    unreadNotifications = innerNotifications.filter(n => !n.read).length;
+    updateNotificationBellCount();
+  }
+}
+
+// Update bell icon with count
+function updateNotificationBellCount() {
+  const badge = document.getElementById('notificationBadge');
+  const bell = document.getElementById('notificationBell');
+  
+  if (unreadNotifications > 0) {
+    badge.textContent = unreadNotifications > 9 ? '9+' : unreadNotifications;
+    badge.style.display = 'flex';
+    badge.classList.add('alert');
+    bell.style.color = '#f59e0b';
+  } else {
+    badge.style.display = 'none';
+    badge.classList.remove('alert');
+    if (notificationPermission) {
+      bell.style.color = '#f59e0b';
+    } else {
+      bell.style.color = 'white';
+    }
+  }
+}
+
+// Add inner notification
+function addInnerNotification(title, message, type = 'info') {
+  const notification = {
+    id: Date.now(),
+    title,
+    message,
+    type,
+    time: new Date(),
+    read: false
+  };
+  
+  innerNotifications.unshift(notification);
+  unreadNotifications++;
+  
+  // Keep only last 50 notifications
+  if (innerNotifications.length > 50) {
+    innerNotifications.pop();
+  }
+  
+  saveInnerNotifications();
+  updateNotificationBellCount();
+  
+  // Update drawer if open
+  if (document.getElementById('notificationDrawer').classList.contains('open')) {
+    loadNotificationDrawer();
+  }
+  
+  return notification.id;
+}
+
+// Ask for notification permission
+async function enableNotifications() {
+  if (!('Notification' in window)) {
+    showNotification('❌ Notifications not supported on this device');
+    return;
+  }
+  
+  if (Notification.permission === 'granted') {
+    showNotification('✅ Notifications already enabled!');
+    notificationPermission = true;
+    updateNotificationBellCount();
+    addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
+    return;
+  }
+  
+  if (Notification.permission === 'denied') {
+    showNotification('❌ Notifications blocked. Please enable in browser settings.');
+    return;
+  }
+  
+  const permission = await Notification.requestPermission();
+  
+  if (permission === 'granted') {
+    showNotification('✅ Notifications enabled! You will receive alerts.');
+    notificationPermission = true;
+    updateNotificationBellCount();
+    
+    // Register service worker
+    await registerServiceWorker();
+    
+    // Start listening for Supabase notifications
+    startNotificationListener();
+    
+    // Add inner notification
+    addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
+  } else {
+    showNotification('❌ Notifications disabled. You wont receive alerts.');
+  }
+}
+
+// Check current notification permission
+function checkNotificationPermission() {
+  if (Notification.permission === 'granted') {
+    notificationPermission = true;
+    updateNotificationBellCount();
+    registerServiceWorker().then(() => {
+      startNotificationListener();
+    });
+  } else {
+    notificationPermission = false;
+    updateNotificationBellCount();
+  }
+}
+
+// Listen for new notifications from Supabase
+function startNotificationListener() {
+  if (!notificationPermission) return;
+  
+  console.log('Starting notification listener...');
+  
+  // Subscribe to Supabase real-time notifications
+  supa
+    .channel('business-notifications')
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'notifications'
+      },
+      (payload) => {
+        console.log('New notification:', payload.new);
+        
+        // Show push notification (mobile top-bar)
+        showPushNotification(payload.new);
+        
+        // Add inner notification (Facebook-style drawer)
+        addInnerNotification(payload.new.title, payload.new.body, 'system');
+        
+        // Show toast notification
+        showNotification(`📢 ${payload.new.title}`);
+      }
+    )
+    .subscribe();
+}
+
+// Show push notification (mobile top-bar)
+function showPushNotification(data) {
+  if (!notificationPermission || !('serviceWorker' in navigator)) return;
+  
+  navigator.serviceWorker.ready.then(registration => {
+    registration.showNotification(data.title || 'Business Alert', {
+      body: data.body || 'New notification',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+      badge: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+      vibrate: [200, 100, 200],
+      data: {
+        url: '/',
+        id: data.id
+      }
+    });
+  });
+}
+
+// ===== ADMIN: SEND NOTIFICATION =====
+async function sendNotificationToAll(title, body) {
+  if (!isAdminLoggedIn) {
+    showNotification('❌ Admin access required');
+    return;
+  }
+  
+  if (!title || !body) {
+    title = prompt('Notification Title:', 'New Update');
+    body = prompt('Notification Message:', 'Check out our latest products!');
+    
+    if (!title || !body) return;
+  }
+  
+  const { error } = await supa
+    .from('notifications')
+    .insert([{ title, body }]);
+    
+  if (!error) {
+    showNotification('✅ Notification sent to all users!');
+    
+    // Add inner notification for admin
+    addInnerNotification('Notification Sent', `"${title}" sent to all users`, 'success');
+    
+    // Also trigger for current user if permission granted
+    if (notificationPermission) {
+      showPushNotification({ title, body });
+    }
+  } else {
+    showNotification('❌ Error sending notification');
+  }
+}
+
+// Test notification
+function testNotification() {
+  if (notificationPermission) {
+    showPushNotification({
+      title: 'Test Notification',
+      body: 'This is a test notification from your business app!'
+    });
+    
+    addInnerNotification('Test Notification', 'This is a test notification from your business app!', 'info');
+    
+    showNotification('✅ Test notification sent');
+  } else {
+    showNotification('❌ Enable notifications first');
+  }
+}
+
+// ===== DELIVERY STATUS NOTIFICATIONS =====
+function addDeliveryNotification(delivery) {
+  const statusText = delivery.status.charAt(0).toUpperCase() + delivery.status.slice(1);
+  const title = `Delivery ${statusText}`;
+  const message = `Order #${delivery.order_id} is now ${delivery.status}`;
+  
+  let type = 'info';
+  switch(delivery.status) {
+    case 'delivered': type = 'success'; break;
+    case 'cancelled': type = 'error'; break;
+    case 'pending': type = 'warning'; break;
+    case 'shipped': type = 'delivery'; break;
+  }
+  
+  addInnerNotification(title, message, type);
+  
+  // Also show push notification if enabled
+  if (notificationPermission) {
+    showPushNotification({
+      title: `🚚 ${title}`,
+      body: message
+    });
+  }
+}
+
 // ===== SHORT ID SYSTEM (6 CHARACTERS) =====
 function generateShortId() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -2948,6 +3502,9 @@ function navigateToDirect(pageId) {
       document.querySelectorAll('.nav-item')[navMap[pageId]].classList.add('active');
     }
     
+    // Close notification drawer when navigating
+    document.getElementById('notificationDrawer').classList.remove('open');
+    
     switch(pageId) {
       case 'homePage':
         loadHomePage();
@@ -2999,6 +3556,12 @@ function navigateTo(pageId) {
 
 // Back navigation
 function goBack() {
+  // Close notification drawer first if open
+  if (document.getElementById('notificationDrawer').classList.contains('open')) {
+    toggleNotificationDrawer();
+    return;
+  }
+  
   if (navigationHistory.length > 1) {
     navigationHistory.pop();
     const previousPage = navigationHistory[navigationHistory.length - 1];
@@ -3077,7 +3640,23 @@ async function checkForDeliveries() {
     }
     
     if(data && data.length > 0) {
+      // Check for status changes
+      const oldDeliveryData = deliveryStatusData;
       deliveryStatusData = data;
+      
+      // Find new or updated deliveries
+      data.forEach(newDelivery => {
+        const oldDelivery = oldDeliveryData.find(d => d.order_id === newDelivery.order_id);
+        
+        if (!oldDelivery) {
+          // New delivery
+          addDeliveryNotification(newDelivery);
+        } else if (oldDelivery.status !== newDelivery.status) {
+          // Status changed
+          addDeliveryNotification(newDelivery);
+        }
+      });
+      
       updateDeliveryIcon();
       
       const pendingOrders = data.filter(order => order.status === 'pending');
@@ -3233,6 +3812,9 @@ function openPhoneInput() {
       updateCustomerPhoneDisplay();
       showNotification('✅ Phone number saved successfully!');
       
+      // Add notification
+      addInnerNotification('Phone Number Saved', 'Your phone number has been saved for delivery tracking', 'success');
+      
       checkForDeliveries();
       
       if (currentPage === 'deliveryPage') {
@@ -3292,6 +3874,10 @@ function attemptLogin() {
     isolatedLocalStorage.setItem('isAdminLoggedIn', 'true');
     updateLoginUI();
     showNotification('✅ Login successful!');
+    
+    // Add notification
+    addInnerNotification('Admin Login', 'You have logged in as administrator', 'success');
+    
     navigateTo('adminPage');
   } else {
     showNotification('❌ Incorrect password. Try again.');
@@ -3311,6 +3897,10 @@ function logoutAdmin() {
   isolatedLocalStorage.removeItem('isAdminLoggedIn');
   updateLoginUI();
   showNotification('👋 Logged out successfully');
+  
+  // Add notification
+  addInnerNotification('Logged Out', 'You have been logged out from admin panel', 'info');
+  
   navigateTo('homePage');
 }
 
@@ -3334,6 +3924,15 @@ async function loadAdminPanel() {
     </div>
     
     <input type="text" class="admin-search" id="adminSearch" placeholder="Search orders by ID, phone, name..." onkeyup="searchAdminOrders()">
+    
+    <div style="margin: 15px; display: flex; gap: 10px;">
+      <button onclick="sendNotificationToAll()" style="flex:1;padding:12px;background:var(--warning-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
+        <i class="fas fa-bell"></i> Send Alert to All
+      </button>
+      <button onclick="testNotification()" style="flex:1;padding:12px;background:var(--info-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
+        <i class="fas fa-bell"></i> Test Alert
+      </button>
+    </div>
     
     <button onclick="addNewOrder()" class="admin-btn">
       <i class="fas fa-plus"></i> Add New Order
@@ -3417,6 +4016,10 @@ async function updateOrder(orderId) {
     
   if(!error) {
     showNotification('✅ Order updated successfully!');
+    
+    // Add notification
+    addInnerNotification('Order Updated', `Order #${document.querySelector(`.admin-order-card [data-order-id]`).textContent} updated to ${status}`, 'success');
+    
     loadAdminPanel();
     if(currentPage === 'deliveryPage') {
       loadDeliveryStatus();
@@ -3450,6 +4053,10 @@ function addNewOrder() {
     .then(({ error }) => {
       if(!error) {
         showNotification('✅ Order added successfully!');
+        
+        // Add notification
+        addInnerNotification('New Order', `Order #${orderId} added for ${customerName || customerPhone}`, 'success');
+        
         loadAdminPanel();
       } else {
         showNotification('❌ Error adding order: ' + error.message);
@@ -3540,18 +4147,33 @@ function addToCart(productIndex) {
     }
     updateCartCount();
     showNotification('Product added to cart!');
+    
+    // Add notification
+    addInnerNotification('Cart Updated', `${product.title} added to cart`, 'info');
   }
 }
 
 function removeFromCart(index) {
-  cart.splice(index, 1);
-  updateCartCount();
+  if(cart[index]) {
+    const productName = cart[index].title;
+    cart.splice(index, 1);
+    updateCartCount();
+    showNotification('Product removed from cart!');
+    
+    // Add notification
+    addInnerNotification('Cart Updated', `${productName} removed from cart`, 'info');
+  }
 }
 
 function updateQuantity(index, change) {
   if(cart[index]) {
-    cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + change);
+    const oldQty = cart[index].quantity || 1;
+    cart[index].quantity = Math.max(1, oldQty + change);
     loadCartPage();
+    
+    if (change > 0) {
+      addInnerNotification('Cart Updated', `Increased quantity of ${cart[index].title}`, 'info');
+    }
   }
 }
 
@@ -3986,6 +4608,9 @@ function sendBuyNowOrder() {
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   }
   
+  // Add notification
+  addInnerNotification('Order Placed', `Order placed for ${currentProduct.title}`, 'success');
+  
   closeModal('productModal');
 }
 
@@ -4179,6 +4804,9 @@ function sendCheckoutOrder() {
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   }
   
+  // Add notification
+  addInnerNotification('Order Placed', `Order placed for ${cart.length} items (Total: PKR ${orderTotal.toFixed(2)})`, 'success');
+  
   cart = [];
   updateCartCount();
   closeModal('checkoutModal');
@@ -4254,27 +4882,8 @@ function closeDeliveryModal() {
   document.body.style.overflow = 'auto';
 }
 
-// ===== FIXED SERVICE WORKER REGISTRATION =====
-function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      // Register service worker with proper scope
-      navigator.serviceWorker.register('./sw.js', { scope: './' })
-        .then(function(registration) {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(function(error) {
-          console.log('Service Worker registration failed:', error);
-        });
-    });
-  }
-}
-
 // ===== INITIALIZE APP =====
 document.addEventListener("DOMContentLoaded", async () => {
-  // Register service worker first
-  registerServiceWorker();
-  
   // Check for short ID in URL
   const urlParams = new URLSearchParams(location.search);
   let id = urlParams.get("id") || localStorage.getItem("lastCardId");
@@ -4342,6 +4951,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Load admin login status from isolated storage
   isAdminLoggedIn = isolatedLocalStorage.getItem('isAdminLoggedIn') === 'true';
   
+  // Load notifications
+  loadInnerNotifications();
+  
   setTimeout(async () => {
     const {data, error} = await supa.from("cards").select("*").eq("id", id).single();
     if(error || !data) {
@@ -4382,12 +4994,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateCartCount();
     updateLoginUI();
     updateCustomerPhoneDisplay();
+    updateNotificationBellCount();
+    
+    // Initialize notifications
+    setTimeout(() => {
+      checkNotificationPermission();
+    }, 1000);
     
     // Check for deliveries
     setTimeout(() => {
       checkForDeliveries();
     }, 1000);
+    
+    // Add welcome notification
+    setTimeout(() => {
+      if (innerNotifications.length === 0) {
+        addInnerNotification('Welcome!', 'Get started by browsing products or enabling notifications', 'info');
+      }
+    }, 2000);
   }, 2000);
+});
+
+// Initialize notifications when app starts
+document.addEventListener('DOMContentLoaded', function() {
+  // Check notification permission after app loads
+  setTimeout(() => {
+    checkNotificationPermission();
+  }, 3000);
 });
 </script>
 </body>
