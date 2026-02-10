@@ -2184,6 +2184,112 @@ body {
 .permission-btn.accept:hover {
   background: linear-gradient(135deg, #0da271 0%, #047857 100%);
 }
+
+/* ===== DELIVERY CHARGES CALCULATOR ===== */
+.delivery-calculator {
+  background: var(--lighter-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  margin: 15px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #f1f5f9;
+}
+
+.delivery-options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.delivery-option {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  background: white;
+}
+
+.delivery-option.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.delivery-option i {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #667eea;
+}
+
+.delivery-option.selected i {
+  color: #764ba2;
+}
+
+.delivery-option .label {
+  font-weight: 700;
+  color: var(--dark-color);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.delivery-option .price {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.delivery-option .time {
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.delivery-charge-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 12px;
+  margin-top: 15px;
+  border: 1px solid #e2e8f0;
+}
+
+.delivery-charge-label {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.delivery-charge-value {
+  font-size: 18px;
+  font-weight: 900;
+  color: #10b981;
+}
+
+.delivery-charge-value.free {
+  color: #10b981;
+}
+
+.delivery-charge-value.charge {
+  color: #f59e0b;
+}
+
+.delivery-free-message {
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  margin-top: 10px;
+  border-left: 3px solid #10b981;
+  display: none;
+}
+
+.delivery-free-message.show {
+  display: block;
+}
 </style>
 </head>
 
@@ -2630,6 +2736,52 @@ body {
   </div>
 </div>
 
+<!-- DELIVERY CHARGES MODAL -->
+<div class="modal-overlay" id="deliveryChargesModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal('deliveryChargesModal')">×</button>
+    
+    <div style="padding:25px;">
+      <h2 style="text-align:center;margin-bottom:25px;color:var(--dark-color);">
+        <i class="fas fa-shipping-fast"></i> Delivery Charges
+      </h2>
+      
+      <div class="delivery-calculator">
+        <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
+          Select Delivery Area
+        </h3>
+        
+        <div class="delivery-options" id="deliveryOptions">
+          <!-- Options will be inserted here -->
+        </div>
+        
+        <div id="deliveryChargesDisplay" class="delivery-charge-display">
+          <div class="delivery-charge-label">Delivery Charge:</div>
+          <div class="delivery-charge-value" id="deliveryChargeValue">PKR 0</div>
+        </div>
+        
+        <div id="freeDeliveryMessage" class="delivery-free-message">
+          <i class="fas fa-gift"></i> Congratulations! You qualify for FREE delivery!
+        </div>
+      </div>
+      
+      <div style="margin-top:25px;padding:15px;background:#f8fafc;border-radius:12px;">
+        <h4 style="color:var(--dark-color);margin-bottom:10px;font-size:14px;font-weight:800;">Delivery Information:</h4>
+        <div style="font-size:12px;color:#64748b;line-height:1.5;">
+          • Free delivery on orders above PKR <span id="freeDeliveryMinDisplay">2000</span><br>
+          • Cash on Delivery available<br>
+          • Order confirmation via WhatsApp<br>
+          • Delivery time: <span id="deliveryTimeDisplay">1-2 days</span>
+        </div>
+      </div>
+      
+      <button onclick="applyDeliveryCharges()" style="width:100%;padding:18px;background:var(--success-gradient);color:white;border:none;border-radius:var(--border-radius-md);font-size:17px;font-weight:800;cursor:pointer;margin-top:25px;">
+        <i class="fas fa-check-circle"></i> Apply Delivery Charges
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Other Modals -->
 <div class="modal-overlay" id="productModal">
   <div class="modal-content">
@@ -2645,6 +2797,22 @@ body {
       
       <h2 id="modalTitle" style="font-size:20px;font-weight:800;color:var(--dark-color);margin-bottom:12px;"></h2>
       <p id="modalDescription" style="color:#64748b;line-height:1.6;margin-bottom:20px;font-size:14px;"></p>
+      
+      <!-- DELIVERY CALCULATOR IN PRODUCT MODAL -->
+      <div id="productDeliveryCalculator" style="display:none; margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size:15px;font-weight:800;color:var(--dark-color);margin-bottom:10px;">
+          <i class="fas fa-truck"></i> Delivery Estimate
+        </h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:13px;color:#64748b;">Delivery to your city:</div>
+            <div style="font-size:14px;font-weight:700;color:var(--dark-color);" id="productDeliveryEstimate">PKR 150 - 1-2 days</div>
+          </div>
+          <button onclick="showDeliveryChargesModal()" style="padding:8px 15px;background:var(--info-gradient);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">
+            Calculate
+          </button>
+        </div>
+      </div>
       
       <div id="directCheckoutSection" style="display:none; margin-top: 25px; padding-top: 25px; border-top: 2px solid #f1f5f9;">
         <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
@@ -2683,6 +2851,17 @@ body {
           </div>
         </div>
         
+        <!-- DELIVERY CHARGES IN CHECKOUT -->
+        <div id="buyNowDeliveryCharges" style="display:none; background: #f8fafc; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <div style="font-size:14px;color:#64748b;font-weight:600;">Delivery Charges:</div>
+            <div style="font-size:16px;font-weight:900;color:#f59e0b;" id="buyNowDeliveryCharge">PKR 150</div>
+          </div>
+          <div style="font-size:12px;color:#94a3b8;" id="buyNowDeliveryInfo">
+            Within city - 1-2 days
+          </div>
+        </div>
+        
         <button onclick="checkoutBuyNow()" style="width:100%;padding:18px;background:var(--success-gradient);color:white;border:none;border-radius:var(--border-radius-md);font-size:16px;font-weight:800;cursor:pointer;">
           Complete Purchase
         </button>
@@ -2710,6 +2889,38 @@ body {
       </h2>
       
       <div id="checkoutItems" style="margin-bottom:25px;max-height:250px;overflow-y:auto;padding-right:10px;">
+      </div>
+      
+      <!-- DELIVERY SELECTION IN CHECKOUT -->
+      <div style="margin:20px 0;">
+        <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
+          <i class="fas fa-shipping-fast"></i> Delivery Options
+        </h3>
+        
+        <div class="delivery-options" style="display:flex;gap:10px;margin-bottom:15px;">
+          <div class="delivery-option" onclick="selectDeliveryOption('city')" id="deliveryCityOption">
+            <i class="fas fa-city"></i>
+            <div class="label">Within City</div>
+            <div class="price" id="cityDeliveryPrice">PKR 150</div>
+            <div class="time" id="cityDeliveryTime">1-2 days</div>
+          </div>
+          
+          <div class="delivery-option" onclick="selectDeliveryOption('other')" id="deliveryOtherOption">
+            <i class="fas fa-map-marked-alt"></i>
+            <div class="label">Other Cities</div>
+            <div class="price" id="otherDeliveryPrice">PKR 300</div>
+            <div class="time" id="otherDeliveryTime">3-5 days</div>
+          </div>
+        </div>
+        
+        <div id="deliveryChargeSummary" class="delivery-charge-display">
+          <div class="delivery-charge-label">Selected Delivery:</div>
+          <div class="delivery-charge-value" id="checkoutDeliveryCharge">PKR 0</div>
+        </div>
+        
+        <div id="freeDeliverySummary" class="delivery-free-message">
+          <i class="fas fa-gift"></i> Congratulations! You qualify for FREE delivery!
+        </div>
       </div>
       
       <div style="margin:20px 0;">
@@ -2756,7 +2967,7 @@ body {
         </div>
         <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
           <span style="color:#64748b;font-size:14px;">Shipping</span>
-          <span style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR 0</span>
+          <span style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR <span id="checkoutShipping">0</span></span>
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:15px;padding-top:15px;border-top:2px solid #e2e8f0;">
           <span style="font-size:18px;font-weight:800;color:var(--dark-color);">Total</span>
@@ -3272,6 +3483,133 @@ function addInnerNotification(title, message, type = 'info') {
   return notification.id;
 }
 
+// ===== SMART NOTIFICATION SYSTEM - Only show when app is closed =====
+let appIsActive = true;
+let lastActiveTime = Date.now();
+let pendingExternalNotifications = [];
+
+// Track app visibility
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    appIsActive = false;
+    lastActiveTime = Date.now();
+    console.log('App is now inactive/closed');
+  } else {
+    appIsActive = true;
+    console.log('App is now active/open');
+  }
+});
+
+// Send external notification (only when app is closed)
+function sendExternalNotification(title, body, imageUrl = null) {
+  // Only send if app has been closed for more than 5 seconds
+  if (appIsActive && (Date.now() - lastActiveTime) < 5000) {
+    console.log('App is active, skipping external notification');
+    return;
+  }
+  
+  if (!notificationPermission || !('serviceWorker' in navigator)) return;
+  
+  const notificationOptions = {
+    body: body,
+    icon: imageUrl || 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+    badge: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+    vibrate: [200, 100, 200],
+    data: {
+      url: window.location.href,
+      businessId: currentBusinessId,
+      timestamp: new Date().toISOString(),
+      type: 'external'
+    },
+    actions: [
+      { action: 'open', title: 'Open App' },
+      { action: 'dismiss', title: 'Dismiss' }
+    ]
+  };
+  
+  // Add image if provided
+  if (imageUrl) {
+    notificationOptions.image = imageUrl;
+  }
+  
+  navigator.serviceWorker.ready.then(registration => {
+    registration.showNotification(title || 'Business Alert', notificationOptions);
+    
+    // Log notification for analytics
+    logExternalNotification(title);
+  });
+}
+
+// Log external notification
+async function logExternalNotification(title) {
+  try {
+    const { error } = await supa
+      .from('external_notifications')
+      .insert([{
+        business_id: currentBusinessId,
+        device_id: customerData.deviceId,
+        title: title,
+        sent_at: new Date().toISOString(),
+        app_state: appIsActive ? 'active' : 'inactive'
+      }]);
+    
+    if (!error) {
+      console.log('External notification logged');
+    }
+  } catch (error) {
+    console.log('Error logging external notification:', error);
+  }
+}
+
+// Send scheduled notifications (for new products/offers)
+function scheduleExternalNotifications() {
+  // Only schedule if user has granted permission
+  if (!notificationPermission) return;
+  
+  // Check if app is active
+  if (appIsActive) {
+    console.log('App is active, delaying external notifications');
+    setTimeout(scheduleExternalNotifications, 60000); // Check again in 1 minute
+    return;
+  }
+  
+  // Check for pending notifications in Supabase
+  checkPendingExternalNotifications();
+}
+
+async function checkPendingExternalNotifications() {
+  try {
+    const { data, error } = await supa
+      .from('scheduled_notifications')
+      .select('*')
+      .eq('business_id', currentBusinessId)
+      .eq('sent', false)
+      .lt('scheduled_for', new Date().toISOString())
+      .limit(5);
+    
+    if (error || !data) return;
+    
+    data.forEach(notification => {
+      sendExternalNotification(
+        notification.title,
+        notification.body,
+        notification.image_url
+      );
+      
+      // Mark as sent
+      supa
+        .from('scheduled_notifications')
+        .update({ sent: true, sent_at: new Date().toISOString() })
+        .eq('id', notification.id);
+    });
+  } catch (error) {
+    console.log('Error checking scheduled notifications:', error);
+  }
+}
+
+// Schedule periodic check for external notifications
+setInterval(scheduleExternalNotifications, 300000); // Check every 5 minutes
+
 // Ask for notification permission
 async function enableNotifications() {
   if (!('Notification' in window)) {
@@ -3285,6 +3623,9 @@ async function enableNotifications() {
     updateNotificationBellCount();
     addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
     updateCustomerPermissions('notifications', true);
+    
+    // Start external notification system
+    scheduleExternalNotifications();
     return;
   }
   
@@ -3310,6 +3651,9 @@ async function enableNotifications() {
     // Add inner notification
     addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
     
+    // Start external notification system
+    scheduleExternalNotifications();
+    
     // Update permission
     updateCustomerPermissions('notifications', true);
   } else {
@@ -3325,6 +3669,7 @@ function checkNotificationPermission() {
     updateNotificationBellCount();
     registerServiceWorker().then(() => {
       startNotificationListener();
+      scheduleExternalNotifications();
     });
     updateCustomerPermissions('notifications', true);
   } else {
@@ -3353,14 +3698,18 @@ function startNotificationListener() {
       (payload) => {
         console.log('New notification:', payload.new);
         
-        // Show push notification (mobile top-bar)
-        showPushNotification(payload.new);
+        // Show push notification (mobile top-bar) - only if app is not active
+        if (!appIsActive || (Date.now() - lastActiveTime) > 10000) {
+          sendExternalNotification(payload.new.title, payload.new.body, payload.new.image_url);
+        }
         
         // Add inner notification (Facebook-style drawer)
         addInnerNotification(payload.new.title, payload.new.body, 'system');
         
-        // Show toast notification
-        showNotification(`📢 ${payload.new.title}`);
+        // Show toast notification (only if app is active)
+        if (appIsActive) {
+          showNotification(`📢 ${payload.new.title}`);
+        }
       }
     )
     .subscribe();
@@ -3370,22 +3719,40 @@ function startNotificationListener() {
 function showPushNotification(data) {
   if (!notificationPermission || !('serviceWorker' in navigator)) return;
   
+  // Only show if app is not active
+  if (appIsActive && (Date.now() - lastActiveTime) < 10000) {
+    console.log('App is active, skipping push notification');
+    return;
+  }
+  
   navigator.serviceWorker.ready.then(registration => {
-    registration.showNotification(data.title || 'Business Alert', {
+    const options = {
       body: data.body || 'New notification',
       icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
       badge: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
       vibrate: [200, 100, 200],
       data: {
         url: '/',
-        id: data.id
-      }
-    });
+        id: data.id,
+        businessId: currentBusinessId
+      },
+      actions: [
+        { action: 'open', title: 'Open App' },
+        { action: 'dismiss', title: 'Dismiss' }
+      ]
+    };
+    
+    // Add image if available
+    if (data.image_url) {
+      options.image = data.image_url;
+    }
+    
+    registration.showNotification(data.title || 'Business Alert', options);
   });
 }
 
 // ===== ADMIN: SEND NOTIFICATION =====
-async function sendNotificationToAll(title, body) {
+async function sendNotificationToAll(title, body, imageUrl = null) {
   if (!isAdminLoggedIn) {
     showNotification('❌ Admin access required');
     return;
@@ -3394,13 +3761,18 @@ async function sendNotificationToAll(title, body) {
   if (!title || !body) {
     title = prompt('Notification Title:', 'New Update');
     body = prompt('Notification Message:', 'Check out our latest products!');
+    imageUrl = prompt('Image URL (optional):', '');
     
     if (!title || !body) return;
   }
   
   const { error } = await supa
     .from('notifications')
-    .insert([{ title, body }]);
+    .insert([{ 
+      title, 
+      body,
+      image_url: imageUrl || null 
+    }]);
     
   if (!error) {
     showNotification('✅ Notification sent to all users!');
@@ -3410,24 +3782,49 @@ async function sendNotificationToAll(title, body) {
     
     // Also trigger for current user if permission granted
     if (notificationPermission) {
-      showPushNotification({ title, body });
+      // Send as external notification (will only show if app is closed)
+      sendExternalNotification(title, body, imageUrl);
     }
   } else {
     showNotification('❌ Error sending notification');
   }
 }
 
+// Schedule external notification (for later)
+async function scheduleExternalNotification(title, body, imageUrl = null, delayMinutes = 60) {
+  if (!isAdminLoggedIn) return;
+  
+  const scheduledFor = new Date(Date.now() + delayMinutes * 60000).toISOString();
+  
+  const { error } = await supa
+    .from('scheduled_notifications')
+    .insert([{
+      business_id: currentBusinessId,
+      title: title,
+      body: body,
+      image_url: imageUrl,
+      scheduled_for: scheduledFor,
+      sent: false
+    }]);
+  
+  if (!error) {
+    showNotification(`✅ Notification scheduled for ${delayMinutes} minutes from now`);
+  }
+}
+
 // Test notification
 function testNotification() {
   if (notificationPermission) {
-    showPushNotification({
-      title: 'Test Notification',
-      body: 'This is a test notification from your business app!'
-    });
+    // Send as external notification (will only show if app is closed)
+    sendExternalNotification(
+      'Test Notification',
+      'This is a test notification from your business app!',
+      'https://cdn-icons-png.flaticon.com/512/1006/1006771.png'
+    );
     
     addInnerNotification('Test Notification', 'This is a test notification from your business app!', 'info');
     
-    showNotification('✅ Test notification sent');
+    showNotification('✅ Test notification sent (will show when app is closed)');
   } else {
     showNotification('❌ Enable notifications first');
   }
@@ -3449,12 +3846,12 @@ function addDeliveryNotification(delivery) {
   
   addInnerNotification(title, message, type);
   
-  // Also show push notification if enabled
+  // Also show external notification if enabled (will only show when app is closed)
   if (notificationPermission) {
-    showPushNotification({
-      title: `🚚 ${title}`,
-      body: message
-    });
+    sendExternalNotification(
+      `🚚 ${title}`,
+      message
+    );
   }
 }
 
@@ -3475,18 +3872,18 @@ function generateAdminPassword(cardId, shortId) {
   return `business123_${shortPart}`;
 }
 
-// ===== SHARE FUNCTIONALITY =====
+// ===== SHARE FUNCTIONALITY WITH SHORT ID =====
 function shareBusiness() {
   const businessName = card.businessName || card.name || "Business";
-  const currentUrl = window.location.href.split('?')[0]; // Get base URL
+  const currentUrl = window.location.origin + window.location.pathname;
   
   let shareUrl = currentUrl;
   
-  // If we have a short ID, use it in the share URL
+  // Use short ID in the share URL
   if (shortCardId) {
     shareUrl = `${currentUrl}?id=${shortCardId}`;
-  } else if (card.id) {
-    // If no short ID but we have full ID, try to get short ID first
+  } else {
+    // If no short ID, try to generate one
     checkAndCreateShortId(card.id).then(shortId => {
       if (shortId) {
         shareUrl = `${currentUrl}?id=${shortId}`;
@@ -3496,9 +3893,10 @@ function shareBusiness() {
         showShareDialog(businessName, shareUrl);
       }
     });
-  } else {
-    showShareDialog(businessName, shareUrl);
+    return;
   }
+  
+  showShareDialog(businessName, shareUrl);
 }
 
 async function checkAndCreateShortId(fullId) {
@@ -4056,6 +4454,218 @@ function exitApp() {
   }
 }
 
+// ===== DELIVERY CHARGES SYSTEM =====
+let deliverySettings = {
+  deliveryChargeCity: 150,
+  deliveryChargeOther: 300,
+  deliveryTimeCity: "1-2 days",
+  deliveryTimeOther: "3-5 days",
+  freeDeliveryMin: 2000
+};
+
+let selectedDeliveryOption = 'city';
+let currentDeliveryCharge = 0;
+
+// Initialize delivery settings from card data
+function initDeliverySettings() {
+  if (card.deliverySettings) {
+    deliverySettings = {
+      deliveryChargeCity: card.deliverySettings.deliveryChargeCity || 150,
+      deliveryChargeOther: card.deliverySettings.deliveryChargeOther || 300,
+      deliveryTimeCity: card.deliverySettings.deliveryTimeCity || "1-2 days",
+      deliveryTimeOther: card.deliverySettings.deliveryTimeOther || "3-5 days",
+      freeDeliveryMin: card.deliverySettings.freeDeliveryMin || 2000
+    };
+  }
+  
+  // Update UI elements
+  updateDeliveryUI();
+}
+
+// Update delivery UI elements
+function updateDeliveryUI() {
+  // Update delivery modal
+  document.getElementById('cityDeliveryPrice').textContent = `PKR ${deliverySettings.deliveryChargeCity}`;
+  document.getElementById('cityDeliveryTime').textContent = deliverySettings.deliveryTimeCity;
+  document.getElementById('otherDeliveryPrice').textContent = `PKR ${deliverySettings.deliveryChargeOther}`;
+  document.getElementById('otherDeliveryTime').textContent = deliverySettings.deliveryTimeOther;
+  document.getElementById('freeDeliveryMinDisplay').textContent = deliverySettings.freeDeliveryMin;
+  document.getElementById('deliveryTimeDisplay').textContent = deliverySettings.deliveryTimeCity;
+  
+  // Update product modal delivery estimate
+  const productDeliveryEstimate = document.getElementById('productDeliveryEstimate');
+  if (productDeliveryEstimate) {
+    productDeliveryEstimate.textContent = `PKR ${deliverySettings.deliveryChargeCity} - ${deliverySettings.deliveryTimeCity}`;
+  }
+}
+
+// Show delivery charges modal
+function showDeliveryChargesModal() {
+  const modal = document.getElementById('deliveryChargesModal');
+  const optionsContainer = document.getElementById('deliveryOptions');
+  
+  // Create delivery options
+  optionsContainer.innerHTML = `
+    <div class="delivery-option ${selectedDeliveryOption === 'city' ? 'selected' : ''}" onclick="selectDeliveryOptionModal('city')">
+      <i class="fas fa-city"></i>
+      <div class="label">Within City</div>
+      <div class="price">PKR ${deliverySettings.deliveryChargeCity}</div>
+      <div class="time">${deliverySettings.deliveryTimeCity}</div>
+    </div>
+    
+    <div class="delivery-option ${selectedDeliveryOption === 'other' ? 'selected' : ''}" onclick="selectDeliveryOptionModal('other')">
+      <i class="fas fa-map-marked-alt"></i>
+      <div class="label">Other Cities</div>
+      <div class="price">PKR ${deliverySettings.deliveryChargeOther}</div>
+      <div class="time">${deliverySettings.deliveryTimeOther}</div>
+    </div>
+  `;
+  
+  // Calculate and display charges
+  calculateDeliveryCharges();
+  
+  // Show modal
+  openModal('deliveryChargesModal');
+}
+
+// Select delivery option in modal
+function selectDeliveryOptionModal(option) {
+  selectedDeliveryOption = option;
+  
+  // Update UI
+  document.querySelectorAll('.delivery-option').forEach(el => {
+    el.classList.remove('selected');
+  });
+  
+  if (option === 'city') {
+    document.querySelector('.delivery-option:nth-child(1)').classList.add('selected');
+  } else {
+    document.querySelector('.delivery-option:nth-child(2)').classList.add('selected');
+  }
+  
+  // Recalculate charges
+  calculateDeliveryCharges();
+}
+
+// Select delivery option in checkout
+function selectDeliveryOption(option) {
+  selectedDeliveryOption = option;
+  
+  // Update UI
+  document.querySelectorAll('.delivery-option').forEach(el => {
+    el.classList.remove('selected');
+  });
+  
+  if (option === 'city') {
+    document.getElementById('deliveryCityOption').classList.add('selected');
+  } else {
+    document.getElementById('deliveryOtherOption').classList.add('selected');
+  }
+  
+  // Update checkout
+  updateCheckoutSummary();
+}
+
+// Calculate delivery charges
+function calculateDeliveryCharges() {
+  const subtotal = getCartSubtotal();
+  let charge = 0;
+  let deliveryInfo = '';
+  
+  if (selectedDeliveryOption === 'city') {
+    charge = deliverySettings.deliveryChargeCity;
+    deliveryInfo = `Within city - ${deliverySettings.deliveryTimeCity}`;
+  } else {
+    charge = deliverySettings.deliveryChargeOther;
+    deliveryInfo = `Other cities - ${deliverySettings.deliveryTimeOther}`;
+  }
+  
+  // Check for free delivery
+  const qualifiesForFreeDelivery = subtotal >= deliverySettings.freeDeliveryMin;
+  if (qualifiesForFreeDelivery) {
+    charge = 0;
+    deliveryInfo += ' (FREE)';
+  }
+  
+  currentDeliveryCharge = charge;
+  
+  // Update UI
+  const chargeValue = document.getElementById('deliveryChargeValue');
+  const freeMessage = document.getElementById('freeDeliveryMessage');
+  
+  if (qualifiesForFreeDelivery) {
+    chargeValue.textContent = 'FREE';
+    chargeValue.className = 'delivery-charge-value free';
+    freeMessage.classList.add('show');
+  } else {
+    chargeValue.textContent = `PKR ${charge}`;
+    chargeValue.className = 'delivery-charge-value charge';
+    freeMessage.classList.remove('show');
+  }
+  
+  // Update product modal if open
+  const buyNowDeliveryCharge = document.getElementById('buyNowDeliveryCharge');
+  const buyNowDeliveryInfo = document.getElementById('buyNowDeliveryInfo');
+  
+  if (buyNowDeliveryCharge && buyNowDeliveryInfo) {
+    if (qualifiesForFreeDelivery) {
+      buyNowDeliveryCharge.textContent = 'FREE';
+      buyNowDeliveryInfo.textContent = deliveryInfo;
+    } else {
+      buyNowDeliveryCharge.textContent = `PKR ${charge}`;
+      buyNowDeliveryInfo.textContent = deliveryInfo;
+    }
+  }
+  
+  return { charge, qualifiesForFreeDelivery, deliveryInfo };
+}
+
+// Apply delivery charges
+function applyDeliveryCharges() {
+  const result = calculateDeliveryCharges();
+  
+  // Update checkout if open
+  if (document.getElementById('checkoutModal').style.display === 'flex') {
+    updateCheckoutSummary();
+  }
+  
+  // Update product modal if open
+  const buyNowDeliveryCharges = document.getElementById('buyNowDeliveryCharges');
+  if (buyNowDeliveryCharges) {
+    buyNowDeliveryCharges.style.display = 'block';
+  }
+  
+  showNotification(`✅ Delivery charges applied: ${result.qualifiesForFreeDelivery ? 'FREE' : 'PKR ' + result.charge}`);
+  closeModal('deliveryChargesModal');
+}
+
+// Get cart subtotal
+function getCartSubtotal() {
+  return cart.reduce((sum, item) => {
+    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
+    return sum + (price * (item.quantity || 1));
+  }, 0);
+}
+
+// Update checkout summary with delivery charges
+function updateCheckoutSummary() {
+  const subtotal = getCartSubtotal();
+  const result = calculateDeliveryCharges();
+  
+  document.getElementById('checkoutSubtotal').textContent = subtotal.toFixed(2);
+  document.getElementById('checkoutShipping').textContent = result.charge;
+  document.getElementById('checkoutTotal').textContent = (subtotal + result.charge).toFixed(2);
+  document.getElementById('checkoutDeliveryCharge').textContent = result.qualifiesForFreeDelivery ? 'FREE' : `PKR ${result.charge}`;
+  
+  // Update free delivery message
+  const freeDeliverySummary = document.getElementById('freeDeliverySummary');
+  if (result.qualifiesForFreeDelivery) {
+    freeDeliverySummary.classList.add('show');
+  } else {
+    freeDeliverySummary.classList.remove('show');
+  }
+}
+
 // ===== DELIVERY SYSTEM FUNCTIONS =====
 async function checkForDeliveries() {
   try {
@@ -4372,6 +4982,9 @@ async function loadAdminPanel() {
       <button onclick="testNotification()" style="flex:1;padding:12px;background:var(--info-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
         <i class="fas fa-bell"></i> Test Alert
       </button>
+      <button onclick="openScheduleNotification()" style="flex:1;padding:12px;background:var(--secondary-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
+        <i class="fas fa-clock"></i> Schedule Alert
+      </button>
     </div>
     
     <button onclick="addNewOrder()" class="admin-btn">
@@ -4420,6 +5033,17 @@ async function loadAdminPanel() {
   }
   
   document.getElementById('adminContent').innerHTML = html;
+}
+
+function openScheduleNotification() {
+  const title = prompt("Notification Title:", "Special Offer!");
+  const body = prompt("Notification Message:", "Check out our latest products with amazing discounts!");
+  const imageUrl = prompt("Image URL (optional):", "");
+  const delayMinutes = prompt("Schedule after how many minutes?", "60");
+  
+  if (title && body && delayMinutes) {
+    scheduleExternalNotification(title, body, imageUrl || null, parseInt(delayMinutes));
+  }
 }
 
 function searchAdminOrders() {
@@ -4549,6 +5173,9 @@ async function renderApp() {
   document.getElementById('contactPhone').textContent = card.phone || "Not available";
   document.getElementById('contactEmail').textContent = card.email || "Not available";
   document.getElementById('contactAddress').textContent = card.address || "Not available";
+  
+  // Initialize delivery settings
+  initDeliverySettings();
   
   loadHomePage();
 }
@@ -4961,14 +5588,27 @@ function showProductModal(productIndex) {
     `;
   }
   
+  // Show delivery calculator in product modal
+  document.getElementById('productDeliveryCalculator').style.display = 'block';
+  
   document.getElementById('directCheckoutSection').style.display = 'none';
   selectBuyNowPayment('whatsapp');
+  
+  // Hide delivery charges section initially
+  document.getElementById('buyNowDeliveryCharges').style.display = 'none';
   
   openModal('productModal');
 }
 
 function showDirectCheckout() {
   document.getElementById('directCheckoutSection').style.display = 'block';
+  
+  // Show delivery charges section
+  const buyNowDeliveryCharges = document.getElementById('buyNowDeliveryCharges');
+  if (buyNowDeliveryCharges) {
+    buyNowDeliveryCharges.style.display = 'block';
+    calculateDeliveryCharges(); // Calculate for single product
+  }
 }
 
 function addToCartFromModal() {
@@ -5008,14 +5648,19 @@ function selectBuyNowPayment(method) {
 function checkoutBuyNow() {
   if(!currentProduct) return;
   
+  // Calculate delivery charges
+  const result = calculateDeliveryCharges();
+  const productPrice = parseFloat(currentProduct.discountPrice || currentProduct.originalPrice || 0);
+  const totalAmount = productPrice + result.charge;
+  
   if(buyNowPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    showPaymentDetailsModal('buyNow');
+    showPaymentDetailsModal('buyNow', totalAmount);
   } else {
-    sendBuyNowOrder();
+    sendBuyNowOrder(totalAmount, result);
   }
 }
 
-function sendBuyNowOrder() {
+function sendBuyNowOrder(totalAmount, deliveryResult) {
   if(!currentProduct) return;
   
   const price = currentProduct.discountPrice || currentProduct.originalPrice || 0;
@@ -5024,7 +5669,15 @@ function sendBuyNowOrder() {
   let message = `Hello ${businessName} Team,\n\n`;
   message += `I would like to place an order for the following product:\n\n`;
   message += `🛒 **Product:** ${currentProduct.title || 'Product'}\n`;
-  message += `💰 **Price:** PKR ${price}\n`;
+  message += `💰 **Product Price:** PKR ${price}\n`;
+  
+  if(deliveryResult.charge > 0) {
+    message += `🚚 **Delivery Charges:** PKR ${deliveryResult.charge}\n`;
+  } else {
+    message += `🎁 **Delivery:** FREE (Order above PKR ${deliverySettings.freeDeliveryMin})\n`;
+  }
+  
+  message += `🎯 **Total Amount:** PKR ${totalAmount}\n`;
   
   if(currentProduct.desc) {
     message += `📝 **Description:** ${currentProduct.desc}\n`;
@@ -5032,6 +5685,8 @@ function sendBuyNowOrder() {
   
   message += `\n---\n`;
   message += `💳 **Payment Method:** ${getPaymentMethodName(buyNowPaymentMethod)}\n`;
+  message += `📍 **Delivery Area:** ${selectedDeliveryOption === 'city' ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n`;
   
   if(buyNowPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
     message += `📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
@@ -5049,7 +5704,7 @@ function sendBuyNowOrder() {
   }
   
   // Add notification
-  addInnerNotification('Order Placed', `Order placed for ${currentProduct.title}`, 'success');
+  addInnerNotification('Order Placed', `Order placed for ${currentProduct.title} (Total: PKR ${totalAmount})`, 'success');
   
   closeModal('productModal');
 }
@@ -5076,8 +5731,14 @@ function openCheckoutModal() {
     `;
   });
   
-  document.getElementById('checkoutSubtotal').textContent = subtotal.toFixed(2);
-  document.getElementById('checkoutTotal').textContent = subtotal.toFixed(2);
+  // Set default delivery option
+  selectedDeliveryOption = 'city';
+  document.getElementById('deliveryCityOption').classList.add('selected');
+  document.getElementById('deliveryOtherOption').classList.remove('selected');
+  
+  // Update checkout summary
+  updateCheckoutSummary();
+  
   selectCheckoutPayment('whatsapp');
   
   openModal('checkoutModal');
@@ -5108,26 +5769,29 @@ function selectCheckoutPayment(method) {
 function proceedToPayment() {
   if(cart.length === 0) return;
   
+  const subtotal = getCartSubtotal();
+  const result = calculateDeliveryCharges();
+  const totalAmount = subtotal + result.charge;
+  
   if(checkoutPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    showPaymentDetailsModal('checkout');
+    showPaymentDetailsModal('checkout', totalAmount);
   } else {
-    sendCheckoutOrder();
+    sendCheckoutOrder(totalAmount, result);
   }
 }
 
-function showPaymentDetailsModal(context) {
+function showPaymentDetailsModal(context, totalAmount) {
   const paymentMethodTitle = document.getElementById('paymentMethodTitle');
   const paymentDetailsContent = document.getElementById('paymentDetailsContent');
   const businessName = card.businessName || card.name || "Your Business";
   
   if(context === 'buyNow' && currentProduct) {
-    const price = currentProduct.discountPrice || currentProduct.originalPrice || 0;
     paymentMethodTitle.innerHTML = `JazzCash Payment`;
     
     paymentDetailsContent.innerHTML = `
       <div style="text-align:center;">
         <div style="margin-bottom:20px;">
-          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${price}</strong> to:</div>
+          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${totalAmount}</strong> to:</div>
           <div style="font-size:24px;font-weight:900;color:#FF6B00;margin:15px 0;background:rgba(255,107,0,0.1);padding:15px;border-radius:16px;">
             ${card.payments.jazzcash.number || ''}
           </div>
@@ -5152,17 +5816,12 @@ function showPaymentDetailsModal(context) {
       </div>
     `;
   } else if(context === 'checkout') {
-    const total = cart.reduce((sum, item) => {
-      const price = parseFloat(item.discountPrice || item.originalPrice || 0);
-      return sum + (price * (item.quantity || 1));
-    }, 0);
-    
     paymentMethodTitle.innerHTML = `JazzCash Payment`;
     
     paymentDetailsContent.innerHTML = `
       <div style="text-align:center;">
         <div style="margin-bottom:20px;">
-          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${total.toFixed(2)}</strong> to:</div>
+          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${totalAmount.toFixed(2)}</strong> to:</div>
           <div style="font-size:24px;font-weight:900;color:#FF6B00;margin:15px 0;background:rgba(255,107,0,0.1);padding:15px;border-radius:16px;">
             ${card.payments.jazzcash.number || ''}
           </div>
@@ -5193,15 +5852,19 @@ function showPaymentDetailsModal(context) {
 }
 
 function confirmPayment() {
+  const subtotal = getCartSubtotal();
+  const result = calculateDeliveryCharges();
+  const totalAmount = subtotal + result.charge;
+  
   if(currentPage === 'checkoutModal' || checkoutPaymentMethod === 'jazzcash') {
-    sendCheckoutOrder();
+    sendCheckoutOrder(totalAmount, result);
   } else {
-    sendBuyNowOrder();
+    sendBuyNowOrder(totalAmount, result);
   }
   closeModal('paymentDetailsModal');
 }
 
-function sendCheckoutOrder() {
+function sendCheckoutOrder(totalAmount, deliveryResult) {
   if(cart.length === 0) return;
   
   const businessName = card.businessName || card.name || "Your Business";
@@ -5216,17 +5879,22 @@ function sendCheckoutOrder() {
     message += `${index + 1}. ${item.title || 'Product'} - Qty: ${item.quantity || 1} - PKR ${total.toFixed(2)}\n`;
   });
   
-  const orderTotal = cart.reduce((sum, item) => {
-    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
-    return sum + (price * (item.quantity || 1));
-  }, 0);
+  const subtotal = getCartSubtotal();
   
   message += `\n---\n`;
-  message += `💰 **Subtotal:** PKR ${orderTotal.toFixed(2)}\n`;
-  message += `📦 **Shipping:** PKR 0\n`;
-  message += `🎯 **Total:** PKR ${orderTotal.toFixed(2)}\n\n`;
+  message += `💰 **Subtotal:** PKR ${subtotal.toFixed(2)}\n`;
+  
+  if(deliveryResult.charge > 0) {
+    message += `🚚 **Shipping:** PKR ${deliveryResult.charge}\n`;
+  } else {
+    message += `🎁 **Shipping:** FREE (Order above PKR ${deliverySettings.freeDeliveryMin})\n`;
+  }
+  
+  message += `🎯 **Total:** PKR ${totalAmount.toFixed(2)}\n\n`;
   
   message += `💳 **Payment Method:** ${getPaymentMethodName(checkoutPaymentMethod)}\n`;
+  message += `📍 **Delivery Area:** ${selectedDeliveryOption === 'city' ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n`;
   
   if(checkoutPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
     message += `📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
@@ -5245,7 +5913,7 @@ function sendCheckoutOrder() {
   }
   
   // Add notification
-  addInnerNotification('Order Placed', `Order placed for ${cart.length} items (Total: PKR ${orderTotal.toFixed(2)})`, 'success');
+  addInnerNotification('Order Placed', `Order placed for ${cart.length} items (Total: PKR ${totalAmount.toFixed(2)})`, 'success');
   
   cart = [];
   updateCartCount();
@@ -5345,36 +6013,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("Found mapping: short", shortCardId, "-> full", id.substring(0, 8) + "...");
     } else {
       console.log("No mapping found for short ID:", id);
-    }
-  } else if (id && id.length === 36) { // UUID length
-    // Generate short ID for new cards (6 characters)
-    console.log("Detected full UUID, generating short ID...");
-    const shortId = generateShortId();
-    const { error } = await supa
-      .from('short_urls')
-      .insert([{ short_id: shortId, full_id: id }]);
-    
-    if (!error) {
-      shortCardId = shortId;
-      console.log("Generated short ID:", shortCardId);
-    } else {
-      console.log("Error creating short ID:", error);
-      // Try to get existing short ID
-      const { data: existing } = await supa
-        .from('short_urls')
-        .select('short_id')
-        .eq('full_id', id)
-        .single();
-      
-      if (existing) {
-        shortCardId = existing.short_id;
-        console.log("Found existing short ID:", shortCardId);
-      }
+      // Show error message
+      document.body.innerHTML = `
+        <div style="padding:40px;text-align:center;color:white;">
+          <h2>Invalid Business Link</h2>
+          <p>The business link you're trying to access doesn't exist.</p>
+          <button onclick="location.href='index.html'" style="margin-top:20px;padding:12px 24px;background:white;color:#667eea;border:none;border-radius:12px;font-weight:700;cursor:pointer;">
+            Create Your Business Card
+          </button>
+        </div>
+      `;
+      return;
     }
   }
   
   if(!id) {
-    document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
+    document.body.innerHTML = `
+      <div style="padding:40px;text-align:center;color:white;">
+        <h2>Business Not Found</h2>
+        <p>Please scan a valid business QR code or use a correct link.</p>
+        <button onclick="location.href='index.html'" style="margin-top:20px;padding:12px 24px;background:white;color:#667eea;border:none;border-radius:12px;font-weight:700;cursor:pointer;">
+          Create Your Business Card
+        </button>
+      </div>
+    `;
     return;
   }
 
@@ -5405,7 +6067,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   setTimeout(async () => {
     const {data, error} = await supa.from("cards").select("*").eq("id", id).single();
     if(error || !data) {
-      document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
+      document.body.innerHTML = `
+        <div style="padding:40px;text-align:center;color:white;">
+          <h2>Business Not Found</h2>
+          <p>The business you're looking for doesn't exist or has been removed.</p>
+          <button onclick="location.href='index.html'" style="margin-top:20px;padding:12px 24px;background:white;color:#667eea;border:none;border-radius:12px;font-weight:700;cursor:pointer;">
+            Create Your Business Card
+          </button>
+        </div>
+      `;
       return;
     }
 
