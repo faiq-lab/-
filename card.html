@@ -207,63 +207,61 @@ body {
   font-weight: 700;
 }
 
-/* ===== UPDATED: FIXED HEADER WITH BACKGROUND ===== */
+/* ===== FIXED: COMPACT HEADER WITH NO OVERLAP ===== */
 .header-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   max-width: 480px;
-  height: 80px;
+  height: 70px;
   background: rgba(102, 126, 234, 0.95);
   backdrop-filter: blur(30px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 15px;
   z-index: 1001;
   box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
 
-/* ===== UPDATED: CENTERED HEADER ICONS ===== */
+/* ===== FIXED: SIMPLE HEADER ICONS NO CIRCULAR BACKGROUND ===== */
 .header-icons {
   position: absolute;
-  top: 20px;
+  top: 15px;
   left: 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 25px;
+  gap: 30px;
   z-index: 10;
-  padding: 0 20px;
+  padding: 0 15px;
 }
 
 .header-icon-btn {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  border: none;
   transition: var(--transition-fast);
   position: relative;
 }
 
 .header-icon-btn:hover {
   transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.3);
+  background: transparent;
 }
 
 .header-icon-btn i {
   color: white;
-  font-size: 20px;
+  font-size: 22px;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
@@ -295,6 +293,324 @@ body {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
+}
+
+/* ===== FIXED: BACK BUTTON IN HEADER - NEW DESIGN ===== */
+.back-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 100;
+  transition: var(--transition-fast);
+}
+
+/* New arrow design */
+.back-btn i {
+  font-size: 20px;
+}
+
+.back-btn:hover {
+  transform: scale(1.1) translateX(-3px);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Save and Share buttons - also simplified */
+.save-contact-btn, .share-btn {
+  position: absolute;
+  top: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 100;
+  transition: var(--transition-fast);
+}
+
+.save-contact-btn {
+  left: 65px;
+}
+
+.share-btn {
+  right: 15px;
+}
+
+.save-contact-btn:hover, .share-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===== FIXED: ALL PAGES HAVE CONSISTENT PADDING ===== */
+#homePage, #productsPage, #cartPage, #aboutPage, #contactPage, #deliveryPage, #loginPage, #adminPage {
+  padding-top: 70px;
+  padding-bottom: 80px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
+}
+
+/* Fix admin/login page overlapping */
+#loginPage, #adminPage {
+  background: var(--light-color);
+}
+
+/* ===== FIXED: HEADER SECTIONS COMPACT ===== */
+.app-header, .products-header, .cart-header, .about-header, .contact-header, .delivery-page-header {
+  background: var(--primary-gradient);
+  padding: 20px 20px 25px;
+  border-radius: 0 0 40px 40px;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.welcome-text, .products-header h1, .cart-header h1, .about-header h1, .contact-header h1, .delivery-page-header h1 {
+  color: white;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+  padding-top: 0;
+}
+
+.welcome-text h1 {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  line-height: 1.2;
+}
+
+.welcome-text p, .products-header p, .cart-header p, .contact-header p, .delivery-page-header p {
+  font-size: 14px;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+/* ===== DARAZ/TEMU STYLE DELIVERY INFO IN PRODUCT CARDS ===== */
+.product-delivery-info {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  border-top: 1px dashed #e2e8f0;
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+.product-delivery-info i {
+  font-size: 10px;
+  color: #10b981;
+}
+
+.delivery-charge {
+  font-weight: 700;
+  color: var(--dark-color);
+}
+
+.delivery-time {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.free-delivery-badge {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: auto;
+}
+
+/* ===== CHECKOUT DELIVERY OPTIONS ===== */
+.delivery-options-section {
+  background: var(--lighter-color);
+  border-radius: var(--border-radius-md);
+  padding: 15px;
+  margin: 15px 0;
+  border: 1px solid #f1f5f9;
+  box-shadow: var(--shadow-sm);
+}
+
+.delivery-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.delivery-option:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.delivery-option.selected {
+  border-color: #10b981;
+  background: #f0fdf4;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+}
+
+.delivery-option input[type="radio"] {
+  accent-color: #10b981;
+  width: 18px;
+  height: 18px;
+}
+
+.delivery-option-details {
+  flex: 1;
+}
+
+.delivery-option-title {
+  font-weight: 700;
+  color: var(--dark-color);
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.delivery-option-subtitle {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.delivery-option-price {
+  font-weight: 800;
+  color: var(--dark-color);
+  font-size: 14px;
+  min-width: 60px;
+  text-align: right;
+}
+
+.delivery-option-price.free {
+  color: #10b981;
+}
+
+.free-delivery-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #f0fdf4;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #065f46;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.free-delivery-note i {
+  color: #10b981;
+}
+
+.minimum-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: #fef3c7;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #92400e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minimum-note i {
+  color: #f59e0b;
+}
+
+/* ===== UPDATED PRODUCT CARDS WITH DELIVERY INFO ===== */
+.product-card {
+  height: 280px; /* Increased for delivery info */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--lighter-color);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  padding: 8px;
+  overflow: hidden;
+  transition: var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  min-height: 280px;
+  max-height: 280px;
+}
+
+.product-image-container {
+  position: relative;
+  width: 100%;
+  min-height: 140px;
+  max-height: 140px; /* Reduced to make space for delivery info */
+  background: #f8fafc;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 4px;
+  padding: 0 2px;
+  margin-top: 2px;
+}
+
+.product-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dark-color);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 34px;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+
+.product-actions {
+  display: flex;
+  gap: 6px;
+  height: 32px;
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-top: 4px;
+  border-top: 1px solid #f1f5f9;
 }
 
 /* ===== FACEBOOK-STYLE NOTIFICATION DRAWER ===== */
@@ -386,74 +702,7 @@ body {
   gap: 10px;
 }
 
-/* Status Modal */
-.delivery-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 20000;
-  padding: 20px;
-}
-
-.delivery-modal {
-  background: var(--glass-bg);
-  border-radius: 24px;
-  width: 100%;
-  max-width: 400px;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-/* FIXED: REMOVED WHITE SPACE IN PAGES */
-#homePage {
-  padding-top: 80px; /* Reduced from 100px to match header height */
-  padding-bottom: 100px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.app-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px 30px; /* Reduced top padding */
-  border-radius: 0 0 50px 50px;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-  margin-top: 0; /* Removed extra margin */
-}
-
-.welcome-text {
-  color: white;
-  margin-bottom: 30px;
-  position: relative;
-  z-index: 1;
-  padding-top: 0; /* Removed padding */
-}
-
-.welcome-text h1 {
-  font-size: 32px;
-  font-weight: 900;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  line-height: 1.2;
-}
-
-.welcome-text p {
-  font-size: 16px;
-  opacity: 0.95;
-  font-weight: 400;
-}
-
+/* Quick Actions */
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -507,8 +756,8 @@ body {
 .profile-section {
   background: var(--glass-bg);
   border-radius: var(--border-radius-xl);
-  padding: 30px;
-  margin: 30px 25px; /* Reduced from 40px */
+  padding: 25px;
+  margin: 25px 20px;
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--glass-border);
   text-align: center;
@@ -555,7 +804,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 30px 25px 20px; /* Reduced from 40px */
+  margin: 25px 20px 15px;
   padding-bottom: 15px;
   border-bottom: 2px solid #f1f5f9;
 }
@@ -582,7 +831,6 @@ body {
   border-radius: var(--border-radius-xs);
 }
 
-/* REDESIGNED PRODUCT CARDS - Daraz/Temu Style */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -592,1059 +840,44 @@ body {
   margin-bottom: 20px;
 }
 
-.product-card {
-  height: 260px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: var(--lighter-color);
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-  padding: 8px;
-  overflow: hidden;
-  transition: var(--transition-fast);
-  cursor: pointer;
-  position: relative;
-  min-height: 260px;
-  max-height: 260px;
-}
-
-.product-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.product-image-container {
-  position: relative;
-  width: 100%;
-  min-height: 140px;
-  max-height: 160px;
-  background: #f8fafc;
-  border-radius: 6px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  flex-shrink: 0;
-  border: 1px solid #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.product-image {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: block;
-  padding: 4px;
-}
-
-.product-card.clicked .product-image {
-  transform: scale(1.8);
-  z-index: 100;
-  position: relative;
-}
-
-.discount-badge {
-  position: absolute;
-  bottom: 6px;
-  right: 6px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95) 0%, rgba(220, 38, 38, 0.95) 100%);
-  color: white;
-  font-weight: 900;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 4px;
-  z-index: 3;
-  border: 1px solid rgba(255,255,255,0.3);
-  min-width: 45px;
+/* Login Page - Fixed overlapping */
+.login-page-content {
+  padding: 40px 20px;
   text-align: center;
-  line-height: 1.2;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
 }
 
-.price-badge {
-  position: absolute;
-  bottom: 6px;
-  left: 6px;
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95) 0%, rgba(5, 150, 105, 0.95) 100%);
-  color: white;
-  font-weight: 900;
-  font-size: 13px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  border: 1px solid rgba(255,255,255,0.3);
-  min-width: 60px;
-  text-align: center;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
-}
-
-.price-badge .current-price {
-  font-size: 14px;
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: -0.2px;
-}
-
-.price-badge .original-price {
-  text-decoration: line-through;
-  font-size: 10px;
-  font-weight: 600;
-  opacity: 0.9;
-  line-height: 1;
-}
-
-.product-badges {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  z-index: 2;
-  max-width: 70%;
-}
-
-.badge {
-  background: rgba(16, 185, 129, 0.95);
-  color: white;
-  font-size: 9px;
-  font-weight: 800;
-  padding: 2px 5px;
-  border-radius: 3px;
-  display: inline-block;
-  white-space: nowrap;
-  line-height: 1.2;
-  text-align: right;
-  align-self: flex-end;
-  backdrop-filter: blur(4px);
-}
-
-.badge.hot { background: rgba(239, 68, 68, 0.95); }
-.badge.best-seller { background: rgba(245, 158, 11, 0.95); }
-.badge.discount { background: rgba(16, 185, 129, 0.95); }
-.badge.limited { background: rgba(139, 92, 246, 0.95); }
-.badge.stock { background: rgba(59, 130, 246, 0.95); }
-.badge.delivery { background: rgba(20, 184, 166, 0.95); }
-
-.product-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  gap: 4px;
-  padding: 0 2px;
-  margin-top: 2px;
-}
-
-.product-title {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--dark-color);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 34px;
-  margin-bottom: 2px;
-  flex-shrink: 0;
-}
-
-.product-actions {
-  display: flex;
-  gap: 6px;
-  height: 32px;
-  margin-top: auto;
-  flex-shrink: 0;
-  padding-top: 4px;
-  border-top: 1px solid #f1f5f9;
-}
-
-.btn-primary, .btn-secondary {
-  flex: 1;
-  height: 28px;
-  border: none;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  transition: var(--transition-fast);
-  white-space: nowrap;
-  min-height: 28px;
-  padding: 0 6px;
-  overflow: hidden;
-}
-
-.btn-primary {
-  background: var(--success-gradient);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #0da271 0%, #047857 100%);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  background: var(--info-gradient);
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  transform: translateY(-1px);
-}
-
-.btn-primary i, .btn-secondary i {
-  font-size: 11px;
-}
-
-@media (max-width: 400px) {
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 10px;
-  }
-  
-  .product-card {
-    height: 250px;
-    min-height: 250px;
-    max-height: 250px;
-  }
-  
-  .product-image-container {
-    min-height: 130px;
-    max-height: 150px;
-  }
-  
-  .product-title {
-    font-size: 11px;
-    height: 32px;
-  }
-  
-  .price-badge {
-    min-width: 55px;
-    padding: 3px 6px;
-    font-size: 12px;
-  }
-  
-  .discount-badge {
-    min-width: 40px;
-    padding: 2px 4px;
-    font-size: 10px;
-  }
-  
-  .btn-primary, .btn-secondary {
-    height: 26px;
-    font-size: 10px;
-    min-height: 26px;
-  }
-}
-
-.modal-content .product-image-container {
-  min-height: 200px;
-  max-height: 300px;
-  width: 100%;
-  margin-bottom: 16px;
-}
-
-.modal-content .product-image {
-  max-height: 280px;
-  width: auto;
-  max-width: 100%;
-}
-
-.modal-price-container {
-  margin-bottom: 16px;
-  padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.modal-price-container .current-price {
+.login-title {
   font-size: 24px;
   font-weight: 900;
-  color: #10b981;
-  margin-bottom: 4px;
-}
-
-.modal-price-container .original-price {
-  font-size: 16px;
-  color: #94a3b8;
-  text-decoration: line-through;
-  margin-right: 8px;
-  font-weight: 500;
-}
-
-.image-zoom-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.95);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
-  animation: fadeIn 0.3s ease;
-}
-
-.image-zoom-content {
-  max-width: 90%;
-  max-height: 90%;
-  animation: zoomIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes zoomIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-/* FIXED: REDUCED PADDING IN OTHER PAGES */
-#productsPage {
-  padding-top: 80px; /* Reduced from 100px */
-  padding-bottom: 100px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.products-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px; /* Reduced from 50px */
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.products-header h1 {
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-  margin-top: 0; /* Removed extra margin */
-}
-
-.products-header p {
-  color: rgba(255,255,255,0.95);
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.products-search {
-  position: relative;
-  margin: 20px;
-  background: var(--glass-bg);
-  border-radius: var(--border-radius-lg);
-  padding: 5px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--glass-border);
-}
-
-.products-search input {
-  width: 100%;
-  padding: 15px 50px 15px 20px;
-  border: none;
-  border-radius: var(--border-radius-md);
-  font-size: 15px;
-  background: transparent;
   color: var(--dark-color);
+  margin-bottom: 10px;
 }
 
-.products-search i {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #64748b;
-  font-size: 20px;
-}
-
-/* FIXED: REDUCED PADDING */
-#cartPage {
-  padding-top: 80px; /* Reduced from 100px */
-  padding-bottom: 100px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.cart-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px; /* Reduced from 50px */
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.cart-header h1 {
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-  margin-top: 0; /* Removed extra margin */
-}
-
-.cart-header p {
-  color: rgba(255,255,255,0.95);
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.cart-empty {
-  text-align: center;
-  padding: 80px 25px;
-}
-
-.cart-empty i {
-  font-size: 80px;
-  color: #cbd5e1;
-  margin-bottom: 20px;
-  opacity: 0.5;
-}
-
-.cart-empty h3 {
-  font-size: 22px;
-  color: var(--dark-color);
-  margin-bottom: 15px;
-  font-weight: 800;
-}
-
-.cart-empty p {
+.login-subtitle {
+  font-size: 14px;
   color: #64748b;
   margin-bottom: 30px;
-  font-size: 16px;
 }
 
-.cart-empty button {
-  padding: 15px 30px;
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-md);
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-}
-
-.cart-item {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
+.password-input {
+  width: 100%;
   padding: 15px;
-  display: flex;
-  gap: 15px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid #f1f5f9;
-}
-
-.cart-item-img {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--border-radius-md);
-  object-fit: contain;
-  background: white;
-  flex-shrink: 0;
-  padding: 8px;
-}
-
-.cart-item-details {
-  flex: 1;
-}
-
-.cart-item-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--dark-color);
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-
-.cart-item-price {
-  color: #ef4444;
-  font-weight: 800;
-  font-size: 16px;
-  margin-bottom: 12px;
-}
-
-.cart-item-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.quantity-control {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #f8fafc;
-  padding: 6px;
-  border-radius: var(--border-radius-md);
-  border: 1px solid #e2e8f0;
-}
-
-.quantity-btn {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--border-radius-xs);
   border: 2px solid #e2e8f0;
-  background: white;
-  color: var(--dark-color);
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-
-.quantity {
-  font-weight: 800;
-  color: var(--dark-color);
-  min-width: 25px;
+  border-radius: var(--border-radius-md);
+  font-size: 16px;
+  margin: 20px 0;
   text-align: center;
+  letter-spacing: 2px;
 }
 
-.remove-btn {
-  background: var(--danger-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-xs);
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-  min-width: 60px;
+.password-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 10px;
+  font-style: italic;
 }
 
-.cart-summary {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 25px;
-  margin: 25px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid #f1f5f9;
-}
-
-.cart-summary h3 {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--dark-color);
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #f1f5f9;
-}
-
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  color: #475569;
-  font-size: 15px;
-}
-
-.summary-total {
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--dark-color);
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: 2px solid #f1f5f9;
-}
-
-.checkout-btn {
-  width: 100%;
-  padding: 18px;
-  background: var(--success-gradient);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-lg);
-  font-size: 17px;
-  font-weight: 800;
-  cursor: pointer;
-  margin-top: 25px;
-}
-
-/* FIXED: REDUCED PADDING */
-#aboutPage {
-  padding-top: 80px; /* Reduced from 100px */
-  padding-bottom: 100px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.about-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px; /* Reduced from 50px */
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.about-header h1 {
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-  margin-top: 0; /* Removed extra margin */
-}
-
-.about-content {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 25px;
-  box-shadow: var(--shadow-md);
-  margin: 25px;
-  border: 1px solid #f1f5f9;
-}
-
-.about-content p {
-  line-height: 1.8;
-  color: #475569;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-.business-hours {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 25px;
-  box-shadow: var(--shadow-md);
-  margin: 20px;
-  border: 1px solid #f1f5f9;
-}
-
-.business-hours h3 {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--dark-color);
-  margin-bottom: 20px;
-}
-
-.hours-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.hour-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px;
-  background: #f8fafc;
-  border-radius: var(--border-radius-md);
-  border: 1px solid #e2e8f0;
-}
-
-.day-name {
-  font-weight: 600;
-  color: #475569;
-  font-size: 14px;
-}
-
-.day-time {
-  font-weight: 800;
-  color: var(--dark-color);
-  font-size: 14px;
-}
-
-.day-time.closed {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
-  padding: 5px 12px;
-  border-radius: 20px;
-}
-
-/* FIXED: REDUCED PADDING */
-#contactPage {
-  padding-top: 80px; /* Reduced from 100px */
-  padding-bottom: 100px;
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-}
-
-.contact-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px; /* Reduced from 50px */
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.contact-header h1 {
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-  margin-top: 0; /* Removed extra margin */
-}
-
-.contact-header p {
-  color: rgba(255,255,255,0.95);
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.contact-info {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 20px;
-  box-shadow: var(--shadow-md);
-  margin: 25px;
-  border: 1px solid #f1f5f9;
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 18px;
-  margin-bottom: 15px;
-  background: #f8fafc;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  border: 1px solid #e2e8f0;
-}
-
-.contact-item:last-child {
-  margin-bottom: 0;
-}
-
-.contact-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: var(--border-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: white;
-  flex-shrink: 0;
-}
-
-.contact-item:nth-child(1) .contact-icon { background: var(--primary-gradient); }
-.contact-item:nth-child(2) .contact-icon { background: var(--success-gradient); }
-.contact-item:nth-child(3) .contact-icon { background: var(--whatsapp-gradient); }
-.contact-item:nth-child(4) .contact-icon { background: var(--secondary-gradient); }
-.contact-item:nth-child(5) .contact-icon { background: var(--warning-gradient); }
-
-.contact-details {
-  flex: 1;
-}
-
-.contact-label {
-  font-size: 11px;
-  color: #64748b;
-  margin-bottom: 4px;
-  font-weight: 700;
-}
-
-.contact-value {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--dark-color);
-}
-
-.social-links {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 25px;
-  box-shadow: var(--shadow-md);
-  margin: 20px;
-  border: 1px solid #f1f5f9;
-}
-
-.social-links h3 {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--dark-color);
-  margin-bottom: 20px;
-}
-
-.social-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-}
-
-.social-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: var(--border-radius-md);
-  cursor: pointer;
-  text-decoration: none;
-  border: 1px solid #e2e8f0;
-}
-
-.social-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: var(--border-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  color: white;
-}
-
-.social-label {
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--dark-color);
-}
-
-.social-icon.facebook { background: #1877F2; }
-.social-icon.instagram { background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); }
-.social-icon.twitter { background: #1DA1F2; }
-.social-icon.linkedin { background: #0A66C2; }
-.social-icon.youtube { background: #FF0000; }
-.social-icon.tiktok { background: #000000; }
-
-/* FIXED: BACK BUTTON MOVED TO HEADER */
-.back-btn {
-  position: absolute;
-  top: 20px; /* Now in header */
-  left: 20px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  backdrop-filter: blur(10px);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.3);
-  z-index: 100;
-}
-
-.page-footer-spacer {
-  height: 30px;
-}
-
-.cart-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: var(--danger-gradient);
-  color: white;
-  font-size: 11px;
-  font-weight: 900;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 5px;
-  border: 2px solid var(--glass-bg);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  z-index: 10;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  backdrop-filter: blur(15px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  padding: 20px;
-}
-
-.modal-content {
-  background: var(--glass-bg);
-  border-radius: var(--border-radius-xl);
-  width: 100%;
-  max-width: 420px;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: var(--shadow-xl);
-  border: 1px solid var(--glass-border);
-}
-
-.close-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(0,0,0,0.1);
-  color: var(--dark-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 10;
-}
-
-@media (max-width: 480px) {
-  .app-container {
-    max-width: 100%;
-  }
-  
-  .social-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .quick-actions {
-    grid-template-columns: 1fr;
-  }
-  
-  .header-icons {
-    gap: 20px;
-  }
-  
-  .header-icon-btn {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .notification-drawer {
-    width: 100%;
-    right: -100%;
-  }
-  
-  .back-btn {
-    top: 20px;
-  }
-}
-
-@media (max-width: 360px) {
-  .social-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .header-icons {
-    gap: 15px;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 10px;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --light-color: #0f172a;
-    --lighter-color: #1e293b;
-    --dark-color: #f8fafc;
-    --glass-bg: rgba(30, 41, 59, 0.95);
-    --glass-border: rgba(255, 255, 255, 0.1);
-  }
-  
-  body {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  }
-  
-  .app-container {
-    background: var(--light-color);
-  }
-  
-  .product-card,
-  .cart-item,
-  .cart-summary,
-  .about-content,
-  .business-hours,
-  .contact-info,
-  .social-links {
-    background: var(--lighter-color);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .header-container {
-    background: rgba(30, 41, 59, 0.95);
-  }
-}
-
-/* ===== DELIVERY PAGE STYLES ===== */
-.delivery-page-header {
-  background: var(--primary-gradient);
-  padding: 30px 25px 30px; /* Reduced from 50px */
-  border-radius: 0 0 50px 50px;
-  margin: 0;
-  position: relative;
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-
-.delivery-page-header h1 {
-  color: white;
-  font-size: 28px;
-  font-weight: 800;
-  margin-bottom: 12px;
-  position: relative;
-  z-index: 1;
-  margin-top: 0; /* Removed extra margin */
-}
-
-.delivery-page-header p {
-  color: rgba(255,255,255,0.95);
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
-
+/* Delivery Page */
 .delivery-card {
   background: var(--lighter-color);
   border-radius: var(--border-radius-lg);
@@ -1725,78 +958,6 @@ body {
   gap: 6px;
 }
 
-.admin-search {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  margin: 15px;
-  font-size: 14px;
-}
-
-.admin-order-card {
-  background: var(--lighter-color);
-  border-radius: var(--border-radius-lg);
-  padding: 20px;
-  margin: 15px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid #f1f5f9;
-}
-
-.admin-order-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
-
-.admin-order-id {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--dark-color);
-}
-
-.admin-customer-info {
-  color: #64748b;
-  font-size: 13px;
-  margin-top: 5px;
-}
-
-.admin-input {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 14px;
-}
-
-.admin-select {
-  width: 100%;
-  padding: 10px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  background: white;
-}
-
-.admin-btn {
-  width: 100%;
-  padding: 12px;
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.admin-btn.success {
-  background: var(--success-gradient);
-}
-
 .no-deliveries {
   text-align: center;
   padding: 60px 20px;
@@ -1822,110 +983,313 @@ body {
   font-size: 16px;
 }
 
-.password-prompt {
+/* Cart Summary with Delivery */
+.cart-summary {
   background: var(--lighter-color);
-  padding: 30px;
   border-radius: var(--border-radius-lg);
-  margin: 40px 20px;
-  text-align: center;
+  padding: 20px;
+  margin: 20px;
   box-shadow: var(--shadow-md);
+  border: 1px solid #f1f5f9;
 }
 
-.password-input {
-  width: 100%;
+.cart-summary h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark-color);
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #475569;
+  font-size: 15px;
+}
+
+.summary-row.delivery-charge {
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.summary-row.delivery-charge .value.free {
+  color: #10b981;
+  font-weight: 800;
+}
+
+.summary-total {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--dark-color);
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #f1f5f9;
+}
+
+/* Checkout Modal Updates */
+.checkout-delivery-section {
+  margin: 20px 0;
+}
+
+.checkout-summary {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: var(--border-radius-md);
+  margin: 25px 0;
+  border: 1px solid #e2e8f0;
+}
+
+.checkout-summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.checkout-summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #e2e8f0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark-color);
+}
+
+/* Payment Options */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.payment-option {
   padding: 15px;
   border: 2px solid #e2e8f0;
   border-radius: var(--border-radius-md);
-  font-size: 16px;
-  margin: 20px 0;
-  text-align: center;
-  letter-spacing: 2px;
-}
-
-.password-hint {
-  font-size: 12px;
-  color: #94a3b8;
-  margin-top: 10px;
-}
-
-/* ===== NOTIFICATION ALERT ===== */
-.notification-alert {
-  position: fixed;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--whatsapp-gradient);
-  color: white;
-  padding: 15px 25px;
-  border-radius: 12px;
-  box-shadow: var(--shadow-xl);
-  z-index: 3000;
-  max-width: 300px;
-  animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
-  font-weight: 700;
-  font-size: 14px;
-  text-align: center;
-  display: none;
-}
-
-@keyframes slideIn {
-  from { top: 50px; opacity: 0; }
-  to { top: 100px; opacity: 1; }
-}
-
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
-
-/* ===== LOGOUT BUTTON ===== */
-.logout-btn {
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 15px;
-  background: rgba(239, 68, 68, 0.9);
+  gap: 12px;
+  background: white;
+  transition: var(--transition-fast);
+}
+
+.payment-option:hover {
+  border-color: #cbd5e1;
+  transform: translateY(-2px);
+}
+
+.payment-option.selected {
+  border-color: #10b981;
+  background: #f0fdf4;
+}
+
+.payment-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
   color: white;
-  border: none;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition);
 }
 
-.logout-btn:hover {
-  background: rgba(220, 38, 38, 0.9);
-  transform: scale(1.05);
+.payment-icon.whatsapp { background: #25D366; }
+.payment-icon.cod { background: #10b981; }
+.payment-icon.jazzcash { background: #FF6B00; }
+
+.payment-details {
+  flex: 1;
 }
 
-/* ===== SIMPLE LOGIN PAGE ===== */
-.login-page-content {
-  padding: 40px 25px;
-  text-align: center;
+.payment-title {
+  font-weight: 800;
+  color: var(--dark-color);
+  font-size: 14px;
 }
 
-.login-title {
+.payment-subtitle {
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* MODAL CONTENT - FIXED SPACING */
+.modal-content {
+  background: var(--glass-bg);
+  border-radius: var(--border-radius-xl);
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--glass-border);
+  padding: 0;
+}
+
+.modal-content .product-image-container {
+  min-height: 200px;
+  max-height: 300px;
+  width: 100%;
+  margin-bottom: 16px;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.modal-content .product-image {
+  max-height: 280px;
+  width: auto;
+  max-width: 100%;
+}
+
+.modal-price-container {
+  margin-bottom: 16px;
+  padding: 12px 20px 0;
+}
+
+.modal-price-container .current-price {
   font-size: 24px;
   font-weight: 900;
-  color: var(--dark-color);
-  margin-bottom: 10px;
+  color: #10b981;
+  margin-bottom: 4px;
 }
 
-.login-subtitle {
-  font-size: 14px;
-  color: #64748b;
-  margin-bottom: 30px;
-}
-
-.login-hint {
-  font-size: 12px;
+.modal-price-container .original-price {
+  font-size: 16px;
   color: #94a3b8;
-  margin-top: 20px;
-  font-style: italic;
+  text-decoration: line-through;
+  margin-right: 8px;
+  font-weight: 500;
 }
 
-/* ===== DOUBLE CLICK EXIT MODAL ===== */
+.modal-content > div:last-child {
+  padding: 0 20px 25px;
+}
+
+/* Delivery Modal */
+.delivery-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000;
+  padding: 20px;
+}
+
+.delivery-modal {
+  background: var(--glass-bg);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Image Zoom Overlay */
+.image-zoom-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  animation: fadeIn 0.3s ease;
+}
+
+.image-zoom-content {
+  max-width: 90%;
+  max-height: 90%;
+  animation: zoomIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Status Modal */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.1);
+  color: var(--dark-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Cart Badge */
+.cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--danger-gradient);
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border: 2px solid var(--glass-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  backdrop-filter: blur(15px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+/* Exit Modal */
 .exit-modal-overlay {
   position: fixed;
   top: 0;
@@ -2001,104 +1365,7 @@ body {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
 
-/* ===== INSTALL BUTTON ===== */
-.install-button-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 10000;
-  animation: slideDown 0.5s ease;
-}
-
-.install-btn {
-  padding: 12px 24px;
-  background: var(--primary-gradient);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  font-weight: 800;
-  cursor: pointer;
-  box-shadow: var(--shadow-xl);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: var(--transition);
-}
-
-.install-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-}
-
-@keyframes slideDown {
-  from { top: -100px; opacity: 0; }
-  to { top: 20px; opacity: 1; }
-}
-
-/* ===== SHARE BUTTON ===== */
-.share-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  z-index: 100;
-  transition: var(--transition-fast);
-}
-
-.share-btn:hover {
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* ===== SAVE TO CONTACTS BUTTON ===== */
-.save-contact-btn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  z-index: 100;
-  transition: var(--transition-fast);
-}
-
-.save-contact-btn:hover {
-  transform: scale(1.1);
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* ===== ANIMATIONS FOR NOTIFICATIONS ===== */
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideOutRight {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(100%); opacity: 0; }
-}
-
-/* ===== INSTALL PERMISSION MODAL ===== */
+/* Install Permission Modal */
 .install-permission-modal {
   background: var(--glass-bg);
   border-radius: 24px;
@@ -2184,6 +1451,127 @@ body {
 .permission-btn.accept:hover {
   background: linear-gradient(135deg, #0da271 0%, #047857 100%);
 }
+
+/* Notification Alert */
+.notification-alert {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--whatsapp-gradient);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-xl);
+  z-index: 3000;
+  max-width: 300px;
+  animation: slideIn 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+  font-weight: 700;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+@keyframes slideIn {
+  from { top: 50px; opacity: 0; }
+  to { top: 100px; opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --light-color: #0f172a;
+    --lighter-color: #1e293b;
+    --dark-color: #f8fafc;
+    --glass-bg: rgba(30, 41, 59, 0.95);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
+  
+  body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  }
+  
+  .app-container {
+    background: var(--light-color);
+  }
+  
+  .product-card,
+  .cart-item,
+  .cart-summary,
+  .about-content,
+  .business-hours,
+  .contact-info,
+  .social-links {
+    background: var(--lighter-color);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .header-container {
+    background: rgba(30, 41, 59, 0.95);
+  }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .app-container {
+    max-width: 100%;
+  }
+  
+  .social-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-icons {
+    gap: 25px;
+  }
+  
+  .header-icon-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .notification-drawer {
+    width: 100%;
+    right: -100%;
+  }
+  
+  .back-btn {
+    top: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .header-icons {
+    gap: 20px;
+  }
+}
 </style>
 </head>
 
@@ -2191,7 +1579,7 @@ body {
 <div class="app-container">
   <!-- Fixed Header -->
   <div class="header-container">
-    <!-- Back Button in Header -->
+    <!-- Back Button in Header - New Design -->
     <button class="back-btn" onclick="goBack()" id="headerBackBtn" style="display:none;">
       <i class="fas fa-arrow-left"></i>
     </button>
@@ -2201,7 +1589,7 @@ body {
       <i class="fas fa-address-card"></i>
     </div>
     
-    <!-- Centered Header Icons -->
+    <!-- Centered Header Icons - Simple (No Circular Background) -->
     <div class="header-icons">
       <!-- Notification Bell -->
       <div class="header-icon-btn" onclick="toggleNotificationDrawer()" title="Notifications">
@@ -2221,7 +1609,7 @@ body {
       </div>
     </div>
     
-    <!-- Share Button (Top Right) -->
+    <!-- Share Button -->
     <div class="share-btn" onclick="shareBusiness()" title="Share Business">
       <i class="fas fa-share-alt"></i>
     </div>
@@ -2646,40 +2034,71 @@ body {
       <h2 id="modalTitle" style="font-size:20px;font-weight:800;color:var(--dark-color);margin-bottom:12px;"></h2>
       <p id="modalDescription" style="color:#64748b;line-height:1.6;margin-bottom:20px;font-size:14px;"></p>
       
+      <!-- Delivery Info in Modal -->
+      <div id="modalDeliveryInfo" style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: var(--border-radius-md); border: 1px solid #e2e8f0;">
+        <h4 style="font-size: 15px; font-weight: 800; color: var(--dark-color); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-truck"></i> Delivery Information
+        </h4>
+        <div id="modalDeliveryDetails" style="font-size: 13px; color: #64748b; line-height: 1.5;">
+          <!-- Delivery info will be populated here -->
+        </div>
+      </div>
+      
       <div id="directCheckoutSection" style="display:none; margin-top: 25px; padding-top: 25px; border-top: 2px solid #f1f5f9;">
         <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
           Checkout Now
         </h3>
         
+        <!-- Delivery Options for Quick Buy -->
+        <div id="quickBuyDeliveryOptions" class="delivery-options-section" style="margin-bottom: 20px;">
+          <!-- Delivery options will be populated here -->
+        </div>
+        
         <div class="payment-options" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
           <div class="payment-option" onclick="selectBuyNowPayment('whatsapp')" id="whatsappBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#25D366;">
+            <div class="payment-icon whatsapp">
               <i class="fab fa-whatsapp"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">WhatsApp Order</div>
-              <div style="font-size:12px;color:#64748b;">Confirm via WhatsApp</div>
+            <div class="payment-details">
+              <div class="payment-title">WhatsApp Order</div>
+              <div class="payment-subtitle">Confirm via WhatsApp</div>
             </div>
           </div>
           
           <div class="payment-option" onclick="selectBuyNowPayment('cod')" id="codBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#10b981;">
+            <div class="payment-icon cod">
               <i class="fas fa-truck"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">Cash on Delivery</div>
-              <div style="font-size:12px;color:#64748b;">Pay when arrives</div>
+            <div class="payment-details">
+              <div class="payment-title">Cash on Delivery</div>
+              <div class="payment-subtitle">Pay when arrives</div>
             </div>
           </div>
           
-          <div class="payment-option" onclick="selectBuyNowPayment('jazzcash')" id="jazzcashBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
+          <div class="payment-option" onclick="selectBuyNowPayment('jazzcash')" id="jazzcashBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon jazzcash">
               <i class="fas fa-qrcode"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">JazzCash / EasyPaisa</div>
-              <div style="font-size:12px;color:#64748b;">Pay via QR Code</div>
+            <div class="payment-details">
+              <div class="payment-title">JazzCash / EasyPaisa</div>
+              <div class="payment-subtitle">Pay via QR Code</div>
             </div>
+          </div>
+        </div>
+        
+        <!-- Quick Buy Summary -->
+        <div id="quickBuySummary" class="checkout-summary" style="display: none;">
+          <div class="checkout-summary-row">
+            <span>Product Price</span>
+            <span>PKR <span id="quickBuyProductPrice">0</span></span>
+          </div>
+          <div class="checkout-summary-row">
+            <span>Delivery Charge</span>
+            <span>PKR <span id="quickBuyDeliveryCharge">0</span></span>
+          </div>
+          <div class="checkout-summary-total">
+            <span>Total</span>
+            <span style="color:#10b981;font-weight:900;">PKR <span id="quickBuyTotal">0</span></span>
           </div>
         </div>
         
@@ -2712,55 +2131,61 @@ body {
       <div id="checkoutItems" style="margin-bottom:25px;max-height:250px;overflow-y:auto;padding-right:10px;">
       </div>
       
+      <!-- Delivery Options Section -->
+      <div id="checkoutDeliveryOptions" class="delivery-options-section">
+        <!-- Delivery options will be populated here -->
+      </div>
+      
       <div style="margin:20px 0;">
         <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
           Payment Method
         </h3>
         <div class="payment-options" style="display:flex;flex-direction:column;gap:12px;">
-          <div class="payment-option" onclick="selectCheckoutPayment('whatsapp')" id="whatsappCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#25D366;">
+          <div class="payment-option" onclick="selectCheckoutPayment('whatsapp')" id="whatsappCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon whatsapp">
               <i class="fab fa-whatsapp"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">WhatsApp Order</div>
-              <div style="font-size:12px;color:#64748b;">Confirm via WhatsApp</div>
+            <div class="payment-details">
+              <div class="payment-title">WhatsApp Order</div>
+              <div class="payment-subtitle">Confirm via WhatsApp</div>
             </div>
           </div>
           
-          <div class="payment-option" onclick="selectCheckoutPayment('cod')" id="codCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#10b981;">
+          <div class="payment-option" onclick="selectCheckoutPayment('cod')" id="codCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon cod">
               <i class="fas fa-truck"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">Cash on Delivery</div>
-              <div style="font-size:12px;color:#64748b;">Pay when arrives</div>
+            <div class="payment-details">
+              <div class="payment-title">Cash on Delivery</div>
+              <div class="payment-subtitle">Pay when arrives</div>
             </div>
           </div>
           
-          <div class="payment-option" onclick="selectCheckoutPayment('jazzcash')" id="jazzcashCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
+          <div class="payment-option" onclick="selectCheckoutPayment('jazzcash')" id="jazzcashCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon jazzcash">
               <i class="fas fa-qrcode"></i>
             </div>
-            <div>
-              <div style="font-weight:800;color:var(--dark-color);font-size:14px;">JazzCash / EasyPaisa</div>
-              <div style="font-size:12px;color:#64748b;">Pay via QR Code</div>
+            <div class="payment-details">
+              <div class="payment-title">JazzCash / EasyPaisa</div>
+              <div class="payment-subtitle">Pay via QR Code</div>
             </div>
           </div>
         </div>
       </div>
       
-      <div style="background:#f8fafc;padding:20px;border-radius:var(--border-radius-md);margin:25px 0;border:1px solid #e2e8f0;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-          <span style="color:#64748b;font-size:14px;">Subtotal</span>
-          <span style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR <span id="checkoutSubtotal">0</span></span>
+      <!-- Checkout Summary with Delivery -->
+      <div class="checkout-summary">
+        <div class="checkout-summary-row">
+          <span>Subtotal</span>
+          <span>PKR <span id="checkoutSubtotal">0</span></span>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:12px;">
-          <span style="color:#64748b;font-size:14px;">Shipping</span>
-          <span style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR 0</span>
+        <div class="checkout-summary-row">
+          <span>Delivery</span>
+          <span>PKR <span id="checkoutDeliveryCharge">0</span></span>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:15px;padding-top:15px;border-top:2px solid #e2e8f0;">
-          <span style="font-size:18px;font-weight:800;color:var(--dark-color);">Total</span>
-          <span style="font-size:24px;font-weight:900;color:#10b981;">PKR <span id="checkoutTotal">0</span></span>
+        <div class="checkout-summary-total">
+          <span>Total</span>
+          <span style="color:#10b981;font-weight:900;">PKR <span id="checkoutTotal">0</span></span>
         </div>
       </div>
       
@@ -2831,20 +2256,17 @@ function initCustomerData() {
   customerData.lastActive = new Date().toISOString();
   customerData.phone = getCustomerPhone() || '';
   
-  // Load saved customer name and email
   const savedName = isolatedLocalStorage.getItem('customerName');
   const savedEmail = isolatedLocalStorage.getItem('customerEmail');
   customerData.name = savedName || '';
   customerData.email = savedEmail || '';
   
-  // Save to Supabase
   saveCustomerDataToBackend();
 }
 
 // Save customer data to Supabase
 async function saveCustomerDataToBackend() {
   try {
-    // First check if customer already exists
     const { data: existing } = await supa
       .from('customer_data')
       .select('id')
@@ -2852,7 +2274,6 @@ async function saveCustomerDataToBackend() {
       .maybeSingle();
     
     if (existing) {
-      // Update existing customer
       const { error } = await supa
         .from('customer_data')
         .update({
@@ -2868,7 +2289,6 @@ async function saveCustomerDataToBackend() {
         console.log('Customer data updated');
       }
     } else {
-      // Insert new customer
       const { error } = await supa
         .from('customer_data')
         .insert([{
@@ -2904,12 +2324,10 @@ function updateCustomerPermissions(permissionType, granted) {
 let installPermissionsShown = false;
 
 function showInstallPermissionModal() {
-  // Don't show if already shown in this session
   if (installPermissionsShown || isolatedLocalStorage.getItem('installPermissionsShown') === 'true') {
     return;
   }
   
-  // Wait 3 seconds after app loads
   setTimeout(() => {
     document.getElementById('installPermissionModal').style.display = 'flex';
     installPermissionsShown = true;
@@ -2920,42 +2338,33 @@ function closeInstallPermissionModal() {
   document.getElementById('installPermissionModal').style.display = 'none';
   isolatedLocalStorage.setItem('installPermissionsShown', 'true');
   
-  // Update permission
   updateCustomerPermissions('install_modal', false);
 }
 
 async function acceptInstallPermissions() {
-  // Save that permissions were accepted
   isolatedLocalStorage.setItem('installPermissionsShown', 'true');
   
-  // Update permissions
   updateCustomerPermissions('install_modal', true);
   updateCustomerPermissions('contacts', true);
   updateCustomerPermissions('notifications', true);
   updateCustomerPermissions('install_prompt', true);
   
-  // Close modal
   document.getElementById('installPermissionModal').style.display = 'none';
   
-  // Show notification
   showNotification('✅ Thank you! Enhancing your experience...');
   
-  // Try to save business to contacts automatically
   setTimeout(() => {
-    saveBusinessToContacts(true); // true = silent mode
+    saveBusinessToContacts(true);
   }, 1000);
   
-  // Enable notifications
   setTimeout(() => {
     enableNotifications();
   }, 2000);
   
-  // Show install prompt if available
   setTimeout(() => {
     showInstallPromptIfAvailable();
   }, 3000);
   
-  // Save customer data
   saveCustomerDataToBackend();
 }
 
@@ -2968,7 +2377,6 @@ async function saveBusinessToContacts(silent = false) {
     return;
   }
   
-  // Check if contacts API is available
   if (!('contacts' in navigator && 'ContactsManager' in window)) {
     if (!silent) {
       showSaveContactsFallback();
@@ -2977,11 +2385,9 @@ async function saveBusinessToContacts(silent = false) {
   }
   
   try {
-    // Request contacts permission
     const granted = await navigator.permissions.query({ name: 'contacts' });
     
     if (granted.state === 'granted') {
-      // Create contact object
       const contact = {
         name: [card.name],
         tel: [{
@@ -3003,7 +2409,6 @@ async function saveBusinessToContacts(silent = false) {
         }] : []
       };
       
-      // Save contact
       const contacts = await navigator.contacts.select(['name', 'tel', 'email'], { multiple: false });
       await navigator.contacts.save(contact);
       
@@ -3011,13 +2416,10 @@ async function saveBusinessToContacts(silent = false) {
         showNotification('✅ Business saved to contacts!');
       }
       
-      // Add inner notification
       addInnerNotification('Contact Saved', `${card.name} saved to your phonebook`, 'success');
       
-      // Update permission
       updateCustomerPermissions('contacts_saved', true);
       
-      // Log to backend
       logContactSave();
       
     } else {
@@ -3044,7 +2446,6 @@ function showSaveContactsFallback() {
   if (email) contactInfo += `Email: ${email}\n`;
   if (address) contactInfo += `Address: ${address}\n`;
   
-  // Copy to clipboard
   navigator.clipboard.writeText(contactInfo).then(() => {
     showNotification('📋 Contact info copied! Paste in your contacts app');
   }).catch(() => {
@@ -3256,7 +2657,6 @@ function addInnerNotification(title, message, type = 'info') {
   innerNotifications.unshift(notification);
   unreadNotifications++;
   
-  // Keep only last 50 notifications
   if (innerNotifications.length > 50) {
     innerNotifications.pop();
   }
@@ -3264,7 +2664,6 @@ function addInnerNotification(title, message, type = 'info') {
   saveInnerNotifications();
   updateNotificationBellCount();
   
-  // Update drawer if open
   if (document.getElementById('notificationDrawer').classList.contains('open')) {
     loadNotificationDrawer();
   }
@@ -3301,16 +2700,12 @@ async function enableNotifications() {
     notificationPermission = true;
     updateNotificationBellCount();
     
-    // Register service worker
     await registerServiceWorker();
     
-    // Start listening for Supabase notifications
     startNotificationListener();
     
-    // Add inner notification
     addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
     
-    // Update permission
     updateCustomerPermissions('notifications', true);
   } else {
     showNotification('❌ Notifications disabled. You wont receive alerts.');
@@ -3340,7 +2735,6 @@ function startNotificationListener() {
   
   console.log('Starting notification listener...');
   
-  // Subscribe to Supabase real-time notifications
   supa
     .channel('business-notifications')
     .on(
@@ -3353,13 +2747,10 @@ function startNotificationListener() {
       (payload) => {
         console.log('New notification:', payload.new);
         
-        // Show push notification (mobile top-bar)
         showPushNotification(payload.new);
         
-        // Add inner notification (Facebook-style drawer)
         addInnerNotification(payload.new.title, payload.new.body, 'system');
         
-        // Show toast notification
         showNotification(`📢 ${payload.new.title}`);
       }
     )
@@ -3405,10 +2796,8 @@ async function sendNotificationToAll(title, body) {
   if (!error) {
     showNotification('✅ Notification sent to all users!');
     
-    // Add inner notification for admin
     addInnerNotification('Notification Sent', `"${title}" sent to all users`, 'success');
     
-    // Also trigger for current user if permission granted
     if (notificationPermission) {
       showPushNotification({ title, body });
     }
@@ -3449,7 +2838,6 @@ function addDeliveryNotification(delivery) {
   
   addInnerNotification(title, message, type);
   
-  // Also show push notification if enabled
   if (notificationPermission) {
     showPushNotification({
       title: `🚚 ${title}`,
@@ -3478,15 +2866,13 @@ function generateAdminPassword(cardId, shortId) {
 // ===== SHARE FUNCTIONALITY =====
 function shareBusiness() {
   const businessName = card.businessName || card.name || "Business";
-  const currentUrl = window.location.href.split('?')[0]; // Get base URL
+  const currentUrl = window.location.href.split('?')[0];
   
   let shareUrl = currentUrl;
   
-  // If we have a short ID, use it in the share URL
   if (shortCardId) {
     shareUrl = `${currentUrl}?id=${shortCardId}`;
   } else if (card.id) {
-    // If no short ID but we have full ID, try to get short ID first
     checkAndCreateShortId(card.id).then(shortId => {
       if (shortId) {
         shareUrl = `${currentUrl}?id=${shortId}`;
@@ -3502,7 +2888,6 @@ function shareBusiness() {
 }
 
 async function checkAndCreateShortId(fullId) {
-  // Check if short ID already exists for this full ID
   const { data: existing } = await supa
     .from('short_urls')
     .select('short_id')
@@ -3513,7 +2898,6 @@ async function checkAndCreateShortId(fullId) {
     return existing.short_id;
   }
   
-  // Create new short ID
   const shortId = generateShortId();
   const { error } = await supa
     .from('short_urls')
@@ -3532,7 +2916,6 @@ function showShareDialog(businessName, shareUrl) {
   const fullText = `${shareText}\n\n${shareUrl}`;
   
   if (navigator.share) {
-    // Use Web Share API if available
     navigator.share({
       title: businessName,
       text: shareText,
@@ -3544,18 +2927,16 @@ function showShareDialog(businessName, shareUrl) {
       fallbackShare(fullText);
     });
   } else {
-    // Fallback for browsers without Web Share API
     fallbackShare(fullText);
   }
 }
 
 function fallbackShare(fullText) {
-  // Create a temporary input to copy the text
   const tempInput = document.createElement('input');
   tempInput.value = fullText;
   document.body.appendChild(tempInput);
   tempInput.select();
-  tempInput.setSelectionRange(0, 99999); // For mobile devices
+  tempInput.setSelectionRange(0, 99999);
   
   try {
     const successful = document.execCommand('copy');
@@ -3573,15 +2954,12 @@ function fallbackShare(fullText) {
 
 // ===== FIXED PWA MANIFEST SYSTEM =====
 function setupDynamicPWA(businessData) {
-  // Generate app name from business name
   const businessName = businessData.businessName || businessData.name || "Business";
   const appName = businessName + " App";
   const shortName = businessName.length > 12 ? businessName.substring(0, 10) + ".." : businessName;
   
-  // Use profile image as app icon (or default)
   const profileImage = businessData.profileImage || '';
   
-  // Create FIXED manifest object with proper structure
   const manifest = {
     "name": appName,
     "short_name": shortName + " App",
@@ -3608,52 +2986,41 @@ function setupDynamicPWA(businessData) {
     ]
   };
   
-  // Remove any existing manifest
   const oldManifest = document.querySelector('link[rel="manifest"]');
   if (oldManifest) {
     oldManifest.remove();
   }
   
-  // Create manifest link with proper URL
   const manifestLink = document.createElement('link');
   manifestLink.rel = 'manifest';
-  manifestLink.href = 'manifest.json'; // Use static manifest file
+  manifestLink.href = 'manifest.json';
   document.head.appendChild(manifestLink);
   
-  // Also create a static manifest.json file dynamically
   createStaticManifest(manifest);
   
-  // Update page title
   document.title = appName;
   
-  // Update loading screen
   document.getElementById('loadingTitle').textContent = appName;
   document.getElementById('loadingSubtitle').textContent = `Loading ${businessName} experience...`;
   
-  // Update theme color meta tag
   document.getElementById('themeColorMeta').content = "#667eea";
   
-  // Update favicon
   updateFavicon(profileImage || getDefaultIcon(businessName));
   
   console.log("Dynamic PWA setup for:", businessName);
   
-  // Trigger PWA install prompt after 3 seconds
   setTimeout(() => {
     showInstallPromptIfAvailable();
   }, 3000);
 }
 
 function createStaticManifest(manifest) {
-  // Create a static manifest.json file
   const manifestData = JSON.stringify(manifest, null, 2);
   const blob = new Blob([manifestData], {type: 'application/json'});
   const manifestURL = URL.createObjectURL(blob);
   
-  // Store in localStorage for service worker to use
   localStorage.setItem('pwa_manifest', manifestData);
   
-  // Update the manifest link
   const manifestLink = document.querySelector('link[rel="manifest"]');
   if (manifestLink) {
     manifestLink.href = manifestURL;
@@ -3661,18 +3028,15 @@ function createStaticManifest(manifest) {
 }
 
 function getDefaultIcon(businessName) {
-  // Create a colored icon with first letter of business name
   const firstLetter = businessName.charAt(0).toUpperCase();
   const colors = ['#667eea', '#764ba2', '#10b981', '#f59e0b', '#ef4444', '#3b82f6'];
   const color = colors[businessName.length % colors.length];
   
-  // Return data URL for SVG icon
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><rect width="100" height="100" fill="${color}" rx="20"/><text x="50" y="65" font-size="40" font-family="Arial, sans-serif" fill="white" text-anchor="middle" font-weight="bold">${firstLetter}</text></svg>`;
   return 'data:image/svg+xml;base64,' + btoa(svg);
 }
 
 function updateFavicon(iconUrl) {
-  // Update favicon
   let favicon = document.querySelector('link[rel="icon"]');
   if (!favicon) {
     favicon = document.createElement('link');
@@ -3681,7 +3045,6 @@ function updateFavicon(iconUrl) {
   }
   favicon.href = iconUrl;
   
-  // Update Apple touch icon
   let appleIcon = document.querySelector('link[rel="apple-touch-icon"]');
   if (!appleIcon) {
     appleIcon = document.createElement('link');
@@ -3767,7 +3130,6 @@ function saveBusinessPhone(phone) {
 let deferredPrompt = null;
 let installButtonShown = false;
 
-// Listen for beforeinstallprompt event
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('PWA install prompt available');
   e.preventDefault();
@@ -3781,7 +3143,6 @@ window.addEventListener('beforeinstallprompt', (e) => {
   }
 });
 
-// Show install button
 function showInstallButton() {
   if (!deferredPrompt) return;
   
@@ -3808,7 +3169,6 @@ function showInstallButton() {
   }, 30000);
 }
 
-// Install PWA
 function installPWA() {
   if (!deferredPrompt) return;
   
@@ -3824,10 +3184,8 @@ function installPWA() {
         installContainer.remove();
       }
       
-      // Hide install button permanently for this session
       installButtonShown = true;
       
-      // Update permission
       updateCustomerPermissions('app_installed', true);
     } else {
       console.log('User dismissed the install prompt');
@@ -3838,13 +3196,11 @@ function installPWA() {
   });
 }
 
-// Check if PWA is already installed
 function isPWAInstalled() {
   return window.matchMedia('(display-mode: standalone)').matches || 
          window.navigator.standalone === true;
 }
 
-// Show install prompt if available
 function showInstallPromptIfAvailable() {
   if (isPWAInstalled()) {
     console.log('PWA already installed');
@@ -3915,7 +3271,6 @@ function navigateToDirect(pageId) {
     newPage.classList.add('active');
     currentPage = pageId;
     
-    // Show/hide back button in header
     const backBtn = document.getElementById('headerBackBtn');
     if (pageId !== 'homePage') {
       backBtn.style.display = 'flex';
@@ -3942,7 +3297,6 @@ function navigateToDirect(pageId) {
       document.querySelectorAll('.nav-item')[navMap[pageId]].classList.add('active');
     }
     
-    // Close notification drawer when navigating
     document.getElementById('notificationDrawer').classList.remove('open');
     
     switch(pageId) {
@@ -3996,7 +3350,6 @@ function navigateTo(pageId) {
 
 // Back navigation
 function goBack() {
-  // Close notification drawer first if open
   if (document.getElementById('notificationDrawer').classList.contains('open')) {
     toggleNotificationDrawer();
     return;
@@ -4080,19 +3433,15 @@ async function checkForDeliveries() {
     }
     
     if(data && data.length > 0) {
-      // Check for status changes
       const oldDeliveryData = deliveryStatusData;
       deliveryStatusData = data;
       
-      // Find new or updated deliveries
       data.forEach(newDelivery => {
         const oldDelivery = oldDeliveryData.find(d => d.order_id === newDelivery.order_id);
         
         if (!oldDelivery) {
-          // New delivery
           addDeliveryNotification(newDelivery);
         } else if (oldDelivery.status !== newDelivery.status) {
-          // Status changed
           addDeliveryNotification(newDelivery);
         }
       });
@@ -4252,7 +3601,6 @@ function openPhoneInput() {
       updateCustomerPhoneDisplay();
       showNotification('✅ Phone number saved successfully!');
       
-      // Add notification
       addInnerNotification('Phone Number Saved', 'Your phone number has been saved for delivery tracking', 'success');
       
       checkForDeliveries();
@@ -4315,7 +3663,6 @@ function attemptLogin() {
     updateLoginUI();
     showNotification('✅ Login successful!');
     
-    // Add notification
     addInnerNotification('Admin Login', 'You have logged in as administrator', 'success');
     
     navigateTo('adminPage');
@@ -4338,7 +3685,6 @@ function logoutAdmin() {
   updateLoginUI();
   showNotification('👋 Logged out successfully');
   
-  // Add notification
   addInnerNotification('Logged Out', 'You have been logged out from admin panel', 'info');
   
   navigateTo('homePage');
@@ -4457,7 +3803,6 @@ async function updateOrder(orderId) {
   if(!error) {
     showNotification('✅ Order updated successfully!');
     
-    // Add notification
     addInnerNotification('Order Updated', `Order #${document.querySelector(`.admin-order-card [data-order-id]`).textContent} updated to ${status}`, 'success');
     
     loadAdminPanel();
@@ -4494,7 +3839,6 @@ function addNewOrder() {
       if(!error) {
         showNotification('✅ Order added successfully!');
         
-        // Add notification
         addInnerNotification('New Order', `Order #${orderId} added for ${customerName || customerPhone}`, 'success');
         
         loadAdminPanel();
@@ -4529,6 +3873,475 @@ let deliveryStatusData = [];
 let businessAdminPassword = "";
 let shortCardId = "";
 let isAdminLoggedIn = false;
+
+// ===== DELIVERY SETTINGS FUNCTIONS =====
+function getDeliverySettings() {
+  return card.deliverySettings || {
+    deliveryChargeCity: 150,
+    deliveryChargeOther: 300,
+    deliveryTimeCity: "1-2 days",
+    deliveryTimeOther: "3-5 days",
+    freeDeliveryMin: 2000
+  };
+}
+
+function calculateDeliveryCharge(productPrice, deliveryType = 'city') {
+  const settings = getDeliverySettings();
+  const freeDeliveryMin = settings.freeDeliveryMin || 2000;
+  
+  if (productPrice >= freeDeliveryMin) {
+    return 0;
+  }
+  
+  if (deliveryType === 'city') {
+    return settings.deliveryChargeCity || 150;
+  } else {
+    return settings.deliveryChargeOther || 300;
+  }
+}
+
+function getDeliveryTime(deliveryType = 'city') {
+  const settings = getDeliverySettings();
+  
+  if (deliveryType === 'city') {
+    return settings.deliveryTimeCity || "1-2 days";
+  } else {
+    return settings.deliveryTimeOther || "3-5 days";
+  }
+}
+
+function calculateCartDeliveryCharge() {
+  if (cart.length === 0) return 0;
+  
+  const subtotal = cart.reduce((sum, item) => {
+    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
+    return sum + (price * (item.quantity || 1));
+  }, 0);
+  
+  const settings = getDeliverySettings();
+  const freeDeliveryMin = settings.freeDeliveryMin || 2000;
+  
+  if (subtotal >= freeDeliveryMin) {
+    return 0;
+  }
+  
+  const deliveryType = document.querySelector('input[name="deliveryOption"]:checked')?.value || 'city';
+  
+  if (deliveryType === 'city') {
+    return settings.deliveryChargeCity || 150;
+  } else {
+    return settings.deliveryChargeOther || 300;
+  }
+}
+
+// ===== UPDATED: CREATE PRODUCT CARD WITH DELIVERY INFO =====
+function createProductCard(product, index) {
+  const price = product.discountPrice || product.originalPrice;
+  const originalPrice = product.originalPrice && product.discountPrice ? product.originalPrice : null;
+  const hasDiscount = originalPrice && price && originalPrice > price;
+  
+  // Calculate delivery info
+  const deliveryCharge = calculateDeliveryCharge(price || 0);
+  const deliveryTime = getDeliveryTime('city');
+  const isFreeDelivery = (price || 0) >= (getDeliverySettings().freeDeliveryMin || 2000);
+  
+  let discountPercentage = '';
+  if(hasDiscount && originalPrice && price) {
+    const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
+    if(discount > 0) {
+      discountPercentage = `<div class="discount-badge">${discount}% OFF</div>`;
+    }
+  }
+  
+  let priceBadgeHtml = '';
+  if(price) {
+    priceBadgeHtml = `<div class="price-badge">`;
+    if(hasDiscount && originalPrice) {
+      priceBadgeHtml += `<div class="original-price">PKR ${originalPrice}</div>`;
+      priceBadgeHtml += `<div class="current-price">PKR ${price}</div>`;
+    } else {
+      priceBadgeHtml += `<div class="current-price">PKR ${price}</div>`;
+    }
+    priceBadgeHtml += `</div>`;
+  }
+  
+  const badgeClasses = {
+    '🔥 Hot Deal': 'hot',
+    '⭐ Best Seller': 'best-seller',
+    '💸 Discount': 'discount',
+    '⏳ Limited Stock': 'limited',
+    '🛒 In Stock': 'stock',
+    '🚚 Free Delivery': 'delivery'
+  };
+  
+  let badgesHtml = '';
+  if(product.badges && product.badges.length > 0) {
+    badgesHtml = `<div class="product-badges">`;
+    product.badges.slice(0, 2).forEach(badge => {
+      const badgeClass = badgeClasses[badge] || 'discount';
+      badgesHtml += `<span class="badge ${badgeClass}">${badge}</span>`;
+    });
+    badgesHtml += `</div>`;
+  }
+  
+  // Delivery info HTML
+  let deliveryInfoHtml = '';
+  if (isFreeDelivery) {
+    deliveryInfoHtml = `
+      <div class="product-delivery-info">
+        <i class="fas fa-shipping-fast"></i>
+        <span class="free-delivery-badge">FREE Delivery</span>
+        <span class="delivery-time">• ${deliveryTime}</span>
+      </div>
+    `;
+  } else {
+    deliveryInfoHtml = `
+      <div class="product-delivery-info">
+        <i class="fas fa-truck"></i>
+        <span>Delivery: PKR <span class="delivery-charge">${deliveryCharge}</span></span>
+        <span class="delivery-time">• ${deliveryTime}</span>
+      </div>
+    `;
+  }
+  
+  const cardElement = document.createElement('div');
+  cardElement.className = 'product-card';
+  
+  cardElement.innerHTML = `
+    <div class="product-image-container" onclick="zoomImage('${product.image || ''}', event)">
+      <img src="${product.image || ''}" class="product-image" loading="lazy" onerror="this.style.display='none'">
+      ${discountPercentage}
+      ${priceBadgeHtml}
+      ${badgesHtml}
+    </div>
+    <div class="product-content">
+      <div class="product-title">${product.title || 'Product'}</div>
+      ${deliveryInfoHtml}
+      <div class="product-actions">
+        <button class="btn-primary" onclick="showProductModal(${index}); event.stopPropagation();">
+          <i class="fas fa-bolt"></i> Quick Buy
+        </button>
+        <button class="btn-secondary" onclick="addToCart(${index}); event.stopPropagation();">
+          <i class="fas fa-cart-plus"></i> Add to Cart
+        </button>
+      </div>
+    </div>
+  `;
+  
+  cardElement.onclick = (e) => {
+    if (!e.target.closest('button')) {
+      showProductModal(index);
+    }
+  };
+  
+  return cardElement;
+}
+
+// ===== UPDATED: SHOW PRODUCT MODAL WITH DELIVERY INFO =====
+function showProductModal(productIndex) {
+  const products = card.products || [];
+  currentProduct = products[productIndex];
+  
+  if(!currentProduct) return;
+  
+  const price = currentProduct.discountPrice || currentProduct.originalPrice;
+  const originalPrice = currentProduct.originalPrice && currentProduct.discountPrice ? currentProduct.originalPrice : null;
+  const hasDiscount = originalPrice && price && originalPrice > price;
+  
+  // Calculate delivery info
+  const deliveryCharge = calculateDeliveryCharge(price || 0);
+  const deliveryTime = getDeliveryTime('city');
+  const isFreeDelivery = (price || 0) >= (getDeliverySettings().freeDeliveryMin || 2000);
+  
+  document.getElementById('modalImage').src = currentProduct.image || '';
+  document.getElementById('modalTitle').textContent = currentProduct.title || 'Product';
+  document.getElementById('modalDescription').textContent = currentProduct.desc || 'No description available';
+  
+  // Update delivery info in modal
+  const modalDeliveryDetails = document.getElementById('modalDeliveryDetails');
+  if (modalDeliveryDetails) {
+    if (isFreeDelivery) {
+      modalDeliveryDetails.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <i class="fas fa-check-circle" style="color: #10b981;"></i>
+          <span style="font-weight: 700; color: #10b981;">FREE Delivery</span>
+        </div>
+        <div style="color: #64748b;">
+          <div>• Estimated delivery: <strong>${deliveryTime}</strong></div>
+          <div>• Free delivery on orders above PKR ${getDeliverySettings().freeDeliveryMin || 2000}</div>
+        </div>
+      `;
+    } else {
+      modalDeliveryDetails.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <i class="fas fa-truck" style="color: #64748b;"></i>
+          <span style="font-weight: 700;">Delivery: PKR ${deliveryCharge}</span>
+        </div>
+        <div style="color: #64748b;">
+          <div>• Estimated delivery: <strong>${deliveryTime}</strong></div>
+          <div>• Free delivery on orders above PKR ${getDeliverySettings().freeDeliveryMin || 2000}</div>
+        </div>
+      `;
+    }
+  }
+  
+  const modalPrice = document.getElementById('modalPrice');
+  if(hasDiscount) {
+    const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
+    modalPrice.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <div style="text-decoration:line-through;color:#94a3b8;font-size:16px;font-weight:500;">PKR ${originalPrice}</div>
+        <div style="color:#10b981;font-size:24px;font-weight:900;">PKR ${price}</div>
+        <div style="background:var(--danger-gradient);color:white;padding:4px 8px;border-radius:4px;font-size:13px;font-weight:800;">${discount}% OFF</div>
+      </div>
+    `;
+  } else {
+    modalPrice.innerHTML = `
+      <div style="color:#10b981;font-size:24px;font-weight:900;">PKR ${price || 'N/A'}</div>
+    `;
+  }
+  
+  // Update quick buy summary
+  document.getElementById('quickBuyProductPrice').textContent = price || '0';
+  document.getElementById('quickBuyDeliveryCharge').textContent = deliveryCharge;
+  document.getElementById('quickBuyTotal').textContent = (parseFloat(price || 0) + deliveryCharge).toFixed(2);
+  
+  // Update delivery options
+  updateQuickBuyDeliveryOptions(price || 0);
+  
+  document.getElementById('directCheckoutSection').style.display = 'none';
+  selectBuyNowPayment('whatsapp');
+  
+  openModal('productModal');
+}
+
+// ===== NEW: UPDATE DELIVERY OPTIONS FOR QUICK BUY =====
+function updateQuickBuyDeliveryOptions(productPrice) {
+  const container = document.getElementById('quickBuyDeliveryOptions');
+  if (!container) return;
+  
+  const settings = getDeliverySettings();
+  const isFreeDelivery = productPrice >= (settings.freeDeliveryMin || 2000);
+  
+  let html = `
+    <h4 style="font-size:15px;font-weight:800;color:var(--dark-color);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-truck"></i> Delivery Options
+    </h4>
+    
+    <div class="delivery-option ${isFreeDelivery ? 'selected' : ''}" onclick="selectQuickBuyDelivery('city')">
+      <input type="radio" name="quickBuyDelivery" id="quickBuyCity" ${isFreeDelivery ? 'checked' : ''}>
+      <div class="delivery-option-details">
+        <div class="delivery-option-title">Standard Delivery</div>
+        <div class="delivery-option-subtitle">${settings.deliveryTimeCity || "1-2 days"}</div>
+      </div>
+      <div class="delivery-option-price ${isFreeDelivery ? 'free' : ''}">
+        ${isFreeDelivery ? 'FREE' : `PKR ${settings.deliveryChargeCity || 150}`}
+      </div>
+    </div>
+    
+    <div class="delivery-option" onclick="selectQuickBuyDelivery('other')">
+      <input type="radio" name="quickBuyDelivery" id="quickBuyOther">
+      <div class="delivery-option-details">
+        <div class="delivery-option-title">Other Cities</div>
+        <div class="delivery-option-subtitle">${settings.deliveryTimeOther || "3-5 days"}</div>
+      </div>
+      <div class="delivery-option-price">
+        PKR ${settings.deliveryChargeOther || 300}
+      </div>
+    </div>
+  `;
+  
+  if (isFreeDelivery) {
+    html += `
+      <div class="free-delivery-note">
+        <i class="fas fa-check-circle"></i>
+        <span>Your order qualifies for FREE delivery! (Order above PKR ${settings.freeDeliveryMin || 2000})</span>
+      </div>
+    `;
+  } else {
+    const remaining = (settings.freeDeliveryMin || 2000) - productPrice;
+    html += `
+      <div class="minimum-note">
+        <i class="fas fa-info-circle"></i>
+        <span>Add PKR ${remaining.toFixed(2)} more for FREE delivery</span>
+      </div>
+    `;
+  }
+  
+  container.innerHTML = html;
+  
+  // Show quick buy summary
+  document.getElementById('quickBuySummary').style.display = 'block';
+}
+
+function selectQuickBuyDelivery(type) {
+  const cityOption = document.getElementById('quickBuyCity');
+  const otherOption = document.getElementById('quickBuyOther');
+  
+  if (type === 'city') {
+    cityOption.checked = true;
+    cityOption.parentElement.classList.add('selected');
+    otherOption.parentElement.classList.remove('selected');
+    
+    // Update delivery charge in summary
+    const productPrice = parseFloat(document.getElementById('quickBuyProductPrice').textContent || 0);
+    const settings = getDeliverySettings();
+    const isFreeDelivery = productPrice >= (settings.freeDeliveryMin || 2000);
+    const deliveryCharge = isFreeDelivery ? 0 : (settings.deliveryChargeCity || 150);
+    
+    document.getElementById('quickBuyDeliveryCharge').textContent = deliveryCharge;
+    document.getElementById('quickBuyTotal').textContent = (productPrice + deliveryCharge).toFixed(2);
+  } else {
+    otherOption.checked = true;
+    otherOption.parentElement.classList.add('selected');
+    cityOption.parentElement.classList.remove('selected');
+    
+    // Update delivery charge in summary
+    const productPrice = parseFloat(document.getElementById('quickBuyProductPrice').textContent || 0);
+    const settings = getDeliverySettings();
+    const isFreeDelivery = productPrice >= (settings.freeDeliveryMin || 2000);
+    const deliveryCharge = isFreeDelivery ? 0 : (settings.deliveryChargeOther || 300);
+    
+    document.getElementById('quickBuyDeliveryCharge').textContent = deliveryCharge;
+    document.getElementById('quickBuyTotal').textContent = (productPrice + deliveryCharge).toFixed(2);
+  }
+}
+
+// ===== UPDATED: OPEN CHECKOUT MODAL WITH DELIVERY OPTIONS =====
+function openCheckoutModal() {
+  const checkoutItems = document.getElementById('checkoutItems');
+  let subtotal = 0;
+  
+  checkoutItems.innerHTML = '';
+  
+  cart.forEach((item, index) => {
+    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
+    const itemTotal = price * (item.quantity || 1);
+    subtotal += itemTotal;
+    
+    checkoutItems.innerHTML += `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+        <div>
+          <div style="font-weight:800;color:var(--dark-color);margin-bottom:4px;">${item.title || 'Product'}</div>
+          <div style="font-size:12px;color:#64748b;">Qty: ${item.quantity || 1}</div>
+        </div>
+        <div style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR ${itemTotal.toFixed(2)}</div>
+      </div>
+    `;
+  });
+  
+  // Update delivery options
+  updateCheckoutDeliveryOptions(subtotal);
+  
+  // Update summary
+  updateCheckoutTotals();
+  
+  selectCheckoutPayment('whatsapp');
+  
+  openModal('checkoutModal');
+}
+
+// ===== NEW: UPDATE CHECKOUT DELIVERY OPTIONS =====
+function updateCheckoutDeliveryOptions(subtotal) {
+  const container = document.getElementById('checkoutDeliveryOptions');
+  if (!container) return;
+  
+  const settings = getDeliverySettings();
+  const isFreeDelivery = subtotal >= (settings.freeDeliveryMin || 2000);
+  
+  let html = `
+    <h4 style="font-size:15px;font-weight:800;color:var(--dark-color);margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+      <i class="fas fa-truck"></i> Delivery Options
+    </h4>
+    
+    <div class="delivery-option ${isFreeDelivery ? 'selected' : ''}" onclick="selectCheckoutDelivery('city')">
+      <input type="radio" name="checkoutDelivery" id="checkoutCity" ${isFreeDelivery ? 'checked' : ''}>
+      <div class="delivery-option-details">
+        <div class="delivery-option-title">Standard Delivery</div>
+        <div class="delivery-option-subtitle">${settings.deliveryTimeCity || "1-2 days"}</div>
+      </div>
+      <div class="delivery-option-price ${isFreeDelivery ? 'free' : ''}">
+        ${isFreeDelivery ? 'FREE' : `PKR ${settings.deliveryChargeCity || 150}`}
+      </div>
+    </div>
+    
+    <div class="delivery-option" onclick="selectCheckoutDelivery('other')">
+      <input type="radio" name="checkoutDelivery" id="checkoutOther">
+      <div class="delivery-option-details">
+        <div class="delivery-option-title">Other Cities</div>
+        <div class="delivery-option-subtitle">${settings.deliveryTimeOther || "3-5 days"}</div>
+      </div>
+      <div class="delivery-option-price">
+        PKR ${settings.deliveryChargeOther || 300}
+      </div>
+    </div>
+  `;
+  
+  if (isFreeDelivery) {
+    html += `
+      <div class="free-delivery-note">
+        <i class="fas fa-check-circle"></i>
+        <span>Your order qualifies for FREE delivery! (Order above PKR ${settings.freeDeliveryMin || 2000})</span>
+      </div>
+    `;
+  } else {
+    const remaining = (settings.freeDeliveryMin || 2000) - subtotal;
+    html += `
+      <div class="minimum-note">
+        <i class="fas fa-info-circle"></i>
+        <span>Add PKR ${remaining.toFixed(2)} more for FREE delivery</span>
+      </div>
+    `;
+  }
+  
+  container.innerHTML = html;
+}
+
+function selectCheckoutDelivery(type) {
+  const cityOption = document.getElementById('checkoutCity');
+  const otherOption = document.getElementById('checkoutOther');
+  
+  if (type === 'city') {
+    cityOption.checked = true;
+    cityOption.parentElement.classList.add('selected');
+    otherOption.parentElement.classList.remove('selected');
+  } else {
+    otherOption.checked = true;
+    otherOption.parentElement.classList.add('selected');
+    cityOption.parentElement.classList.remove('selected');
+  }
+  
+  updateCheckoutTotals();
+}
+
+// ===== UPDATED: UPDATE CHECKOUT TOTALS WITH DELIVERY =====
+function updateCheckoutTotals() {
+  const subtotal = cart.reduce((sum, item) => {
+    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
+    return sum + (price * (item.quantity || 1));
+  }, 0);
+  
+  const settings = getDeliverySettings();
+  const freeDeliveryMin = settings.freeDeliveryMin || 2000;
+  
+  let deliveryCharge = 0;
+  
+  if (subtotal < freeDeliveryMin) {
+    const deliveryType = document.querySelector('input[name="checkoutDelivery"]:checked')?.value || 'city';
+    
+    if (deliveryType === 'city') {
+      deliveryCharge = settings.deliveryChargeCity || 150;
+    } else {
+      deliveryCharge = settings.deliveryChargeOther || 300;
+    }
+  }
+  
+  const total = subtotal + deliveryCharge;
+  
+  document.getElementById('checkoutSubtotal').textContent = subtotal.toFixed(2);
+  document.getElementById('checkoutDeliveryCharge').textContent = deliveryCharge.toFixed(2);
+  document.getElementById('checkoutTotal').textContent = total.toFixed(2);
+}
 
 // ===== RENDER APP =====
 async function renderApp() {
@@ -4588,7 +4401,6 @@ function addToCart(productIndex) {
     updateCartCount();
     showNotification('Product added to cart!');
     
-    // Add notification
     addInnerNotification('Cart Updated', `${product.title} added to cart`, 'info');
   }
 }
@@ -4600,7 +4412,6 @@ function removeFromCart(index) {
     updateCartCount();
     showNotification('Product removed from cart!');
     
-    // Add notification
     addInnerNotification('Cart Updated', `${productName} removed from cart`, 'info');
   }
 }
@@ -4650,101 +4461,6 @@ function loadProductsPage() {
   });
 }
 
-function createProductCard(product, index) {
-  const price = product.discountPrice || product.originalPrice;
-  const originalPrice = product.originalPrice && product.discountPrice ? product.originalPrice : null;
-  const hasDiscount = originalPrice && price && originalPrice > price;
-  
-  let discountPercentage = '';
-  if(hasDiscount && originalPrice && price) {
-    const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
-    if(discount > 0) {
-      discountPercentage = `<div class="discount-badge">${discount}% OFF</div>`;
-    }
-  }
-  
-  let priceBadgeHtml = '';
-  if(price) {
-    priceBadgeHtml = `<div class="price-badge">`;
-    if(hasDiscount && originalPrice) {
-      priceBadgeHtml += `<div class="original-price">PKR ${originalPrice}</div>`;
-      priceBadgeHtml += `<div class="current-price">PKR ${price}</div>`;
-    } else {
-      priceBadgeHtml += `<div class="current-price">PKR ${price}</div>`;
-    }
-    priceBadgeHtml += `</div>`;
-  }
-  
-  const badgeClasses = {
-    '🔥 Hot Deal': 'hot',
-    '⭐ Best Seller': 'best-seller',
-    '💸 Discount': 'discount',
-    '⏳ Limited Stock': 'limited',
-    '🛒 In Stock': 'stock',
-    '🚚 Free Delivery': 'delivery'
-  };
-  
-  let badgesHtml = '';
-  if(product.badges && product.badges.length > 0) {
-    badgesHtml = `<div class="product-badges">`;
-    product.badges.slice(0, 2).forEach(badge => {
-      const badgeClass = badgeClasses[badge] || 'discount';
-      badgesHtml += `<span class="badge ${badgeClass}">${badge}</span>`;
-    });
-    badgesHtml += `</div>`;
-  }
-  
-  const cardElement = document.createElement('div');
-  cardElement.className = 'product-card';
-  
-  cardElement.innerHTML = `
-    <div class="product-image-container" onclick="zoomImage('${product.image || ''}', event)">
-      <img src="${product.image || ''}" class="product-image" loading="lazy" onerror="this.style.display='none'">
-      ${discountPercentage}
-      ${priceBadgeHtml}
-      ${badgesHtml}
-    </div>
-    <div class="product-content">
-      <div class="product-title">${product.title || 'Product'}</div>
-      <div class="product-actions">
-        <button class="btn-primary" onclick="showProductModal(${index}); event.stopPropagation();">
-          <i class="fas fa-bolt"></i> Quick Buy
-        </button>
-        <button class="btn-secondary" onclick="addToCart(${index}); event.stopPropagation();">
-          <i class="fas fa-cart-plus"></i> Add to Cart
-        </button>
-      </div>
-    </div>
-  `;
-  
-  cardElement.onclick = (e) => {
-    if (!e.target.closest('button')) {
-      showProductModal(index);
-    }
-  };
-  
-  return cardElement;
-}
-
-function zoomImage(imageUrl, event) {
-  event.stopPropagation();
-  
-  const overlay = document.getElementById('imageZoomOverlay');
-  const zoomedImage = document.getElementById('zoomedImage');
-  
-  if (imageUrl) {
-    zoomedImage.src = imageUrl;
-    overlay.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-  }
-}
-
-function closeImageZoom() {
-  const overlay = document.getElementById('imageZoomOverlay');
-  overlay.style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
-
 function filterProducts() {
   const searchTerm = document.getElementById('productsSearch').value.toLowerCase();
   const products = card.products || [];
@@ -4783,15 +4499,15 @@ function loadCartPage() {
     return;
   }
   
-  let html = '<div class="cart-items">';
-  let total = 0;
+  let subtotal = 0;
+  let itemsHtml = '<div class="cart-items">';
   
   cart.forEach((item, index) => {
     const price = parseFloat(item.discountPrice || item.originalPrice || 0);
     const itemTotal = price * (item.quantity || 1);
-    total += itemTotal;
+    subtotal += itemTotal;
     
-    html += `
+    itemsHtml += `
       <div class="cart-item">
         <img src="${item.image || ''}" class="cart-item-img" loading="lazy" onerror="this.style.display='none'">
         <div class="cart-item-details">
@@ -4812,19 +4528,39 @@ function loadCartPage() {
     `;
   });
   
-  html += '</div>';
+  itemsHtml += '</div>';
   
-  html += `
+  // Calculate delivery charge
+  const settings = getDeliverySettings();
+  const freeDeliveryMin = settings.freeDeliveryMin || 2000;
+  const isFreeDelivery = subtotal >= freeDeliveryMin;
+  const deliveryCharge = isFreeDelivery ? 0 : (settings.deliveryChargeCity || 150);
+  const total = subtotal + deliveryCharge;
+  
+  const summaryHtml = `
     <div class="cart-summary">
       <h3><i class="fas fa-receipt"></i> Order Summary</h3>
       <div class="summary-row">
         <span>Subtotal</span>
-        <span>PKR ${total.toFixed(2)}</span>
+        <span>PKR ${subtotal.toFixed(2)}</span>
       </div>
-      <div class="summary-row">
-        <span>Shipping</span>
-        <span>PKR 0</span>
+      <div class="summary-row delivery-charge">
+        <span>Delivery</span>
+        <span class="value ${isFreeDelivery ? 'free' : ''}">
+          ${isFreeDelivery ? 'FREE' : `PKR ${deliveryCharge.toFixed(2)}`}
+        </span>
       </div>
+      ${!isFreeDelivery ? `
+        <div style="font-size:12px;color:#f59e0b;margin:10px 0;padding:8px 12px;background:#fef3c7;border-radius:6px;">
+          <i class="fas fa-info-circle"></i>
+          Add PKR ${(freeDeliveryMin - subtotal).toFixed(2)} more for FREE delivery
+        </div>
+      ` : `
+        <div style="font-size:12px;color:#10b981;margin:10px 0;padding:8px 12px;background:#f0fdf4;border-radius:6px;">
+          <i class="fas fa-check-circle"></i>
+          You qualify for FREE delivery!
+        </div>
+      `}
       <div class="summary-row summary-total">
         <span>Total</span>
         <span>PKR ${total.toFixed(2)}</span>
@@ -4835,7 +4571,7 @@ function loadCartPage() {
     </div>
   `;
   
-  cartContent.innerHTML = html;
+  cartContent.innerHTML = itemsHtml + summaryHtml;
   cartItemsCount.textContent = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
 }
 
@@ -4931,42 +4667,6 @@ function loadContactPage() {
   });
 }
 
-function showProductModal(productIndex) {
-  const products = card.products || [];
-  currentProduct = products[productIndex];
-  
-  if(!currentProduct) return;
-  
-  const price = currentProduct.discountPrice || currentProduct.originalPrice;
-  const originalPrice = currentProduct.originalPrice && currentProduct.discountPrice ? currentProduct.originalPrice : null;
-  const hasDiscount = originalPrice && price && originalPrice > price;
-  
-  document.getElementById('modalImage').src = currentProduct.image || '';
-  document.getElementById('modalTitle').textContent = currentProduct.title || 'Product';
-  document.getElementById('modalDescription').textContent = currentProduct.desc || 'No description available';
-  
-  const modalPrice = document.getElementById('modalPrice');
-  if(hasDiscount) {
-    const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
-    modalPrice.innerHTML = `
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-        <div style="text-decoration:line-through;color:#94a3b8;font-size:16px;font-weight:500;">PKR ${originalPrice}</div>
-        <div style="color:#10b981;font-size:24px;font-weight:900;">PKR ${price}</div>
-        <div style="background:var(--danger-gradient);color:white;padding:4px 8px;border-radius:4px;font-size:13px;font-weight:800;">${discount}% OFF</div>
-      </div>
-    `;
-  } else {
-    modalPrice.innerHTML = `
-      <div style="color:#10b981;font-size:24px;font-weight:900;">PKR ${price || 'N/A'}</div>
-    `;
-  }
-  
-  document.getElementById('directCheckoutSection').style.display = 'none';
-  selectBuyNowPayment('whatsapp');
-  
-  openModal('productModal');
-}
-
 function showDirectCheckout() {
   document.getElementById('directCheckoutSection').style.display = 'block';
 }
@@ -4993,15 +4693,19 @@ function selectBuyNowPayment(method) {
   [whatsappOption, codOption, jazzcashOption].forEach(option => {
     if(option) {
       option.style.borderColor = '#e2e8f0';
+      option.classList.remove('selected');
     }
   });
   
   if(method === 'whatsapp' && whatsappOption) {
     whatsappOption.style.borderColor = '#25D366';
+    whatsappOption.classList.add('selected');
   } else if(method === 'cod' && codOption) {
     codOption.style.borderColor = '#10b981';
+    codOption.classList.add('selected');
   } else if(method === 'jazzcash' && jazzcashOption) {
     jazzcashOption.style.borderColor = '#FF6B00';
+    jazzcashOption.classList.add('selected');
   }
 }
 
@@ -5021,6 +4725,11 @@ function sendBuyNowOrder() {
   const price = currentProduct.discountPrice || currentProduct.originalPrice || 0;
   const businessName = card.businessName || card.name || "Your Business";
   
+  // Get delivery info
+  const deliveryType = document.querySelector('input[name="quickBuyDelivery"]:checked')?.value || 'city';
+  const deliveryCharge = calculateDeliveryCharge(price, deliveryType);
+  const deliveryTime = getDeliveryTime(deliveryType);
+  
   let message = `Hello ${businessName} Team,\n\n`;
   message += `I would like to place an order for the following product:\n\n`;
   message += `🛒 **Product:** ${currentProduct.title || 'Product'}\n`;
@@ -5031,6 +4740,9 @@ function sendBuyNowOrder() {
   }
   
   message += `\n---\n`;
+  message += `🚚 **Delivery:** ${deliveryType === 'city' ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏰ **Estimated Time:** ${deliveryTime}\n`;
+  message += `💵 **Delivery Charge:** PKR ${deliveryCharge}\n`;
   message += `💳 **Payment Method:** ${getPaymentMethodName(buyNowPaymentMethod)}\n`;
   
   if(buyNowPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
@@ -5048,39 +4760,9 @@ function sendBuyNowOrder() {
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   }
   
-  // Add notification
   addInnerNotification('Order Placed', `Order placed for ${currentProduct.title}`, 'success');
   
   closeModal('productModal');
-}
-
-function openCheckoutModal() {
-  const checkoutItems = document.getElementById('checkoutItems');
-  let subtotal = 0;
-  
-  checkoutItems.innerHTML = '';
-  
-  cart.forEach((item, index) => {
-    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
-    const itemTotal = price * (item.quantity || 1);
-    subtotal += itemTotal;
-    
-    checkoutItems.innerHTML += `
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
-        <div>
-          <div style="font-weight:800;color:var(--dark-color);margin-bottom:4px;">${item.title || 'Product'}</div>
-          <div style="font-size:12px;color:#64748b;">Qty: ${item.quantity || 1}</div>
-        </div>
-        <div style="font-weight:800;color:var(--dark-color);font-size:16px;">PKR ${itemTotal.toFixed(2)}</div>
-      </div>
-    `;
-  });
-  
-  document.getElementById('checkoutSubtotal').textContent = subtotal.toFixed(2);
-  document.getElementById('checkoutTotal').textContent = subtotal.toFixed(2);
-  selectCheckoutPayment('whatsapp');
-  
-  openModal('checkoutModal');
 }
 
 function selectCheckoutPayment(method) {
@@ -5093,15 +4775,19 @@ function selectCheckoutPayment(method) {
   [whatsappOption, codOption, jazzcashOption].forEach(option => {
     if(option) {
       option.style.borderColor = '#e2e8f0';
+      option.classList.remove('selected');
     }
   });
   
   if(method === 'whatsapp' && whatsappOption) {
     whatsappOption.style.borderColor = '#25D366';
+    whatsappOption.classList.add('selected');
   } else if(method === 'cod' && codOption) {
     codOption.style.borderColor = '#10b981';
+    codOption.classList.add('selected');
   } else if(method === 'jazzcash' && jazzcashOption) {
     jazzcashOption.style.borderColor = '#FF6B00';
+    jazzcashOption.classList.add('selected');
   }
 }
 
@@ -5122,16 +4808,21 @@ function showPaymentDetailsModal(context) {
   
   if(context === 'buyNow' && currentProduct) {
     const price = currentProduct.discountPrice || currentProduct.originalPrice || 0;
+    const deliveryType = document.querySelector('input[name="quickBuyDelivery"]:checked')?.value || 'city';
+    const deliveryCharge = calculateDeliveryCharge(price, deliveryType);
+    const total = parseFloat(price) + deliveryCharge;
+    
     paymentMethodTitle.innerHTML = `JazzCash Payment`;
     
     paymentDetailsContent.innerHTML = `
       <div style="text-align:center;">
         <div style="margin-bottom:20px;">
-          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${price}</strong> to:</div>
+          <div style="font-size:15px;color:#64748b;margin-bottom:12px;">Send <strong style="color:#10b981;font-size:20px;">PKR ${total.toFixed(2)}</strong> to:</div>
           <div style="font-size:24px;font-weight:900;color:#FF6B00;margin:15px 0;background:rgba(255,107,0,0.1);padding:15px;border-radius:16px;">
             ${card.payments.jazzcash.number || ''}
           </div>
           <div style="font-size:13px;color:#64748b;margin-top:10px;">For: ${currentProduct.title || 'Product'}</div>
+          <div style="font-size:12px;color:#64748b;margin-top:5px;">Includes: Product (PKR ${price}) + Delivery (PKR ${deliveryCharge})</div>
         </div>
         
         ${card.payments.jazzcash.barcode ? `
@@ -5152,10 +4843,13 @@ function showPaymentDetailsModal(context) {
       </div>
     `;
   } else if(context === 'checkout') {
-    const total = cart.reduce((sum, item) => {
+    const subtotal = cart.reduce((sum, item) => {
       const price = parseFloat(item.discountPrice || item.originalPrice || 0);
       return sum + (price * (item.quantity || 1));
     }, 0);
+    
+    const deliveryCharge = calculateCartDeliveryCharge();
+    const total = subtotal + deliveryCharge;
     
     paymentMethodTitle.innerHTML = `JazzCash Payment`;
     
@@ -5167,6 +4861,7 @@ function showPaymentDetailsModal(context) {
             ${card.payments.jazzcash.number || ''}
           </div>
           <div style="font-size:13px;color:#64748b;margin-top:10px;">For: ${businessName} - Order (${cart.length} items)</div>
+          <div style="font-size:12px;color:#64748b;margin-top:5px;">Includes: Products (PKR ${subtotal.toFixed(2)}) + Delivery (PKR ${deliveryCharge.toFixed(2)})</div>
         </div>
         
         ${card.payments.jazzcash.barcode ? `
@@ -5206,25 +4901,32 @@ function sendCheckoutOrder() {
   
   const businessName = card.businessName || card.name || "Your Business";
   
+  // Get delivery info
+  const deliveryType = document.querySelector('input[name="checkoutDelivery"]:checked')?.value || 'city';
+  const deliveryCharge = calculateCartDeliveryCharge();
+  const deliveryTime = getDeliveryTime(deliveryType);
+  const subtotal = cart.reduce((sum, item) => {
+    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
+    return sum + (price * (item.quantity || 1));
+  }, 0);
+  const total = subtotal + deliveryCharge;
+  
   let message = `Hello ${businessName} Team,\n\n`;
   message += `I would like to place an order:\n\n`;
   message += `🛒 **Order Details:**\n`;
   
   cart.forEach((item, index) => {
     const price = parseFloat(item.discountPrice || item.originalPrice || 0);
-    const total = price * (item.quantity || 1);
-    message += `${index + 1}. ${item.title || 'Product'} - Qty: ${item.quantity || 1} - PKR ${total.toFixed(2)}\n`;
+    const itemTotal = price * (item.quantity || 1);
+    message += `${index + 1}. ${item.title || 'Product'} - Qty: ${item.quantity || 1} - PKR ${itemTotal.toFixed(2)}\n`;
   });
   
-  const orderTotal = cart.reduce((sum, item) => {
-    const price = parseFloat(item.discountPrice || item.originalPrice || 0);
-    return sum + (price * (item.quantity || 1));
-  }, 0);
-  
   message += `\n---\n`;
-  message += `💰 **Subtotal:** PKR ${orderTotal.toFixed(2)}\n`;
-  message += `📦 **Shipping:** PKR 0\n`;
-  message += `🎯 **Total:** PKR ${orderTotal.toFixed(2)}\n\n`;
+  message += `💰 **Subtotal:** PKR ${subtotal.toFixed(2)}\n`;
+  message += `🚚 **Delivery:** ${deliveryType === 'city' ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏰ **Estimated Time:** ${deliveryTime}\n`;
+  message += `📦 **Delivery Charge:** PKR ${deliveryCharge.toFixed(2)}\n`;
+  message += `🎯 **Total:** PKR ${total.toFixed(2)}\n\n`;
   
   message += `💳 **Payment Method:** ${getPaymentMethodName(checkoutPaymentMethod)}\n`;
   
@@ -5244,8 +4946,7 @@ function sendCheckoutOrder() {
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
   }
   
-  // Add notification
-  addInnerNotification('Order Placed', `Order placed for ${cart.length} items (Total: PKR ${orderTotal.toFixed(2)})`, 'success');
+  addInnerNotification('Order Placed', `Order placed for ${cart.length} items (Total: PKR ${total.toFixed(2)})`, 'success');
   
   cart = [];
   updateCartCount();
@@ -5260,6 +4961,25 @@ function getPaymentMethodName(method) {
     case 'jazzcash': return card.payments?.jazzcash?.type === 'easypaisa' ? 'EasyPaisa' : 'JazzCash';
     default: return 'WhatsApp Order';
   }
+}
+
+function zoomImage(imageUrl, event) {
+  event.stopPropagation();
+  
+  const overlay = document.getElementById('imageZoomOverlay');
+  const zoomedImage = document.getElementById('zoomedImage');
+  
+  if (imageUrl) {
+    zoomedImage.src = imageUrl;
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeImageZoom() {
+  const overlay = document.getElementById('imageZoomOverlay');
+  overlay.style.display = 'none';
+  document.body.style.overflow = 'auto';
 }
 
 function openWhatsAppChat(context) {
@@ -5324,13 +5044,11 @@ function closeDeliveryModal() {
 
 // ===== INITIALIZE APP =====
 document.addEventListener("DOMContentLoaded", async () => {
-  // Check for short ID in URL
   const urlParams = new URLSearchParams(location.search);
   let id = urlParams.get("id") || localStorage.getItem("lastCardId");
   
   console.log("Initial ID from URL:", id);
   
-  // If it's a short ID (6 characters), map it to full UUID
   if (id && id.length === 6) {
     console.log("Detected short ID (6 chars), looking up full ID...");
     const { data: mapping } = await supa
@@ -5346,8 +5064,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       console.log("No mapping found for short ID:", id);
     }
-  } else if (id && id.length === 36) { // UUID length
-    // Generate short ID for new cards (6 characters)
+  } else if (id && id.length === 36) {
     console.log("Detected full UUID, generating short ID...");
     const shortId = generateShortId();
     const { error } = await supa
@@ -5359,7 +5076,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log("Generated short ID:", shortCardId);
     } else {
       console.log("Error creating short ID:", error);
-      // Try to get existing short ID
       const { data: existing } = await supa
         .from('short_urls')
         .select('short_id')
@@ -5378,26 +5094,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Save the card ID globally (for backward compatibility)
   localStorage.setItem("lastCardId", id);
   
-  // Set current business ID for isolation
   currentBusinessId = id;
   
-  // Load cart from isolated storage
   const savedCart = isolatedLocalStorage.getItem('cart');
   cart = savedCart ? JSON.parse(savedCart) : [];
   
-  // Load admin login status from isolated storage
   isAdminLoggedIn = isolatedLocalStorage.getItem('isAdminLoggedIn') === 'true';
   
-  // Load notifications
   loadInnerNotifications();
   
-  // Initialize customer data
   initCustomerData();
   
-  // Show install permission modal after delay
   setTimeout(() => {
     showInstallPermissionModal();
   }, 5000);
@@ -5412,17 +5121,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     card = JSON.parse(data.data);
     card.id = data.id;
     
-    // Save business phone for admin check
     if (card.phone) {
       saveBusinessPhone(card.phone);
     }
     
-    // Generate unique admin password for this business using short ID
     businessAdminPassword = generateAdminPassword(card.id, shortCardId);
     console.log("Admin password generated:", businessAdminPassword);
     console.log("Short ID for this business:", shortCardId);
     
-    // Update password hint with short ID
     if (shortCardId) {
       document.getElementById('passwordHint').textContent = 
         `Hint: Password format is business123_${shortCardId.toLowerCase()}`;
@@ -5433,28 +5139,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     await renderApp();
     
-    // Initialize routing after render
     initializeRouting();
     
-    // Start with home page
     navigationHistory.push('homePage');
+    window.location.hash = '#home';
     
     updateCartCount();
     updateLoginUI();
     updateCustomerPhoneDisplay();
     updateNotificationBellCount();
     
-    // Initialize notifications
     setTimeout(() => {
       checkNotificationPermission();
     }, 1000);
     
-    // Check for deliveries
     setTimeout(() => {
       checkForDeliveries();
     }, 1000);
     
-    // Add welcome notification
     setTimeout(() => {
       if (innerNotifications.length === 0) {
         addInnerNotification('Welcome!', 'Get started by browsing products or enabling notifications', 'info');
@@ -5465,7 +5167,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Initialize notifications when app starts
 document.addEventListener('DOMContentLoaded', function() {
-  // Check notification permission after app loads
   setTimeout(() => {
     checkNotificationPermission();
   }, 3000);
