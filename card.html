@@ -2343,7 +2343,7 @@ body {
           </div>
           
           <div class="payment-option" onclick="selectBuyNowPayment('cod')" id="codBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#10b981;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#10b981;">
               <i class="fas fa-truck"></i>
             </div>
             <div>
@@ -2353,7 +2353,7 @@ body {
           </div>
           
           <div class="payment-option" onclick="selectBuyNowPayment('jazzcash')" id="jazzcashBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
               <i class="fas fa-qrcode"></i>
             </div>
             <div>
@@ -2398,7 +2398,7 @@ body {
         </h3>
         <div class="payment-options" style="display:flex;flex-direction:column;gap:12px;">
           <div class="payment-option" onclick="selectCheckoutPayment('whatsapp')" id="whatsappCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#25D366;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#25D366;">
               <i class="fab fa-whatsapp"></i>
             </div>
             <div>
@@ -2407,8 +2407,8 @@ body {
             </div>
           </div>
           
-          <div class="payment-option" onclick="selectCheckoutPayment('cod')" id="codCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#10b981;">
+          <div class="payment-option" onclick="selectCheckoutPayment('cod')" id="codCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size=20px;color:white;background:#10b981;">
               <i class="fas fa-truck"></i>
             </div>
             <div>
@@ -2417,8 +2417,8 @@ body {
             </div>
           </div>
           
-          <div class="payment-option" onclick="selectCheckoutPayment('jazzcash')" id="jazzcashCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
+          <div class="payment-option" onclick="selectCheckoutPayment('jazzcash')" id="jazzcashCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display=flex;align-items:center;gap:12px;background:white;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size=20px;color:white;background:#FF6B00;">
               <i class="fas fa-qrcode"></i>
             </div>
             <div>
@@ -2502,7 +2502,7 @@ function shareBusiness() {
   
   let shareUrl = currentUrl;
   
-  // If we have a short ID, use it in the share URL
+  // Always use short ID for sharing
   if (shortCardId) {
     shareUrl = `${currentUrl}?id=${shortCardId}`;
   } else if (card.id) {
@@ -2512,6 +2512,7 @@ function shareBusiness() {
         shareUrl = `${currentUrl}?id=${shortId}`;
         showShareDialog(businessName, shareUrl);
       } else {
+        // Fallback to full ID if short ID creation fails
         shareUrl = `${currentUrl}?id=${card.id}`;
         showShareDialog(businessName, shareUrl);
       }
@@ -2611,7 +2612,7 @@ function setupDynamicPWA(businessData) {
     "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
-    "start_url": window.location.origin + window.location.pathname + "?source=pwa",
+    "start_url": window.location.origin + window.location.pathname + "?id=" + shortCardId + "&source=pwa",
     "icons": [
       {
         "src": profileImage || getDefaultIcon(businessName),
@@ -4277,13 +4278,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Check for short ID in URL
   const urlParams = new URLSearchParams(location.search);
-  let id = urlParams.get("id") || localStorage.getItem("lastCardId");
+  let id = urlParams.get("id");
   
   console.log("Initial ID from URL:", id);
+  
+  let fullCardId = null;
+  let usingShortId = false;
   
   // If it's a short ID (6 characters), map it to full UUID
   if (id && id.length === 6) {
     console.log("Detected short ID (6 chars), looking up full ID...");
+    usingShortId = true;
+    
     const { data: mapping } = await supa
       .from('short_urls')
       .select('full_id')
@@ -4291,15 +4297,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       .single();
     
     if (mapping) {
-      id = mapping.full_id;
-      shortCardId = mapping.short_id;
-      console.log("Found mapping: short", shortCardId, "-> full", id.substring(0, 8) + "...");
+      fullCardId = mapping.full_id;
+      shortCardId = id;
+      console.log("Found mapping: short", shortCardId, "-> full", fullCardId.substring(0, 8) + "...");
     } else {
       console.log("No mapping found for short ID:", id);
+      // Try to get from localStorage as fallback
+      fullCardId = localStorage.getItem("lastCardId");
     }
   } else if (id && id.length === 36) { // UUID length
-    // Generate short ID for new cards (6 characters)
     console.log("Detected full UUID, generating short ID...");
+    fullCardId = id;
+    
+    // Generate short ID for new cards (6 characters)
     const shortId = generateShortId();
     const { error } = await supa
       .from('short_urls')
@@ -4322,18 +4332,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.log("Found existing short ID:", shortCardId);
       }
     }
+  } else {
+    // No ID in URL, try localStorage
+    fullCardId = localStorage.getItem("lastCardId");
+    console.log("No ID in URL, using localStorage:", fullCardId ? fullCardId.substring(0, 8) + "..." : "none");
   }
   
-  if(!id) {
+  if(!fullCardId) {
     document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
     return;
   }
 
   // Save the card ID globally (for backward compatibility)
-  localStorage.setItem("lastCardId", id);
+  localStorage.setItem("lastCardId", fullCardId);
   
   // Set current business ID for isolation
-  currentBusinessId = id;
+  currentBusinessId = fullCardId;
   
   // Load cart from isolated storage
   const savedCart = isolatedLocalStorage.getItem('cart');
@@ -4343,7 +4357,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   isAdminLoggedIn = isolatedLocalStorage.getItem('isAdminLoggedIn') === 'true';
   
   setTimeout(async () => {
-    const {data, error} = await supa.from("cards").select("*").eq("id", id).single();
+    const {data, error} = await supa.from("cards").select("*").eq("id", fullCardId).single();
     if(error || !data) {
       document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
       return;
@@ -4387,6 +4401,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     setTimeout(() => {
       checkForDeliveries();
     }, 1000);
+    
+    // If we're using short ID but URL still shows full ID, replace it
+    if (usingShortId && shortCardId && window.location.search.includes(id) && id.length === 6) {
+      // We're already using the short ID in the URL, good!
+      console.log("URL already contains short ID:", id);
+    } else if (shortCardId && window.location.search.includes(fullCardId)) {
+      // URL contains full ID but we have short ID, replace it
+      const newUrl = window.location.href.replace(fullCardId, shortCardId);
+      if (newUrl !== window.location.href) {
+        console.log("Replacing full ID with short ID in URL");
+        window.history.replaceState({}, document.title, newUrl);
+      }
+    }
   }, 2000);
 });
 </script>
