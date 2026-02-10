@@ -3,10 +3,8 @@ const CACHE_NAME = 'business-app-v1.0';
 const urlsToCache = [
   './',
   './index.html',
-  './manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
-  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap',
-  'https://unpkg.com/@supabase/supabase-js@2'
+  'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap'
 ];
 
 // Install Event
@@ -41,6 +39,11 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   // Skip Supabase requests
   if (event.request.url.includes('supabase.co')) {
+    return;
+  }
+  
+  // Skip blob URLs (manifest)
+  if (event.request.url.startsWith('blob:')) {
     return;
   }
   
