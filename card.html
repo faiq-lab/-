@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap">
 
+<!-- Add manifest link -->
+<link rel="manifest" href="manifest.json">
+
 <!-- All CSS styles remain exactly the same -->
 <style>
 /* ALL CSS FROM ORIGINAL FILE REMAINS EXACTLY THE SAME */
@@ -1966,6 +1969,12 @@ body {
     <div class="app-header">
       <!-- Centered Header Icons -->
       <div class="header-icons">
+        <!-- Notification Bell -->
+        <div class="header-icon-btn" onclick="enableNotifications()" title="Enable Alerts">
+          <i class="fas fa-bell" id="notificationBell"></i>
+          <div class="delivery-badge" id="notificationBadge" style="display:none;">!</div>
+        </div>
+        
         <!-- Delivery Status Icon -->
         <div class="header-icon-btn" id="deliveryStatusBtn" onclick="checkDeliveryStatus()">
           <i class="fas fa-truck" id="deliveryIcon"></i>
@@ -2478,6 +2487,171 @@ const supa = supabase.createClient(
   "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
 
+// ===== PUSH NOTIFICATIONS SYSTEM =====
+let notificationPermission = false;
+
+// Register Service Worker
+async function registerServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register('sw.js');
+      console.log('Service Worker registered:', registration);
+      return registration;
+    } catch (error) {
+      console.error('Service Worker registration failed:', error);
+    }
+  }
+  return null;
+}
+
+// Ask for notification permission
+async function enableNotifications() {
+  if (!('Notification' in window)) {
+    showNotification('❌ Notifications not supported on this device');
+    return;
+  }
+  
+  if (Notification.permission === 'granted') {
+    showNotification('✅ Notifications already enabled!');
+    notificationPermission = true;
+    updateNotificationBell();
+    return;
+  }
+  
+  if (Notification.permission === 'denied') {
+    showNotification('❌ Notifications blocked. Please enable in browser settings.');
+    return;
+  }
+  
+  const permission = await Notification.requestPermission();
+  
+  if (permission === 'granted') {
+    showNotification('✅ Notifications enabled! You will receive alerts.');
+    notificationPermission = true;
+    updateNotificationBell();
+    
+    // Register service worker after permission
+    await registerServiceWorker();
+    startNotificationListener();
+  } else {
+    showNotification('❌ Notifications disabled. You wont receive alerts.');
+  }
+}
+
+// Update notification bell icon
+function updateNotificationBell() {
+  const bell = document.getElementById('notificationBell');
+  const badge = document.getElementById('notificationBadge');
+  
+  if (notificationPermission) {
+    bell.style.color = '#f59e0b'; // Orange color when enabled
+    badge.style.display = 'none';
+  } else {
+    bell.style.color = 'white';
+    badge.style.display = 'flex';
+  }
+}
+
+// Listen for new notifications from Supabase
+function startNotificationListener() {
+  if (!notificationPermission) return;
+  
+  console.log('Starting notification listener...');
+  
+  // Subscribe to Supabase real-time notifications
+  supa
+    .channel('business-notifications')
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'notifications'
+      },
+      (payload) => {
+        console.log('New notification:', payload.new);
+        showPushNotification(payload.new);
+        showNotification(`📢 ${payload.new.title}`);
+      }
+    )
+    .subscribe();
+}
+
+// Show push notification
+function showPushNotification(data) {
+  if (!notificationPermission || !('serviceWorker' in navigator)) return;
+  
+  navigator.serviceWorker.ready.then(registration => {
+    registration.showNotification(data.title || 'Business Alert', {
+      body: data.body || 'New notification',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+      badge: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+      vibrate: [200, 100, 200],
+      data: {
+        url: '/',
+        id: data.id
+      }
+    });
+  });
+}
+
+// Check current notification permission
+function checkNotificationPermission() {
+  if (Notification.permission === 'granted') {
+    notificationPermission = true;
+    updateNotificationBell();
+    registerServiceWorker().then(() => {
+      startNotificationListener();
+    });
+  } else {
+    notificationPermission = false;
+    updateNotificationBell();
+  }
+}
+
+// ===== ADMIN: SEND NOTIFICATION =====
+async function sendNotificationToAll(title, body) {
+  if (!isAdminLoggedIn) {
+    showNotification('❌ Admin access required');
+    return;
+  }
+  
+  if (!title || !body) {
+    title = prompt('Notification Title:', 'New Update');
+    body = prompt('Notification Message:', 'Check out our latest products!');
+    
+    if (!title || !body) return;
+  }
+  
+  const { error } = await supa
+    .from('notifications')
+    .insert([{ title, body }]);
+    
+  if (!error) {
+    showNotification('✅ Notification sent to all users!');
+    
+    // Also trigger for current user if permission granted
+    if (notificationPermission) {
+      showPushNotification({ title, body });
+    }
+  } else {
+    showNotification('❌ Error sending notification');
+  }
+}
+
+// Test notification function
+function testNotification() {
+  if (notificationPermission) {
+    showPushNotification({
+      title: 'Test Notification',
+      body: 'This is a test notification from your business app!'
+    });
+    showNotification('✅ Test notification sent');
+  } else {
+    showNotification('❌ Enable notifications first');
+  }
+}
+
 // ===== SHORT ID SYSTEM (6 CHARACTERS) =====
 function generateShortId() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -2502,7 +2676,7 @@ function shareBusiness() {
   
   let shareUrl = currentUrl;
   
-  // Always use short ID for sharing
+  // If we have a short ID, use it in the share URL
   if (shortCardId) {
     shareUrl = `${currentUrl}?id=${shortCardId}`;
   } else if (card.id) {
@@ -2512,7 +2686,6 @@ function shareBusiness() {
         shareUrl = `${currentUrl}?id=${shortId}`;
         showShareDialog(businessName, shareUrl);
       } else {
-        // Fallback to full ID if short ID creation fails
         shareUrl = `${currentUrl}?id=${card.id}`;
         showShareDialog(businessName, shareUrl);
       }
@@ -2612,7 +2785,7 @@ function setupDynamicPWA(businessData) {
     "display": "standalone",
     "orientation": "portrait",
     "scope": "/",
-    "start_url": window.location.origin + window.location.pathname + "?id=" + shortCardId + "&source=pwa",
+    "start_url": window.location.origin + window.location.pathname + "?source=pwa",
     "icons": [
       {
         "src": profileImage || getDefaultIcon(businessName),
@@ -3335,6 +3508,15 @@ async function loadAdminPanel() {
     </div>
     
     <input type="text" class="admin-search" id="adminSearch" placeholder="Search orders by ID, phone, name..." onkeyup="searchAdminOrders()">
+    
+    <div style="margin: 15px; display: flex; gap: 10px;">
+      <button onclick="sendNotificationToAll()" style="flex:1;padding:12px;background:var(--warning-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
+        <i class="fas fa-bell"></i> Send Alert to All
+      </button>
+      <button onclick="testNotification()" style="flex:1;padding:12px;background:var(--info-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;">
+        <i class="fas fa-bell"></i> Test Alert
+      </button>
+    </div>
     
     <button onclick="addNewOrder()" class="admin-btn">
       <i class="fas fa-plus"></i> Add New Order
@@ -4255,41 +4437,17 @@ function closeDeliveryModal() {
   document.body.style.overflow = 'auto';
 }
 
-// ===== FIXED SERVICE WORKER REGISTRATION =====
-function registerServiceWorker() {
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      // Register service worker with proper scope
-      navigator.serviceWorker.register('./sw.js', { scope: './' })
-        .then(function(registration) {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch(function(error) {
-          console.log('Service Worker registration failed:', error);
-        });
-    });
-  }
-}
-
 // ===== INITIALIZE APP =====
 document.addEventListener("DOMContentLoaded", async () => {
-  // Register service worker first
-  registerServiceWorker();
-  
   // Check for short ID in URL
   const urlParams = new URLSearchParams(location.search);
-  let id = urlParams.get("id");
+  let id = urlParams.get("id") || localStorage.getItem("lastCardId");
   
   console.log("Initial ID from URL:", id);
-  
-  let fullCardId = null;
-  let usingShortId = false;
   
   // If it's a short ID (6 characters), map it to full UUID
   if (id && id.length === 6) {
     console.log("Detected short ID (6 chars), looking up full ID...");
-    usingShortId = true;
-    
     const { data: mapping } = await supa
       .from('short_urls')
       .select('full_id')
@@ -4297,73 +4455,49 @@ document.addEventListener("DOMContentLoaded", async () => {
       .single();
     
     if (mapping) {
-      fullCardId = mapping.full_id;
-      shortCardId = id;
-      console.log("Found mapping: short", shortCardId, "-> full", fullCardId.substring(0, 8) + "...");
-      
-      // Save to localStorage for future reference
-      localStorage.setItem("lastCardId", fullCardId);
+      id = mapping.full_id;
+      shortCardId = mapping.short_id;
+      console.log("Found mapping: short", shortCardId, "-> full", id.substring(0, 8) + "...");
     } else {
       console.log("No mapping found for short ID:", id);
-      // Try to get from localStorage as fallback
-      fullCardId = localStorage.getItem("lastCardId");
     }
   } else if (id && id.length === 36) { // UUID length
-    console.log("Detected full UUID, will redirect to short ID...");
-    fullCardId = id;
-    
-    // Get or create short ID for this full ID
-    const { data: existing } = await supa
+    // Generate short ID for new cards (6 characters)
+    console.log("Detected full UUID, generating short ID...");
+    const shortId = generateShortId();
+    const { error } = await supa
       .from('short_urls')
-      .select('short_id')
-      .eq('full_id', id)
-      .single();
+      .insert([{ short_id: shortId, full_id: id }]);
     
-    if (existing) {
-      shortCardId = existing.short_id;
-      console.log("Found existing short ID:", shortCardId);
-      
-      // REDIRECT TO SHORT ID URL IMMEDIATELY
-      const baseUrl = window.location.origin + window.location.pathname;
-      const newUrl = `${baseUrl}?id=${shortCardId}${window.location.hash}`;
-      console.log("Redirecting to short ID URL:", newUrl);
-      window.location.replace(newUrl);
-      return; // Stop execution here since we're redirecting
+    if (!error) {
+      shortCardId = shortId;
+      console.log("Generated short ID:", shortCardId);
     } else {
-      // Create new short ID
-      const shortId = generateShortId();
-      const { error } = await supa
+      console.log("Error creating short ID:", error);
+      // Try to get existing short ID
+      const { data: existing } = await supa
         .from('short_urls')
-        .insert([{ short_id: shortId, full_id: id }]);
+        .select('short_id')
+        .eq('full_id', id)
+        .single();
       
-      if (!error) {
-        shortCardId = shortId;
-        console.log("Generated new short ID:", shortCardId);
-        
-        // REDIRECT TO SHORT ID URL IMMEDIATELY
-        const baseUrl = window.location.origin + window.location.pathname;
-        const newUrl = `${baseUrl}?id=${shortCardId}${window.location.hash}`;
-        console.log("Redirecting to short ID URL:", newUrl);
-        window.location.replace(newUrl);
-        return; // Stop execution here since we're redirecting
+      if (existing) {
+        shortCardId = existing.short_id;
+        console.log("Found existing short ID:", shortCardId);
       }
     }
-  } else {
-    // No ID in URL, try localStorage
-    fullCardId = localStorage.getItem("lastCardId");
-    console.log("No ID in URL, using localStorage:", fullCardId ? fullCardId.substring(0, 8) + "..." : "none");
   }
   
-  if(!fullCardId) {
+  if(!id) {
     document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
     return;
   }
 
   // Save the card ID globally (for backward compatibility)
-  localStorage.setItem("lastCardId", fullCardId);
+  localStorage.setItem("lastCardId", id);
   
   // Set current business ID for isolation
-  currentBusinessId = fullCardId;
+  currentBusinessId = id;
   
   // Load cart from isolated storage
   const savedCart = isolatedLocalStorage.getItem('cart');
@@ -4373,7 +4507,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   isAdminLoggedIn = isolatedLocalStorage.getItem('isAdminLoggedIn') === 'true';
   
   setTimeout(async () => {
-    const {data, error} = await supa.from("cards").select("*").eq("id", fullCardId).single();
+    const {data, error} = await supa.from("cards").select("*").eq("id", id).single();
     if(error || !data) {
       document.body.innerHTML = "<div style='padding:40px;text-align:center;color:white;'><h2>Card not found</h2></div>";
       return;
@@ -4413,19 +4547,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateLoginUI();
     updateCustomerPhoneDisplay();
     
+    // Initialize notifications
+    setTimeout(() => {
+      checkNotificationPermission();
+    }, 1000);
+    
     // Check for deliveries
     setTimeout(() => {
       checkForDeliveries();
     }, 1000);
-    
-    // Final check: If we have a short ID but URL shows full ID, redirect
-    if (shortCardId && window.location.search.includes(fullCardId)) {
-      const baseUrl = window.location.origin + window.location.pathname;
-      const newUrl = `${baseUrl}?id=${shortCardId}${window.location.hash}`;
-      console.log("Final redirect check: replacing full ID with short ID");
-      window.history.replaceState({}, document.title, newUrl);
-    }
   }, 2000);
+});
+
+// Initialize notifications when app starts
+document.addEventListener('DOMContentLoaded', function() {
+  // Check notification permission after app loads
+  setTimeout(() => {
+    checkNotificationPermission();
+  }, 3000);
 });
 </script>
 </body>
