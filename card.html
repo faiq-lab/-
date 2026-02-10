@@ -414,21 +414,22 @@ body {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
+/* FIXED: REMOVED WHITE SPACE IN PAGES */
 #homePage {
-  padding-top: 100px; /* Added padding for fixed header */
+  padding-top: 80px; /* Reduced from 100px to match header height */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .app-header {
   background: var(--primary-gradient);
-  padding: 80px 25px 30px;
+  padding: 30px 25px 30px; /* Reduced top padding */
   border-radius: 0 0 50px 50px;
   margin: 0;
   position: relative;
   overflow: hidden;
   box-shadow: var(--shadow-md);
-  margin-top: 60px; /* Space for fixed header */
+  margin-top: 0; /* Removed extra margin */
 }
 
 .welcome-text {
@@ -436,7 +437,7 @@ body {
   margin-bottom: 30px;
   position: relative;
   z-index: 1;
-  padding-top: 10px;
+  padding-top: 0; /* Removed padding */
 }
 
 .welcome-text h1 {
@@ -507,7 +508,7 @@ body {
   background: var(--glass-bg);
   border-radius: var(--border-radius-xl);
   padding: 30px;
-  margin: 40px 25px;
+  margin: 30px 25px; /* Reduced from 40px */
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--glass-border);
   text-align: center;
@@ -554,7 +555,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 40px 25px 20px;
+  margin: 30px 25px 20px; /* Reduced from 40px */
   padding-bottom: 15px;
   border-bottom: 2px solid #f1f5f9;
 }
@@ -919,15 +920,16 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
+/* FIXED: REDUCED PADDING IN OTHER PAGES */
 #productsPage {
-  padding-top: 100px; /* Added padding for fixed header */
+  padding-top: 80px; /* Reduced from 100px */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .products-header {
   background: var(--primary-gradient);
-  padding: 50px 25px;
+  padding: 30px 25px; /* Reduced from 50px */
   margin: 0;
   position: relative;
   overflow: hidden;
@@ -940,7 +942,7 @@ body {
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 0; /* Removed extra margin */
 }
 
 .products-header p {
@@ -979,15 +981,16 @@ body {
   font-size: 20px;
 }
 
+/* FIXED: REDUCED PADDING */
 #cartPage {
-  padding-top: 100px; /* Added padding for fixed header */
+  padding-top: 80px; /* Reduced from 100px */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .cart-header {
   background: var(--primary-gradient);
-  padding: 50px 25px;
+  padding: 30px 25px; /* Reduced from 50px */
   margin: 0;
   position: relative;
   overflow: hidden;
@@ -1000,7 +1003,7 @@ body {
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 0; /* Removed extra margin */
 }
 
 .cart-header p {
@@ -1195,15 +1198,16 @@ body {
   margin-top: 25px;
 }
 
+/* FIXED: REDUCED PADDING */
 #aboutPage {
-  padding-top: 100px; /* Added padding for fixed header */
+  padding-top: 80px; /* Reduced from 100px */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .about-header {
   background: var(--primary-gradient);
-  padding: 50px 25px;
+  padding: 30px 25px; /* Reduced from 50px */
   margin: 0;
   position: relative;
   overflow: hidden;
@@ -1216,7 +1220,7 @@ body {
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 0; /* Removed extra margin */
 }
 
 .about-content {
@@ -1286,15 +1290,16 @@ body {
   border-radius: 20px;
 }
 
+/* FIXED: REDUCED PADDING */
 #contactPage {
-  padding-top: 100px; /* Added padding for fixed header */
+  padding-top: 80px; /* Reduced from 100px */
   padding-bottom: 100px;
   background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .contact-header {
   background: var(--primary-gradient);
-  padding: 50px 25px;
+  padding: 30px 25px; /* Reduced from 50px */
   margin: 0;
   position: relative;
   overflow: hidden;
@@ -1307,7 +1312,7 @@ body {
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 0; /* Removed extra margin */
 }
 
 .contact-header p {
@@ -1354,10 +1359,11 @@ body {
   flex-shrink: 0;
 }
 
-.contact-item:nth-child(1) .contact-icon { background: var(--success-gradient); }
-.contact-item:nth-child(2) .contact-icon { background: var(--whatsapp-gradient); }
-.contact-item:nth-child(3) .contact-icon { background: var(--secondary-gradient); }
-.contact-item:nth-child(4) .contact-icon { background: var(--warning-gradient); }
+.contact-item:nth-child(1) .contact-icon { background: var(--primary-gradient); }
+.contact-item:nth-child(2) .contact-icon { background: var(--success-gradient); }
+.contact-item:nth-child(3) .contact-icon { background: var(--whatsapp-gradient); }
+.contact-item:nth-child(4) .contact-icon { background: var(--secondary-gradient); }
+.contact-item:nth-child(5) .contact-icon { background: var(--warning-gradient); }
 
 .contact-details {
   flex: 1;
@@ -1435,9 +1441,10 @@ body {
 .social-icon.youtube { background: #FF0000; }
 .social-icon.tiktok { background: #000000; }
 
+/* FIXED: BACK BUTTON MOVED TO HEADER */
 .back-btn {
   position: absolute;
-  top: 100px; /* Adjusted for fixed header */
+  top: 20px; /* Now in header */
   left: 20px;
   width: 45px;
   height: 45px;
@@ -1550,7 +1557,7 @@ body {
   }
   
   .back-btn {
-    top: 90px;
+    top: 20px;
   }
 }
 
@@ -1613,7 +1620,7 @@ body {
 /* ===== DELIVERY PAGE STYLES ===== */
 .delivery-page-header {
   background: var(--primary-gradient);
-  padding: 50px 25px 30px;
+  padding: 30px 25px 30px; /* Reduced from 50px */
   border-radius: 0 0 50px 50px;
   margin: 0;
   position: relative;
@@ -1628,7 +1635,7 @@ body {
   margin-bottom: 12px;
   position: relative;
   z-index: 1;
-  margin-top: 20px;
+  margin-top: 0; /* Removed extra margin */
 }
 
 .delivery-page-header p {
@@ -2054,6 +2061,32 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ===== SAVE TO CONTACTS BUTTON ===== */
+.save-contact-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  z-index: 100;
+  transition: var(--transition-fast);
+}
+
+.save-contact-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.3);
+}
+
 /* ===== ANIMATIONS FOR NOTIFICATIONS ===== */
 @keyframes slideInRight {
   from { transform: translateX(100%); opacity: 0; }
@@ -2064,6 +2097,93 @@ body {
   from { transform: translateX(0); opacity: 1; }
   to { transform: translateX(100%); opacity: 0; }
 }
+
+/* ===== INSTALL PERMISSION MODAL ===== */
+.install-permission-modal {
+  background: var(--glass-bg);
+  border-radius: 24px;
+  width: 100%;
+  max-width: 380px;
+  padding: 30px;
+  text-align: center;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.install-permission-modal h2 {
+  color: var(--dark-color);
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.install-permission-modal p {
+  color: #64748b;
+  margin-bottom: 25px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.permission-features {
+  text-align: left;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 16px;
+  margin: 20px 0;
+}
+
+.permission-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #475569;
+}
+
+.permission-feature i {
+  color: #10b981;
+  font-size: 16px;
+}
+
+.permission-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.permission-btn {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.permission-btn.cancel {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.permission-btn.accept {
+  background: var(--success-gradient);
+  color: white;
+}
+
+.permission-btn.cancel:hover {
+  background: #e2e8f0;
+}
+
+.permission-btn.accept:hover {
+  background: linear-gradient(135deg, #0da271 0%, #047857 100%);
+}
 </style>
 </head>
 
@@ -2071,6 +2191,16 @@ body {
 <div class="app-container">
   <!-- Fixed Header -->
   <div class="header-container">
+    <!-- Back Button in Header -->
+    <button class="back-btn" onclick="goBack()" id="headerBackBtn" style="display:none;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    
+    <!-- Save to Contacts Button -->
+    <div class="save-contact-btn" onclick="saveBusinessToContacts()" title="Save to Contacts">
+      <i class="fas fa-address-card"></i>
+    </div>
+    
     <!-- Centered Header Icons -->
     <div class="header-icons">
       <!-- Notification Bell -->
@@ -2132,6 +2262,44 @@ body {
         </button>
         <button class="exit-modal-btn exit" onclick="exitApp()">
           <i class="fas fa-sign-out-alt"></i> Exit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Install Permission Modal -->
+  <div class="exit-modal-overlay" id="installPermissionModal" style="display:none;">
+    <div class="install-permission-modal">
+      <h2><i class="fas fa-download"></i> Enhance Your Experience</h2>
+      <p>To provide you with the best experience, we'd like to:</p>
+      
+      <div class="permission-features">
+        <div class="permission-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Save business details to your contacts</span>
+        </div>
+        <div class="permission-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Enable push notifications for orders</span>
+        </div>
+        <div class="permission-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Install app for quick access</span>
+        </div>
+        <div class="permission-feature">
+          <i class="fas fa-check-circle"></i>
+          <span>Auto-save your preferences</span>
+        </div>
+      </div>
+      
+      <p style="font-size: 14px; color: #94a3b8;">Your data is secure and never shared with third parties.</p>
+      
+      <div class="permission-buttons">
+        <button class="permission-btn cancel" onclick="closeInstallPermissionModal()">
+          <i class="fas fa-times"></i> Skip
+        </button>
+        <button class="permission-btn accept" onclick="acceptInstallPermissions()">
+          <i class="fas fa-check"></i> Accept & Continue
         </button>
       </div>
     </div>
@@ -2211,10 +2379,6 @@ body {
 
   <!-- Products Page -->
   <div id="productsPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="products-header">
       <h1>Products & Offers</h1>
       <p>Discover our premium collection</p>
@@ -2233,10 +2397,6 @@ body {
 
   <!-- Cart Page -->
   <div id="cartPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="cart-header">
       <h1>My Cart</h1>
       <p id="cartItemsCount">0 items</p>
@@ -2250,10 +2410,6 @@ body {
 
   <!-- About Page -->
   <div id="aboutPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="about-header">
       <h1>About Business</h1>
     </div>
@@ -2278,25 +2434,32 @@ body {
 
   <!-- Contact Page -->
   <div id="contactPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="contact-header">
       <h1>Contact Us</h1>
       <p>Get in touch anytime</p>
     </div>
     
     <div class="contact-info">
-      <!-- Customer Phone Input -->
-      <div class="contact-item" onclick="openPhoneInput()" style="cursor:pointer;">
-        <div class="contact-icon" style="background:var(--primary-gradient);">
-          <i class="fas fa-user-plus"></i>
+      <!-- Save Business Contact -->
+      <div class="contact-item" onclick="saveBusinessToContacts()" style="cursor:pointer;">
+        <div class="contact-icon">
+          <i class="fas fa-address-card"></i>
         </div>
         <div class="contact-details">
-          <div class="contact-label">Your Phone Number</div>
+          <div class="contact-label">Save Business Contact</div>
+          <div class="contact-value">Tap to save to phonebook</div>
+        </div>
+      </div>
+      
+      <!-- Customer Phone for Delivery -->
+      <div class="contact-item" onclick="openPhoneInput()" style="cursor:pointer;">
+        <div class="contact-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <div class="contact-details">
+          <div class="contact-label">My Delivery Phone</div>
           <div class="contact-value" id="customerPhoneDisplay">
-            Tap to add your number
+            Tap to set your number
           </div>
         </div>
       </div>
@@ -2306,7 +2469,7 @@ body {
           <i class="fas fa-phone"></i>
         </div>
         <div class="contact-details">
-          <div class="contact-label">Call Us</div>
+          <div class="contact-label">Call Business</div>
           <div class="contact-value" id="contactPhone">Loading...</div>
         </div>
       </div>
@@ -2353,10 +2516,6 @@ body {
 
   <!-- ===== DELIVERY STATUS PAGE ===== -->
   <div id="deliveryPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="delivery-page-header">
       <h1><i class="fas fa-truck"></i> Delivery Status</h1>
       <p>Track your orders in real-time</p>
@@ -2371,10 +2530,6 @@ body {
 
   <!-- ===== ADMIN DELIVERY PAGE ===== -->
   <div id="adminPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="delivery-page-header">
       <h1><i class="fas fa-cog"></i> Delivery Admin</h1>
       <p>Manage customer deliveries</p>
@@ -2389,10 +2544,6 @@ body {
 
   <!-- ===== SIMPLE LOGIN PAGE ===== -->
   <div id="loginPage" class="page">
-    <button class="back-btn" onclick="goBack()">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    
     <div class="delivery-page-header">
       <h1><i class="fas fa-lock"></i> Admin Login</h1>
       <p>Enter password to access admin panel</p>
@@ -2652,6 +2803,273 @@ let notificationPermission = false;
 let innerNotifications = [];
 let unreadNotifications = 0;
 
+// ===== CUSTOMER DATA COLLECTION =====
+let customerData = {
+  deviceId: '',
+  phone: '',
+  name: '',
+  email: '',
+  installDate: '',
+  lastActive: '',
+  permissions: {}
+};
+
+// Generate unique device ID
+function generateDeviceId() {
+  let deviceId = localStorage.getItem('customer_device_id');
+  if (!deviceId) {
+    deviceId = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem('customer_device_id', deviceId);
+  }
+  return deviceId;
+}
+
+// Initialize customer data
+function initCustomerData() {
+  customerData.deviceId = generateDeviceId();
+  customerData.installDate = new Date().toISOString();
+  customerData.lastActive = new Date().toISOString();
+  customerData.phone = getCustomerPhone() || '';
+  
+  // Load saved customer name and email
+  const savedName = isolatedLocalStorage.getItem('customerName');
+  const savedEmail = isolatedLocalStorage.getItem('customerEmail');
+  customerData.name = savedName || '';
+  customerData.email = savedEmail || '';
+  
+  // Save to Supabase
+  saveCustomerDataToBackend();
+}
+
+// Save customer data to Supabase
+async function saveCustomerDataToBackend() {
+  try {
+    // First check if customer already exists
+    const { data: existing } = await supa
+      .from('customer_data')
+      .select('id')
+      .eq('device_id', customerData.deviceId)
+      .maybeSingle();
+    
+    if (existing) {
+      // Update existing customer
+      const { error } = await supa
+        .from('customer_data')
+        .update({
+          phone: customerData.phone,
+          name: customerData.name,
+          email: customerData.email,
+          last_active: new Date().toISOString(),
+          permissions: customerData.permissions
+        })
+        .eq('device_id', customerData.deviceId);
+      
+      if (!error) {
+        console.log('Customer data updated');
+      }
+    } else {
+      // Insert new customer
+      const { error } = await supa
+        .from('customer_data')
+        .insert([{
+          device_id: customerData.deviceId,
+          phone: customerData.phone,
+          name: customerData.name,
+          email: customerData.email,
+          business_id: currentBusinessId,
+          install_date: customerData.installDate,
+          last_active: customerData.lastActive,
+          permissions: customerData.permissions
+        }]);
+      
+      if (!error) {
+        console.log('New customer data saved');
+      }
+    }
+  } catch (error) {
+    console.log('Error saving customer data:', error);
+  }
+}
+
+// Update customer permissions
+function updateCustomerPermissions(permissionType, granted) {
+  customerData.permissions[permissionType] = {
+    granted: granted,
+    date: new Date().toISOString()
+  };
+  saveCustomerDataToBackend();
+}
+
+// ===== INSTALL PERMISSIONS SYSTEM =====
+let installPermissionsShown = false;
+
+function showInstallPermissionModal() {
+  // Don't show if already shown in this session
+  if (installPermissionsShown || isolatedLocalStorage.getItem('installPermissionsShown') === 'true') {
+    return;
+  }
+  
+  // Wait 3 seconds after app loads
+  setTimeout(() => {
+    document.getElementById('installPermissionModal').style.display = 'flex';
+    installPermissionsShown = true;
+  }, 3000);
+}
+
+function closeInstallPermissionModal() {
+  document.getElementById('installPermissionModal').style.display = 'none';
+  isolatedLocalStorage.setItem('installPermissionsShown', 'true');
+  
+  // Update permission
+  updateCustomerPermissions('install_modal', false);
+}
+
+async function acceptInstallPermissions() {
+  // Save that permissions were accepted
+  isolatedLocalStorage.setItem('installPermissionsShown', 'true');
+  
+  // Update permissions
+  updateCustomerPermissions('install_modal', true);
+  updateCustomerPermissions('contacts', true);
+  updateCustomerPermissions('notifications', true);
+  updateCustomerPermissions('install_prompt', true);
+  
+  // Close modal
+  document.getElementById('installPermissionModal').style.display = 'none';
+  
+  // Show notification
+  showNotification('✅ Thank you! Enhancing your experience...');
+  
+  // Try to save business to contacts automatically
+  setTimeout(() => {
+    saveBusinessToContacts(true); // true = silent mode
+  }, 1000);
+  
+  // Enable notifications
+  setTimeout(() => {
+    enableNotifications();
+  }, 2000);
+  
+  // Show install prompt if available
+  setTimeout(() => {
+    showInstallPromptIfAvailable();
+  }, 3000);
+  
+  // Save customer data
+  saveCustomerDataToBackend();
+}
+
+// ===== SAVE BUSINESS TO CONTACTS =====
+async function saveBusinessToContacts(silent = false) {
+  if (!card.name || !card.phone) {
+    if (!silent) {
+      showNotification('❌ Business information incomplete');
+    }
+    return;
+  }
+  
+  // Check if contacts API is available
+  if (!('contacts' in navigator && 'ContactsManager' in window)) {
+    if (!silent) {
+      showSaveContactsFallback();
+    }
+    return;
+  }
+  
+  try {
+    // Request contacts permission
+    const granted = await navigator.permissions.query({ name: 'contacts' });
+    
+    if (granted.state === 'granted') {
+      // Create contact object
+      const contact = {
+        name: [card.name],
+        tel: [{
+          number: card.phone,
+          type: 'work'
+        }],
+        email: card.email ? [{
+          address: card.email,
+          type: 'work'
+        }] : [],
+        note: [card.businessName || 'Business Contact'],
+        url: card.website ? [{
+          url: card.website,
+          type: 'work'
+        }] : [],
+        address: card.address ? [{
+          streetAddress: card.address,
+          type: 'work'
+        }] : []
+      };
+      
+      // Save contact
+      const contacts = await navigator.contacts.select(['name', 'tel', 'email'], { multiple: false });
+      await navigator.contacts.save(contact);
+      
+      if (!silent) {
+        showNotification('✅ Business saved to contacts!');
+      }
+      
+      // Add inner notification
+      addInnerNotification('Contact Saved', `${card.name} saved to your phonebook`, 'success');
+      
+      // Update permission
+      updateCustomerPermissions('contacts_saved', true);
+      
+      // Log to backend
+      logContactSave();
+      
+    } else {
+      if (!silent) {
+        showSaveContactsFallback();
+      }
+    }
+  } catch (error) {
+    console.log('Error saving contact:', error);
+    if (!silent) {
+      showSaveContactsFallback();
+    }
+  }
+}
+
+function showSaveContactsFallback() {
+  const businessName = card.name || 'Business';
+  const phone = card.phone || '';
+  const email = card.email || '';
+  const address = card.address || '';
+  
+  let contactInfo = `Business: ${businessName}\n`;
+  contactInfo += `Phone: ${phone}\n`;
+  if (email) contactInfo += `Email: ${email}\n`;
+  if (address) contactInfo += `Address: ${address}\n`;
+  
+  // Copy to clipboard
+  navigator.clipboard.writeText(contactInfo).then(() => {
+    showNotification('📋 Contact info copied! Paste in your contacts app');
+  }).catch(() => {
+    prompt('Copy this contact information:', contactInfo);
+  });
+}
+
+async function logContactSave() {
+  try {
+    const { error } = await supa
+      .from('contact_saves')
+      .insert([{
+        business_id: currentBusinessId,
+        device_id: customerData.deviceId,
+        timestamp: new Date().toISOString()
+      }]);
+    
+    if (!error) {
+      console.log('Contact save logged');
+    }
+  } catch (error) {
+    console.log('Error logging contact save:', error);
+  }
+}
+
 // Register Service Worker
 async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
@@ -2866,11 +3284,13 @@ async function enableNotifications() {
     notificationPermission = true;
     updateNotificationBellCount();
     addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
+    updateCustomerPermissions('notifications', true);
     return;
   }
   
   if (Notification.permission === 'denied') {
     showNotification('❌ Notifications blocked. Please enable in browser settings.');
+    updateCustomerPermissions('notifications', false);
     return;
   }
   
@@ -2889,8 +3309,12 @@ async function enableNotifications() {
     
     // Add inner notification
     addInnerNotification('Notifications Enabled', 'You will receive alerts for updates and deliveries', 'success');
+    
+    // Update permission
+    updateCustomerPermissions('notifications', true);
   } else {
     showNotification('❌ Notifications disabled. You wont receive alerts.');
+    updateCustomerPermissions('notifications', false);
   }
 }
 
@@ -2902,9 +3326,11 @@ function checkNotificationPermission() {
     registerServiceWorker().then(() => {
       startNotificationListener();
     });
+    updateCustomerPermissions('notifications', true);
   } else {
     notificationPermission = false;
     updateNotificationBellCount();
+    updateCustomerPermissions('notifications', false);
   }
 }
 
@@ -3329,6 +3755,8 @@ function getCustomerPhone() {
 
 function saveCustomerPhone(phone) {
   isolatedLocalStorage.setItem('customerPhone', phone);
+  customerData.phone = phone;
+  saveCustomerDataToBackend();
 }
 
 function saveBusinessPhone(phone) {
@@ -3398,8 +3826,12 @@ function installPWA() {
       
       // Hide install button permanently for this session
       installButtonShown = true;
+      
+      // Update permission
+      updateCustomerPermissions('app_installed', true);
     } else {
       console.log('User dismissed the install prompt');
+      updateCustomerPermissions('app_installed', false);
     }
     
     deferredPrompt = null;
@@ -3482,6 +3914,14 @@ function navigateToDirect(pageId) {
     if(oldPage) oldPage.classList.remove('slide-out');
     newPage.classList.add('active');
     currentPage = pageId;
+    
+    // Show/hide back button in header
+    const backBtn = document.getElementById('headerBackBtn');
+    if (pageId !== 'homePage') {
+      backBtn.style.display = 'flex';
+    } else {
+      backBtn.style.display = 'none';
+    }
     
     document.querySelectorAll('.nav-item').forEach(item => {
       item.classList.remove('active');
@@ -3835,7 +4275,7 @@ function updateCustomerPhoneDisplay() {
     displayElement.style.color = '#10b981';
     displayElement.style.fontWeight = '800';
   } else {
-    displayElement.textContent = 'Tap to add your number';
+    displayElement.textContent = 'Tap to set your number';
     displayElement.style.color = '';
     displayElement.style.fontWeight = '';
   }
@@ -4953,6 +5393,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Load notifications
   loadInnerNotifications();
+  
+  // Initialize customer data
+  initCustomerData();
+  
+  // Show install permission modal after delay
+  setTimeout(() => {
+    showInstallPermissionModal();
+  }, 5000);
   
   setTimeout(async () => {
     const {data, error} = await supa.from("cards").select("*").eq("id", id).single();
