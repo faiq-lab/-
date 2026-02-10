@@ -1,3 +1,5 @@
+[file name]: card (22).html
+[file content begin]
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -504,6 +506,7 @@ body {
   line-height: 1.4;
 }
 
+/* FIXED: IMPROVED PROFILE AVATAR QUALITY AND ALIGNMENT */
 .profile-section {
   background: var(--glass-bg);
   border-radius: var(--border-radius-xl);
@@ -512,16 +515,33 @@ body {
   box-shadow: var(--shadow-lg);
   border: 1px solid var(--glass-border);
   text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .profile-avatar {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   border: 5px solid white;
   box-shadow: var(--shadow-lg);
   margin-bottom: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .profile-name {
@@ -2290,6 +2310,482 @@ body {
 .delivery-free-message.show {
   display: block;
 }
+
+/* ===== ADDRESS MANAGEMENT SYSTEM STYLES ===== */
+.address-book-header {
+  background: var(--primary-gradient);
+  padding: 30px 25px;
+  border-radius: 0 0 50px 50px;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.address-book-header h1 {
+  color: white;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  margin-top: 0;
+}
+
+.address-book-header p {
+  color: rgba(255,255,255,0.95);
+  font-size: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Address Cards */
+.address-card {
+  background: var(--lighter-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  margin: 15px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #f1f5f9;
+  border-left: 5px solid #667eea;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.address-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.address-card.home { border-left-color: #10b981; }
+.address-card.work { border-left-color: #3b82f6; }
+.address-card.other { border-left-color: #8b5cf6; }
+
+.address-type {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.address-type.home { background: #d1fae5; color: #065f46; }
+.address-type.work { background: #dbeafe; color: #1e40af; }
+.address-type.other { background: #ede9fe; color: #5b21b6; }
+
+.address-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.address-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.address-icon.home { background: var(--success-gradient); }
+.address-icon.work { background: var(--info-gradient); }
+.address-icon.other { background: var(--secondary-gradient); }
+
+.address-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--dark-color);
+}
+
+.address-details {
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.address-phone {
+  color: #64748b;
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.address-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.address-btn.edit {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.address-btn.delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.address-btn.default {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.address-btn:hover {
+  transform: translateY(-1px);
+}
+
+.default-badge {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: var(--success-gradient);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.no-addresses {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.no-addresses i {
+  font-size: 60px;
+  color: #cbd5e1;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.no-addresses h3 {
+  font-size: 20px;
+  color: var(--dark-color);
+  margin-bottom: 15px;
+  font-weight: 800;
+}
+
+.no-addresses p {
+  color: #64748b;
+  margin-bottom: 30px;
+  font-size: 16px;
+}
+
+/* Address Form */
+.address-form-section {
+  background: var(--lighter-color);
+  border-radius: var(--border-radius-lg);
+  padding: 20px;
+  margin: 15px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #f1f5f9;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: var(--dark-color);
+  transition: var(--transition-fast);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: white;
+  color: var(--dark-color);
+  cursor: pointer;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.address-type-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.type-option {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  background: white;
+}
+
+.type-option.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.type-option i {
+  font-size: 20px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.type-option.home.selected i { color: #10b981; }
+.type-option.work.selected i { color: #3b82f6; }
+.type-option.other.selected i { color: #8b5cf6; }
+
+.type-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dark-color);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #667eea;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  color: #475569;
+  font-weight: 600;
+}
+
+/* Location Picker */
+.location-picker {
+  margin: 20px 0;
+}
+
+.location-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.location-btn {
+  padding: 8px 15px;
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location-coordinates {
+  font-size: 12px;
+  color: #64748b;
+  padding: 8px;
+  background: #f8fafc;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+/* Map Preview */
+.map-preview {
+  width: 100%;
+  height: 200px;
+  background: #f8fafc;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 15px 0;
+  border: 2px dashed #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* Address Selection in Checkout */
+.address-selection {
+  margin: 20px 0;
+}
+
+.address-selection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.add-address-btn {
+  padding: 8px 15px;
+  background: var(--success-gradient);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Form Validation */
+.error-message {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-input.error {
+  border-color: #ef4444;
+}
+
+.form-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Address Book Page */
+.address-book-actions {
+  display: flex;
+  gap: 10px;
+  padding: 15px;
+  background: var(--lighter-color);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition-fast);
+}
+
+.action-btn.primary {
+  background: var(--primary-gradient);
+  color: white;
+}
+
+.action-btn.secondary {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive Design for Address System */
+@media (max-width: 480px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .address-type-selector {
+    flex-direction: column;
+  }
+  
+  .address-actions {
+    flex-direction: column;
+  }
+  
+  .address-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .address-card {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  .address-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
 </style>
 </head>
 
@@ -2462,7 +2958,9 @@ body {
     </div>
 
     <div class="profile-section">
-      <img src="" id="photo" class="profile-avatar" loading="lazy">
+      <div class="profile-avatar" id="photoContainer">
+        <img src="" id="photo" loading="lazy" onerror="handleProfileImageError()">
+      </div>
       <div class="profile-name">
         <span id="name">Loading...</span>
         <i class="fas fa-badge-check verified-badge"></i>
@@ -2557,6 +3055,19 @@ body {
         </div>
       </div>
       
+      <!-- Address Book -->
+      <div class="contact-item" onclick="navigateTo('addressPage')" style="cursor:pointer;">
+        <div class="contact-icon">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="contact-details">
+          <div class="contact-label">My Address Book</div>
+          <div class="contact-value" id="defaultAddressSummary">
+            Manage shipping addresses
+          </div>
+        </div>
+      </div>
+      
       <!-- Customer Phone for Delivery -->
       <div class="contact-item" onclick="openPhoneInput()" style="cursor:pointer;">
         <div class="contact-icon">
@@ -2605,7 +3116,7 @@ body {
           <i class="fas fa-map-marker-alt"></i>
         </div>
         <div class="contact-details">
-          <div class="contact-label">Address</div>
+          <div class="contact-label">Business Address</div>
           <div class="contact-value" id="contactAddress">Loading...</div>
         </div>
       </div>
@@ -2615,6 +3126,29 @@ body {
       <h3><i class="fas fa-share-alt"></i> Follow Us</h3>
       <div class="social-grid" id="socialGrid">
       </div>
+    </div>
+    
+    <div class="page-footer-spacer"></div>
+  </div>
+
+  <!-- ===== ADDRESS BOOK PAGE ===== -->
+  <div id="addressPage" class="page">
+    <div class="address-book-header">
+      <h1><i class="fas fa-map-marker-alt"></i> My Address Book</h1>
+      <p>Manage your shipping addresses</p>
+    </div>
+    
+    <div class="address-book-actions">
+      <button class="action-btn primary" onclick="showAddressFormModal()">
+        <i class="fas fa-plus"></i> Add New Address
+      </button>
+      <button class="action-btn secondary" onclick="useCurrentLocation()">
+        <i class="fas fa-location-arrow"></i> Use My Location
+      </button>
+    </div>
+    
+    <div id="addressList">
+      <!-- Addresses will load here -->
     </div>
     
     <div class="page-footer-spacer"></div>
@@ -2782,6 +3316,151 @@ body {
   </div>
 </div>
 
+<!-- ===== ADDRESS FORM MODAL ===== -->
+<div class="modal-overlay" id="addressFormModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal('addressFormModal')">×</button>
+    
+    <div style="padding:25px;">
+      <h2 style="text-align:center;margin-bottom:25px;color:var(--dark-color);">
+        <i class="fas fa-map-marker-alt"></i> <span id="addressFormTitle">Add New Address</span>
+      </h2>
+      
+      <div class="address-form-section">
+        <div class="address-type-selector">
+          <div class="type-option home" onclick="selectAddressType('home')">
+            <i class="fas fa-home"></i>
+            <div class="type-label">Home</div>
+          </div>
+          <div class="type-option work" onclick="selectAddressType('work')">
+            <i class="fas fa-briefcase"></i>
+            <div class="type-label">Work</div>
+          </div>
+          <div class="type-option other" onclick="selectAddressType('other')">
+            <i class="fas fa-map-pin"></i>
+            <div class="type-label">Other</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Full Name *</label>
+          <input type="text" id="addressFullName" class="form-input" placeholder="Enter your full name">
+          <div class="error-message" id="nameError">Please enter your name</div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Phone Number *</label>
+          <input type="tel" id="addressPhone" class="form-input" placeholder="Enter phone number">
+          <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Address Line 1 *</label>
+          <input type="text" id="addressLine1" class="form-input" placeholder="House No, Building, Street">
+          <div class="error-message" id="address1Error">Please enter address line 1</div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Address Line 2</label>
+          <input type="text" id="addressLine2" class="form-input" placeholder="Apartment, Floor, Landmark">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">City *</label>
+            <input type="text" id="addressCity" class="form-input" placeholder="City">
+            <div class="error-message" id="cityError">Please enter city</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">State/Province *</label>
+            <input type="text" id="addressState" class="form-input" placeholder="State">
+            <div class="error-message" id="stateError">Please enter state</div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Postal Code *</label>
+            <input type="text" id="addressPostalCode" class="form-input" placeholder="Postal Code">
+            <div class="error-message" id="postalError">Please enter postal code</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Country *</label>
+            <select id="addressCountry" class="form-select">
+              <option value="Pakistan">Pakistan</option>
+              <option value="India">India</option>
+              <option value="Bangladesh">Bangladesh</option>
+              <option value="Sri Lanka">Sri Lanka</option>
+              <option value="USA">United States</option>
+              <option value="UK">United Kingdom</option>
+              <option value="UAE">United Arab Emirates</option>
+              <option value="Saudi Arabia">Saudi Arabia</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Delivery Instructions (Optional)</label>
+          <textarea id="addressInstructions" class="form-input" placeholder="e.g., Call before delivery, Leave at gate, etc." rows="3"></textarea>
+        </div>
+        
+        <div class="location-picker">
+          <div class="location-header">
+            <label class="form-label">Location (Optional)</label>
+            <button type="button" class="location-btn" onclick="getCurrentLocation()">
+              <i class="fas fa-location-arrow"></i> Use Current Location
+            </button>
+          </div>
+          <div class="location-coordinates" id="locationCoordinates">
+            Latitude: Not set | Longitude: Not set
+          </div>
+        </div>
+        
+        <div class="checkbox-group">
+          <input type="checkbox" id="setAsDefault" checked>
+          <label class="checkbox-label">Set as default shipping address</label>
+        </div>
+        
+        <input type="hidden" id="addressId" value="">
+        
+        <button onclick="saveAddress()" style="width:100%;padding:18px;background:var(--success-gradient);color:white;border:none;border-radius:var(--border-radius-md);font-size:17px;font-weight:800;cursor:pointer;margin-top:25px;">
+          <i class="fas fa-save"></i> Save Address
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADDRESS SELECTION MODAL (FOR CHECKOUT) ===== -->
+<div class="modal-overlay" id="addressSelectionModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeModal('addressSelectionModal')">×</button>
+    
+    <div style="padding:25px;">
+      <h2 style="text-align:center;margin-bottom:25px;color:var(--dark-color);">
+        <i class="fas fa-truck"></i> Select Delivery Address
+      </h2>
+      
+      <div style="margin-bottom:20px;">
+        <button onclick="showAddressFormModal(true)" style="width:100%;padding:15px;background:var(--primary-gradient);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:15px;">
+          <i class="fas fa-plus"></i> Add New Address
+        </button>
+      </div>
+      
+      <div id="addressSelectionList" style="max-height:400px;overflow-y:auto;">
+        <!-- Addresses for selection will load here -->
+      </div>
+      
+      <button onclick="confirmAddressSelection()" style="width:100%;padding:18px;background:var(--success-gradient);color:white;border:none;border-radius:var(--border-radius-md);font-size:17px;font-weight:800;cursor:pointer;margin-top:25px;display:none;" id="confirmAddressBtn">
+        <i class="fas fa-check-circle"></i> Use Selected Address
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Other Modals -->
 <div class="modal-overlay" id="productModal">
   <div class="modal-content">
@@ -2818,6 +3497,19 @@ body {
         <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);margin-bottom:15px;">
           Checkout Now
         </h3>
+        
+        <!-- ADDRESS SELECTION IN DIRECT CHECKOUT -->
+        <div id="buyNowAddressSection" style="margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; cursor: pointer;" onclick="selectAddressForBuyNow()">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:13px;color:#64748b;">Delivery Address:</div>
+              <div style="font-size:14px;font-weight:700;color:var(--dark-color);" id="buyNowAddressDisplay">
+                Tap to select address
+              </div>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#64748b;"></i>
+          </div>
+        </div>
         
         <div class="payment-options" style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
           <div class="payment-option" onclick="selectBuyNowPayment('whatsapp')" id="whatsappBuyNowOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
@@ -2888,6 +3580,24 @@ body {
         Checkout
       </h2>
       
+      <!-- ADDRESS SELECTION IN CHECKOUT -->
+      <div class="address-selection" style="margin-bottom:25px;">
+        <div class="address-selection-header">
+          <h3 style="font-size:17px;font-weight:800;color:var(--dark-color);">
+            <i class="fas fa-map-marker-alt"></i> Delivery Address
+          </h3>
+          <button class="add-address-btn" onclick="selectAddressForCheckout()">
+            <i class="fas fa-plus"></i> Change Address
+          </button>
+        </div>
+        
+        <div id="checkoutAddressDisplay" style="padding:15px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;cursor:pointer;" onclick="selectAddressForCheckout()">
+          <div id="selectedAddressSummary" style="color:#64748b;font-size:14px;">
+            Tap to select delivery address
+          </div>
+        </div>
+      </div>
+      
       <div id="checkoutItems" style="margin-bottom:25px;max-height:250px;overflow-y:auto;padding-right:10px;">
       </div>
       
@@ -2949,7 +3659,7 @@ body {
           </div>
           
           <div class="payment-option" onclick="selectCheckoutPayment('jazzcash')" id="jazzcashCheckoutOption" style="padding:15px;border:2px solid #e2e8f0;border-radius:var(--border-radius-md);cursor:pointer;display:flex;align-items:center;gap:12px;background:white;">
-            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
+            <div class="payment-icon" style="width:45px;height:45px;border-radius:var(--border-radius-sm);display=flex;align-items:center;justify-content:center;font-size:20px;color:white;background:#FF6B00;">
               <i class="fas fa-qrcode"></i>
             </div>
             <div>
@@ -3008,6 +3718,799 @@ const supa = supabase.createClient(
   "https://dfvnefbxgayxqgjjgtrr.supabase.co",
   "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
+
+// ===== ADDRESS MANAGEMENT SYSTEM =====
+let addresses = [];
+let selectedAddressId = null;
+let editingAddressId = null;
+let currentAddressType = 'home';
+let currentLocation = null;
+let isSelectingAddressForCheckout = false;
+
+// Address data structure
+const AddressType = {
+  HOME: 'home',
+  WORK: 'work',
+  OTHER: 'other'
+};
+
+// Initialize address system
+function initAddressSystem() {
+  loadAddresses();
+  updateDefaultAddressSummary();
+}
+
+// Load addresses from isolated storage
+function loadAddresses() {
+  const savedAddresses = isolatedLocalStorage.getItem('addresses');
+  addresses = savedAddresses ? JSON.parse(savedAddresses) : [];
+  
+  // If no addresses, create a default one if customer phone exists
+  if (addresses.length === 0) {
+    const customerPhone = getCustomerPhone();
+    if (customerPhone) {
+      const defaultAddress = {
+        id: generateId(),
+        type: AddressType.HOME,
+        fullName: 'Your Name',
+        phone: customerPhone,
+        addressLine1: 'Your Address',
+        addressLine2: '',
+        city: 'Your City',
+        state: 'Your State',
+        postalCode: '',
+        country: 'Pakistan',
+        isDefault: true,
+        instructions: ''
+      };
+      addresses.push(defaultAddress);
+      saveAddresses();
+    }
+  }
+  
+  return addresses;
+}
+
+// Save addresses to isolated storage
+function saveAddresses() {
+  isolatedLocalStorage.setItem('addresses', JSON.stringify(addresses));
+}
+
+// Generate unique ID for addresses
+function generateId() {
+  return 'addr_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Select address type in form
+function selectAddressType(type) {
+  currentAddressType = type;
+  
+  // Update UI
+  document.querySelectorAll('.type-option').forEach(option => {
+    option.classList.remove('selected');
+  });
+  
+  document.querySelector(`.type-option.${type}`).classList.add('selected');
+}
+
+// Show address form modal
+function showAddressFormModal(forCheckout = false) {
+  editingAddressId = null;
+  isSelectingAddressForCheckout = forCheckout;
+  
+  // Reset form
+  document.getElementById('addressFormTitle').textContent = 'Add New Address';
+  document.getElementById('addressId').value = '';
+  document.getElementById('addressFullName').value = '';
+  document.getElementById('addressPhone').value = getCustomerPhone() || '';
+  document.getElementById('addressLine1').value = '';
+  document.getElementById('addressLine2').value = '';
+  document.getElementById('addressCity').value = '';
+  document.getElementById('addressState').value = '';
+  document.getElementById('addressPostalCode').value = '';
+  document.getElementById('addressCountry').value = 'Pakistan';
+  document.getElementById('addressInstructions').value = '';
+  document.getElementById('setAsDefault').checked = true;
+  
+  // Reset type selection
+  currentAddressType = AddressType.HOME;
+  document.querySelectorAll('.type-option').forEach(option => {
+    option.classList.remove('selected');
+  });
+  document.querySelector('.type-option.home').classList.add('selected');
+  
+  // Reset location
+  currentLocation = null;
+  document.getElementById('locationCoordinates').textContent = 'Latitude: Not set | Longitude: Not set';
+  
+  // Clear errors
+  clearFormErrors();
+  
+  openModal('addressFormModal');
+}
+
+// Edit address
+function editAddress(addressId) {
+  const address = addresses.find(addr => addr.id === addressId);
+  if (!address) return;
+  
+  editingAddressId = addressId;
+  
+  // Fill form
+  document.getElementById('addressFormTitle').textContent = 'Edit Address';
+  document.getElementById('addressId').value = address.id;
+  document.getElementById('addressFullName').value = address.fullName || '';
+  document.getElementById('addressPhone').value = address.phone || '';
+  document.getElementById('addressLine1').value = address.addressLine1 || '';
+  document.getElementById('addressLine2').value = address.addressLine2 || '';
+  document.getElementById('addressCity').value = address.city || '';
+  document.getElementById('addressState').value = address.state || '';
+  document.getElementById('addressPostalCode').value = address.postalCode || '';
+  document.getElementById('addressCountry').value = address.country || 'Pakistan';
+  document.getElementById('addressInstructions').value = address.instructions || '';
+  document.getElementById('setAsDefault').checked = address.isDefault || false;
+  
+  // Set type
+  currentAddressType = address.type || AddressType.HOME;
+  document.querySelectorAll('.type-option').forEach(option => {
+    option.classList.remove('selected');
+  });
+  document.querySelector(`.type-option.${currentAddressType}`).classList.add('selected');
+  
+  // Set location
+  if (address.latitude && address.longitude) {
+    currentLocation = { lat: address.latitude, lng: address.longitude };
+    document.getElementById('locationCoordinates').textContent = 
+      `Latitude: ${address.latitude.toFixed(6)} | Longitude: ${address.longitude.toFixed(6)}`;
+  } else {
+    currentLocation = null;
+    document.getElementById('locationCoordinates').textContent = 'Latitude: Not set | Longitude: Not set';
+  }
+  
+  // Clear errors
+  clearFormErrors();
+  
+  openModal('addressFormModal');
+}
+
+// Get current location
+function getCurrentLocation() {
+  if (!navigator.geolocation) {
+    showNotification('Geolocation is not supported by your browser');
+    return;
+  }
+  
+  showNotification('Getting your location...');
+  
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      currentLocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      
+      document.getElementById('locationCoordinates').textContent = 
+        `Latitude: ${currentLocation.lat.toFixed(6)} | Longitude: ${currentLocation.lng.toFixed(6)}`;
+      
+      showNotification('📍 Location captured successfully!');
+      
+      // Try to get address from coordinates (reverse geocoding)
+      getAddressFromCoordinates(currentLocation.lat, currentLocation.lng);
+    },
+    (error) => {
+      console.error('Error getting location:', error);
+      showNotification('❌ Could not get your location. Please enter address manually.');
+    }
+  );
+}
+
+// Get address from coordinates (simplified - in real app, use Google Maps API)
+function getAddressFromCoordinates(lat, lng) {
+  // This is a simplified version. In production, you would use:
+  // 1. Google Maps Geocoding API
+  // 2. OpenStreetMap Nominatim
+  // 3. Other geocoding service
+  
+  // For now, we'll just update the coordinates display
+  console.log(`Coordinates: ${lat}, ${lng}`);
+  
+  // You can implement actual reverse geocoding here
+  // Example with Google Maps (requires API key):
+  // fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=YOUR_API_KEY`)
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     if (data.results[0]) {
+  //       const address = data.results[0].formatted_address;
+  //       // Parse address components and fill form
+  //     }
+  //   });
+}
+
+// Use current location to create address
+function useCurrentLocation() {
+  getCurrentLocation();
+  setTimeout(() => {
+    showAddressFormModal();
+  }, 1000);
+}
+
+// Validate address form
+function validateAddressForm() {
+  let isValid = true;
+  const errors = {};
+  
+  // Full Name
+  const fullName = document.getElementById('addressFullName').value.trim();
+  if (!fullName) {
+    errors.name = 'Please enter your name';
+    isValid = false;
+  }
+  
+  // Phone
+  const phone = document.getElementById('addressPhone').value.trim();
+  if (!phone || phone.length < 10) {
+    errors.phone = 'Please enter a valid phone number';
+    isValid = false;
+  }
+  
+  // Address Line 1
+  const addressLine1 = document.getElementById('addressLine1').value.trim();
+  if (!addressLine1) {
+    errors.address1 = 'Please enter address line 1';
+    isValid = false;
+  }
+  
+  // City
+  const city = document.getElementById('addressCity').value.trim();
+  if (!city) {
+    errors.city = 'Please enter city';
+    isValid = false;
+  }
+  
+  // State
+  const state = document.getElementById('addressState').value.trim();
+  if (!state) {
+    errors.state = 'Please enter state';
+    isValid = false;
+  }
+  
+  // Postal Code
+  const postalCode = document.getElementById('addressPostalCode').value.trim();
+  if (!postalCode) {
+    errors.postal = 'Please enter postal code';
+    isValid = false;
+  }
+  
+  // Show errors
+  Object.keys(errors).forEach(field => {
+    const errorElement = document.getElementById(`${field}Error`);
+    const inputElement = document.getElementById(`address${field.charAt(0).toUpperCase() + field.slice(1)}`);
+    
+    if (errorElement && inputElement) {
+      errorElement.textContent = errors[field];
+      errorElement.style.display = 'block';
+      inputElement.classList.add('error');
+    }
+  });
+  
+  return isValid;
+}
+
+// Clear form errors
+function clearFormErrors() {
+  const errorElements = document.querySelectorAll('.error-message');
+  errorElements.forEach(element => {
+    element.style.display = 'none';
+  });
+  
+  const inputElements = document.querySelectorAll('.form-input');
+  inputElements.forEach(element => {
+    element.classList.remove('error');
+  });
+}
+
+// Save address
+function saveAddress() {
+  if (!validateAddressForm()) {
+    return;
+  }
+  
+  const addressData = {
+    id: editingAddressId || generateId(),
+    type: currentAddressType,
+    fullName: document.getElementById('addressFullName').value.trim(),
+    phone: document.getElementById('addressPhone').value.trim(),
+    addressLine1: document.getElementById('addressLine1').value.trim(),
+    addressLine2: document.getElementById('addressLine2').value.trim(),
+    city: document.getElementById('addressCity').value.trim(),
+    state: document.getElementById('addressState').value.trim(),
+    postalCode: document.getElementById('addressPostalCode').value.trim(),
+    country: document.getElementById('addressCountry').value,
+    instructions: document.getElementById('addressInstructions').value.trim(),
+    isDefault: document.getElementById('setAsDefault').checked,
+    latitude: currentLocation ? currentLocation.lat : null,
+    longitude: currentLocation ? currentLocation.lng : null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  
+  if (editingAddressId) {
+    // Update existing address
+    const index = addresses.findIndex(addr => addr.id === editingAddressId);
+    if (index !== -1) {
+      addresses[index] = addressData;
+    }
+  } else {
+    // Add new address
+    addresses.push(addressData);
+  }
+  
+  // If set as default, update other addresses
+  if (addressData.isDefault) {
+    addresses.forEach(addr => {
+      if (addr.id !== addressData.id) {
+        addr.isDefault = false;
+      }
+    });
+    selectedAddressId = addressData.id;
+  }
+  
+  // If this is the first address, set it as default
+  if (addresses.length === 1) {
+    addresses[0].isDefault = true;
+    selectedAddressId = addresses[0].id;
+  }
+  
+  // Save to storage
+  saveAddresses();
+  
+  // Show success message
+  showNotification('✅ Address saved successfully!');
+  
+  // Close modal
+  closeModal('addressFormModal');
+  
+  // Update UI
+  if (currentPage === 'addressPage') {
+    loadAddressPage();
+  }
+  
+  // Update default address summary
+  updateDefaultAddressSummary();
+  
+  // If selecting for checkout, update checkout display
+  if (isSelectingAddressForCheckout && selectedAddressId) {
+    updateSelectedAddressDisplay();
+  }
+  
+  // Save to Supabase for analytics (optional)
+  saveAddressToBackend(addressData);
+}
+
+// Save address to Supabase backend
+async function saveAddressToBackend(addressData) {
+  try {
+    const { error } = await supa
+      .from('customer_addresses')
+      .insert([{
+        business_id: currentBusinessId,
+        device_id: customerData.deviceId,
+        address_data: addressData,
+        created_at: new Date().toISOString()
+      }]);
+    
+    if (!error) {
+      console.log('Address saved to backend');
+    }
+  } catch (error) {
+    console.log('Error saving address to backend:', error);
+  }
+}
+
+// Delete address
+function deleteAddress(addressId) {
+  if (!confirm('Are you sure you want to delete this address?')) {
+    return;
+  }
+  
+  const index = addresses.findIndex(addr => addr.id === addressId);
+  if (index === -1) return;
+  
+  const wasDefault = addresses[index].isDefault;
+  
+  // Remove address
+  addresses.splice(index, 1);
+  
+  // If we deleted the default address and there are other addresses, set a new default
+  if (wasDefault && addresses.length > 0) {
+    addresses[0].isDefault = true;
+    selectedAddressId = addresses[0].id;
+  }
+  
+  // If no addresses left, clear selection
+  if (addresses.length === 0) {
+    selectedAddressId = null;
+  }
+  
+  // Save changes
+  saveAddresses();
+  
+  // Show notification
+  showNotification('🗑️ Address deleted');
+  
+  // Update UI
+  if (currentPage === 'addressPage') {
+    loadAddressPage();
+  }
+  
+  // Update default address summary
+  updateDefaultAddressSummary();
+}
+
+// Set default address
+function setDefaultAddress(addressId) {
+  addresses.forEach(addr => {
+    addr.isDefault = addr.id === addressId;
+  });
+  
+  selectedAddressId = addressId;
+  saveAddresses();
+  
+  showNotification('⭐ Address set as default');
+  
+  if (currentPage === 'addressPage') {
+    loadAddressPage();
+  }
+  
+  updateDefaultAddressSummary();
+}
+
+// Load address page
+function loadAddressPage() {
+  const addressList = document.getElementById('addressList');
+  
+  if (addresses.length === 0) {
+    addressList.innerHTML = `
+      <div class="no-addresses">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>No Addresses Yet</h3>
+        <p>Add your first shipping address to get started.</p>
+        <button onclick="showAddressFormModal()" style="padding:12px 30px;background:var(--primary-gradient);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;">
+          <i class="fas fa-plus"></i> Add First Address
+        </button>
+      </div>
+    `;
+    return;
+  }
+  
+  let html = '';
+  addresses.forEach(address => {
+    const typeIcon = {
+      'home': 'fa-home',
+      'work': 'fa-briefcase',
+      'other': 'fa-map-pin'
+    }[address.type] || 'fa-map-marker-alt';
+    
+    const typeColor = {
+      'home': '#10b981',
+      'work': '#3b82f6',
+      'other': '#8b5cf6'
+    }[address.type] || '#667eea';
+    
+    const typeText = address.type.charAt(0).toUpperCase() + address.type.slice(1);
+    
+    html += `
+      <div class="address-card ${address.type} ${address.isDefault ? 'default' : ''}" onclick="selectAddressForView('${address.id}')">
+        <div class="address-type ${address.type}">${typeText}</div>
+        
+        <div class="address-header">
+          <div class="address-icon ${address.type}">
+            <i class="fas ${typeIcon}"></i>
+          </div>
+          <div class="address-name">${address.fullName}</div>
+        </div>
+        
+        <div class="address-details">
+          ${address.addressLine1}<br>
+          ${address.addressLine2 ? address.addressLine2 + '<br>' : ''}
+          ${address.city}, ${address.state}<br>
+          ${address.postalCode} ${address.country}
+        </div>
+        
+        <div class="address-phone">
+          <i class="fas fa-phone"></i>
+          <span>${address.phone}</span>
+        </div>
+        
+        ${address.instructions ? `
+          <div style="font-size:12px;color:#94a3b8;margin-top:10px;padding:8px;background:#f8fafc;border-radius:6px;">
+            <i class="fas fa-info-circle"></i> ${address.instructions}
+          </div>
+        ` : ''}
+        
+        <div class="address-actions">
+          <button class="address-btn edit" onclick="editAddress('${address.id}'); event.stopPropagation();">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="address-btn delete" onclick="deleteAddress('${address.id}'); event.stopPropagation();">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+          ${!address.isDefault ? `
+            <button class="address-btn default" onclick="setDefaultAddress('${address.id}'); event.stopPropagation();">
+              <i class="fas fa-star"></i> Set Default
+            </button>
+          ` : ''}
+        </div>
+        
+        ${address.isDefault ? `
+          <div class="default-badge">
+            <i class="fas fa-star"></i> Default
+          </div>
+        ` : ''}
+      </div>
+    `;
+  });
+  
+  addressList.innerHTML = html;
+}
+
+// Update default address summary in contact page
+function updateDefaultAddressSummary() {
+  const defaultAddress = addresses.find(addr => addr.isDefault);
+  const summaryElement = document.getElementById('defaultAddressSummary');
+  
+  if (defaultAddress && summaryElement) {
+    const shortAddress = `${defaultAddress.addressLine1}, ${defaultAddress.city}`;
+    if (shortAddress.length > 30) {
+      summaryElement.textContent = shortAddress.substring(0, 27) + '...';
+    } else {
+      summaryElement.textContent = shortAddress;
+    }
+    summaryElement.style.color = '#10b981';
+    summaryElement.style.fontWeight = '800';
+  } else {
+    if (summaryElement) {
+      summaryElement.textContent = 'Manage shipping addresses';
+      summaryElement.style.color = '';
+      summaryElement.style.fontWeight = '';
+    }
+  }
+}
+
+// Select address for viewing
+function selectAddressForView(addressId) {
+  // In future, could show address details in a modal
+  console.log('Viewing address:', addressId);
+}
+
+// Select address for checkout
+function selectAddressForCheckout() {
+  isSelectingAddressForCheckout = true;
+  showAddressSelectionModal();
+}
+
+// Select address for buy now
+function selectAddressForBuyNow() {
+  isSelectingAddressForCheckout = true;
+  showAddressSelectionModal();
+}
+
+// Show address selection modal
+function showAddressSelectionModal() {
+  const addressList = document.getElementById('addressSelectionList');
+  
+  if (addresses.length === 0) {
+    addressList.innerHTML = `
+      <div class="no-addresses" style="padding:20px;text-align:center;">
+        <i class="fas fa-map-marker-alt" style="font-size:40px;"></i>
+        <h3 style="font-size:16px;margin:10px 0;">No Addresses</h3>
+        <p style="color:#64748b;font-size:14px;">Please add a shipping address first.</p>
+        <button onclick="showAddressFormModal(true)" style="padding:10px 20px;background:var(--primary-gradient);color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;margin-top:10px;">
+          <i class="fas fa-plus"></i> Add Address
+        </button>
+      </div>
+    `;
+    document.getElementById('confirmAddressBtn').style.display = 'none';
+  } else {
+    let html = '';
+    addresses.forEach(address => {
+      const typeIcon = {
+        'home': 'fa-home',
+        'work': 'fa-briefcase',
+        'other': 'fa-map-pin'
+      }[address.type] || 'fa-map-marker-alt';
+      
+      const isSelected = selectedAddressId === address.id;
+      
+      html += `
+        <div class="address-card ${address.type} ${isSelected ? 'selected' : ''}" 
+             onclick="selectAddressInModal('${address.id}')"
+             style="cursor:pointer; ${isSelected ? 'border-color:#10b981;background:rgba(16,185,129,0.05);' : ''}">
+          <div class="address-type ${address.type}">${address.type.charAt(0).toUpperCase() + address.type.slice(1)}</div>
+          
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <div class="address-icon ${address.type}" style="width:30px;height:30px;font-size:14px;">
+              <i class="fas ${typeIcon}"></i>
+            </div>
+            <div class="address-name" style="font-size:16px;">${address.fullName}</div>
+            ${address.isDefault ? `
+              <div style="background:var(--success-gradient);color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:800;">
+                DEFAULT
+              </div>
+            ` : ''}
+            ${isSelected ? `
+              <div style="margin-left:auto;color:#10b981;">
+                <i class="fas fa-check-circle"></i>
+              </div>
+            ` : ''}
+          </div>
+          
+          <div style="color:#475569;font-size:13px;line-height:1.4;">
+            ${address.addressLine1}<br>
+            ${address.addressLine2 ? address.addressLine2 + '<br>' : ''}
+            ${address.city}, ${address.state}, ${address.country}<br>
+            <small style="color:#64748b;"><i class="fas fa-phone"></i> ${address.phone}</small>
+          </div>
+        </div>
+      `;
+    });
+    
+    addressList.innerHTML = html;
+    document.getElementById('confirmAddressBtn').style.display = 'block';
+  }
+  
+  openModal('addressSelectionModal');
+}
+
+// Select address in modal
+function selectAddressInModal(addressId) {
+  selectedAddressId = addressId;
+  showAddressSelectionModal(); // Refresh to show selection
+}
+
+// Confirm address selection
+function confirmAddressSelection() {
+  if (!selectedAddressId) {
+    showNotification('Please select an address');
+    return;
+  }
+  
+  closeModal('addressSelectionModal');
+  updateSelectedAddressDisplay();
+}
+
+// Update selected address display
+function updateSelectedAddressDisplay() {
+  const selectedAddress = addresses.find(addr => addr.id === selectedAddressId);
+  
+  if (!selectedAddress) {
+    // Try to get default address
+    const defaultAddress = addresses.find(addr => addr.isDefault);
+    if (defaultAddress) {
+      selectedAddressId = defaultAddress.id;
+      selectedAddress = defaultAddress;
+    }
+  }
+  
+  if (selectedAddress) {
+    // Update checkout address display
+    const checkoutAddressDisplay = document.getElementById('selectedAddressSummary');
+    if (checkoutAddressDisplay) {
+      checkoutAddressDisplay.innerHTML = `
+        <div style="font-weight:800;color:var(--dark-color);margin-bottom:4px;">${selectedAddress.fullName}</div>
+        <div style="color:#475569;font-size:13px;">
+          ${selectedAddress.addressLine1}<br>
+          ${selectedAddress.addressLine2 ? selectedAddress.addressLine2 + '<br>' : ''}
+          ${selectedAddress.city}, ${selectedAddress.state}<br>
+          <span style="color:#64748b;"><i class="fas fa-phone"></i> ${selectedAddress.phone}</span>
+        </div>
+      `;
+    }
+    
+    // Update buy now address display
+    const buyNowAddressDisplay = document.getElementById('buyNowAddressDisplay');
+    if (buyNowAddressDisplay) {
+      const shortAddress = `${selectedAddress.addressLine1}, ${selectedAddress.city}`;
+      buyNowAddressDisplay.textContent = shortAddress.length > 25 ? 
+        shortAddress.substring(0, 22) + '...' : shortAddress;
+    }
+  }
+}
+
+// Get selected address
+function getSelectedAddress() {
+  if (!selectedAddressId) {
+    // Try to get default address
+    const defaultAddress = addresses.find(addr => addr.isDefault);
+    if (defaultAddress) {
+      selectedAddressId = defaultAddress.id;
+      return defaultAddress;
+    }
+    return null;
+  }
+  
+  return addresses.find(addr => addr.id === selectedAddressId);
+}
+
+// Format address for display
+function formatAddress(address) {
+  if (!address) return '';
+  
+  let formatted = `${address.fullName}\n`;
+  formatted += `${address.addressLine1}\n`;
+  if (address.addressLine2) formatted += `${address.addressLine2}\n`;
+  formatted += `${address.city}, ${address.state}\n`;
+  formatted += `${address.postalCode} ${address.country}\n`;
+  formatted += `Phone: ${address.phone}`;
+  
+  if (address.instructions) {
+    formatted += `\nInstructions: ${address.instructions}`;
+  }
+  
+  return formatted;
+}
+
+// Format address for WhatsApp message
+function formatAddressForWhatsApp(address) {
+  if (!address) return 'Address will be provided separately';
+  
+  return `📍 *Delivery Address:*\n` +
+         `👤 ${address.fullName}\n` +
+         `📞 ${address.phone}\n` +
+         `🏠 ${address.addressLine1}\n` +
+         `${address.addressLine2 ? address.addressLine2 + '\n' : ''}` +
+         `${address.city}, ${address.state}\n` +
+         `${address.postalCode} ${address.country}` +
+         `${address.instructions ? `\n📝 *Instructions:* ${address.instructions}` : ''}`;
+}
+
+// Calculate delivery charges based on address
+function calculateDeliveryChargesBasedOnAddress(address) {
+  if (!address) {
+    return calculateDeliveryCharges(); // Use default calculation
+  }
+  
+  const subtotal = getCartSubtotal();
+  let charge = 0;
+  let deliveryInfo = '';
+  
+  // Simple logic: Check if city matches business city (you would implement more complex logic)
+  const businessCity = card.address ? extractCity(card.address) : '';
+  const customerCity = address.city || '';
+  
+  if (businessCity && customerCity && 
+      businessCity.toLowerCase() === customerCity.toLowerCase()) {
+    // Same city
+    charge = deliverySettings.deliveryChargeCity;
+    deliveryInfo = `Within ${customerCity} - ${deliverySettings.deliveryTimeCity}`;
+    selectedDeliveryOption = 'city';
+  } else {
+    // Different city
+    charge = deliverySettings.deliveryChargeOther;
+    deliveryInfo = `${customerCity || 'Other city'} - ${deliverySettings.deliveryTimeOther}`;
+    selectedDeliveryOption = 'other';
+  }
+  
+  // Check for free delivery
+  const qualifiesForFreeDelivery = subtotal >= deliverySettings.freeDeliveryMin;
+  if (qualifiesForFreeDelivery) {
+    charge = 0;
+    deliveryInfo += ' (FREE)';
+  }
+  
+  currentDeliveryCharge = charge;
+  
+  return { charge, qualifiesForFreeDelivery, deliveryInfo, cityMatch: businessCity === customerCity };
+}
+
+// Extract city from address string (simple implementation)
+function extractCity(address) {
+  if (!address) return '';
+  
+  // Simple extraction - in production, use proper address parsing
+  const parts = address.split(',');
+  return parts[parts.length - 2]?.trim() || '';
+}
 
 // ===== DUAL NOTIFICATION SYSTEM =====
 let notificationPermission = false;
@@ -3278,6 +4781,36 @@ async function logContactSave() {
     }
   } catch (error) {
     console.log('Error logging contact save:', error);
+  }
+}
+
+// ===== FIXED: PROFILE IMAGE ERROR HANDLING =====
+function handleProfileImageError() {
+  const photo = document.getElementById('photo');
+  const photoContainer = document.getElementById('photoContainer');
+  
+  if (photo) {
+    photo.style.display = 'none';
+  }
+  
+  if (photoContainer) {
+    // Create initials from business name
+    const businessName = card.businessName || card.name || "Business";
+    const initials = businessName.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 2);
+    
+    // Create beautiful gradient based on business name
+    const colors = [
+      'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+      'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+      'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)'
+    ];
+    
+    const colorIndex = businessName.length % colors.length;
+    photoContainer.style.background = colors[colorIndex];
+    photoContainer.innerHTML = `<span style="color:white;font-size:36px;font-weight:bold;">${initials}</span>`;
   }
 }
 
@@ -4282,6 +5815,7 @@ function handleHashChange() {
     'cart': 'cartPage',
     'about': 'aboutPage',
     'contact': 'contactPage',
+    'address': 'addressPage',
     'delivery': 'deliveryPage',
     'admin': 'adminPage',
     'login': 'loginPage'
@@ -4331,6 +5865,7 @@ function navigateToDirect(pageId) {
       'cartPage': 2,
       'aboutPage': 3,
       'contactPage': 4,
+      'addressPage': 4, // Same as contact page
       'deliveryPage': 0,
       'adminPage': 0,
       'loginPage': 0
@@ -4359,6 +5894,9 @@ function navigateToDirect(pageId) {
       case 'contactPage':
         loadContactPage();
         break;
+      case 'addressPage':
+        loadAddressPage();
+        break;
       case 'deliveryPage':
         loadDeliveryStatus();
         break;
@@ -4381,6 +5919,7 @@ function navigateTo(pageId) {
     'cartPage': 'cart',
     'aboutPage': 'about',
     'contactPage': 'contact',
+    'addressPage': 'address',
     'deliveryPage': 'delivery',
     'adminPage': 'admin',
     'loginPage': 'login'
@@ -4410,6 +5949,7 @@ function goBack() {
       'cartPage': 'cart',
       'aboutPage': 'about',
       'contactPage': 'contact',
+      'addressPage': 'address',
       'deliveryPage': 'delivery',
       'adminPage': 'admin',
       'loginPage': 'login'
@@ -5161,10 +6701,13 @@ async function renderApp() {
   document.getElementById('businessHeader').textContent = card.businessName || card.name || "Premium Business";
   
   const photo = document.getElementById('photo');
+  const photoContainer = document.getElementById('photoContainer');
+  
   if(card.profileImage) {
     photo.src = card.profileImage;
+    photo.onerror = handleProfileImageError;
   } else {
-    photo.style.display = 'none';
+    handleProfileImageError();
   }
   
   document.getElementById('name').textContent = card.name || "";
@@ -5173,6 +6716,9 @@ async function renderApp() {
   document.getElementById('contactPhone').textContent = card.phone || "Not available";
   document.getElementById('contactEmail').textContent = card.email || "Not available";
   document.getElementById('contactAddress').textContent = card.address || "Not available";
+  
+  // Initialize address system
+  initAddressSystem();
   
   // Initialize delivery settings
   initDeliverySettings();
@@ -5597,6 +7143,9 @@ function showProductModal(productIndex) {
   // Hide delivery charges section initially
   document.getElementById('buyNowDeliveryCharges').style.display = 'none';
   
+  // Reset address selection for buy now
+  document.getElementById('buyNowAddressDisplay').textContent = 'Tap to select address';
+  
   openModal('productModal');
 }
 
@@ -5648,20 +7197,28 @@ function selectBuyNowPayment(method) {
 function checkoutBuyNow() {
   if(!currentProduct) return;
   
-  // Calculate delivery charges
-  const result = calculateDeliveryCharges();
+  // Check if address is selected
+  const selectedAddress = getSelectedAddress();
+  if (!selectedAddress) {
+    showNotification('❌ Please select a delivery address');
+    selectAddressForBuyNow();
+    return;
+  }
+  
+  // Calculate delivery charges based on address
+  const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
   const productPrice = parseFloat(currentProduct.discountPrice || currentProduct.originalPrice || 0);
-  const totalAmount = productPrice + result.charge;
+  const totalAmount = productPrice + deliveryResult.charge;
   
   if(buyNowPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    showPaymentDetailsModal('buyNow', totalAmount);
+    showPaymentDetailsModal('buyNow', totalAmount, selectedAddress, deliveryResult);
   } else {
-    sendBuyNowOrder(totalAmount, result);
+    sendBuyNowOrder(totalAmount, deliveryResult, selectedAddress);
   }
 }
 
-function sendBuyNowOrder(totalAmount, deliveryResult) {
-  if(!currentProduct) return;
+function sendBuyNowOrder(totalAmount, deliveryResult, selectedAddress) {
+  if(!currentProduct || !selectedAddress) return;
   
   const price = currentProduct.discountPrice || currentProduct.originalPrice || 0;
   const businessName = card.businessName || card.name || "Your Business";
@@ -5685,17 +7242,20 @@ function sendBuyNowOrder(totalAmount, deliveryResult) {
   
   message += `\n---\n`;
   message += `💳 **Payment Method:** ${getPaymentMethodName(buyNowPaymentMethod)}\n`;
-  message += `📍 **Delivery Area:** ${selectedDeliveryOption === 'city' ? 'Within City' : 'Other Cities'}\n`;
-  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n`;
+  message += `📍 **Delivery Area:** ${deliveryResult.cityMatch ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n\n`;
+  
+  // Add address to message
+  message += formatAddressForWhatsApp(selectedAddress);
   
   if(buyNowPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    message += `📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
-    message += `💸 **Via:** ${card.payments.jazzcash.type === 'easypaisa' ? 'EasyPaisa' : 'JazzCash'}\n`;
+    message += `\n\n📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
+    message += `💸 **Via:** ${card.payments.jazzcash.type === 'easypaisa' ? 'EasyPaisa' : 'JazzCash'}`;
   } else if(buyNowPaymentMethod === 'cod') {
-    message += `📦 **Delivery:** I prefer Cash on Delivery\n`;
+    message += `\n\n📦 **Delivery:** I prefer Cash on Delivery`;
   }
   
-  message += `\nPlease confirm product availability and share estimated delivery time.\n`;
+  message += `\n\nPlease confirm product availability and share estimated delivery time.\n`;
   message += `Thank you!\n`;
   
   if(card.phone) {
@@ -5710,6 +7270,14 @@ function sendBuyNowOrder(totalAmount, deliveryResult) {
 }
 
 function openCheckoutModal() {
+  // Check if address is selected
+  const selectedAddress = getSelectedAddress();
+  if (!selectedAddress) {
+    showNotification('Please select a delivery address first');
+    selectAddressForCheckout();
+    return;
+  }
+  
   const checkoutItems = document.getElementById('checkoutItems');
   let subtotal = 0;
   
@@ -5731,10 +7299,18 @@ function openCheckoutModal() {
     `;
   });
   
-  // Set default delivery option
-  selectedDeliveryOption = 'city';
-  document.getElementById('deliveryCityOption').classList.add('selected');
+  // Calculate delivery based on selected address
+  const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
+  selectedDeliveryOption = deliveryResult.cityMatch ? 'city' : 'other';
+  
+  // Update UI
+  document.getElementById('deliveryCityOption').classList.remove('selected');
   document.getElementById('deliveryOtherOption').classList.remove('selected');
+  if (selectedDeliveryOption === 'city') {
+    document.getElementById('deliveryCityOption').classList.add('selected');
+  } else {
+    document.getElementById('deliveryOtherOption').classList.add('selected');
+  }
   
   // Update checkout summary
   updateCheckoutSummary();
@@ -5769,18 +7345,26 @@ function selectCheckoutPayment(method) {
 function proceedToPayment() {
   if(cart.length === 0) return;
   
+  // Check if address is selected
+  const selectedAddress = getSelectedAddress();
+  if (!selectedAddress) {
+    showNotification('❌ Please select a delivery address');
+    selectAddressForCheckout();
+    return;
+  }
+  
   const subtotal = getCartSubtotal();
-  const result = calculateDeliveryCharges();
-  const totalAmount = subtotal + result.charge;
+  const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
+  const totalAmount = subtotal + deliveryResult.charge;
   
   if(checkoutPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    showPaymentDetailsModal('checkout', totalAmount);
+    showPaymentDetailsModal('checkout', totalAmount, selectedAddress, deliveryResult);
   } else {
-    sendCheckoutOrder(totalAmount, result);
+    sendCheckoutOrder(totalAmount, deliveryResult, selectedAddress);
   }
 }
 
-function showPaymentDetailsModal(context, totalAmount) {
+function showPaymentDetailsModal(context, totalAmount, selectedAddress, deliveryResult) {
   const paymentMethodTitle = document.getElementById('paymentMethodTitle');
   const paymentDetailsContent = document.getElementById('paymentDetailsContent');
   const businessName = card.businessName || card.name || "Your Business";
@@ -5806,12 +7390,13 @@ function showPaymentDetailsModal(context, totalAmount) {
         ` : ''}
         
         <div style="background:#f0f9ff;padding:15px;border-radius:16px;margin-top:20px;">
-          <div style="font-size:14px;color:#64748b;margin-bottom:10px;font-weight:800;">Instructions:</div>
-          <ol style="text-align:left;padding-left:20px;margin:12px 0;color:#475569;line-height:1.6;">
-            <li style="margin-bottom:8px;">Complete payment using the QR code or number above</li>
-            <li style="margin-bottom:8px;">Take screenshot of payment confirmation</li>
-            <li>Share screenshot via WhatsApp for order verification</li>
-          </ol>
+          <div style="font-size:14px;color:#64748b;margin-bottom:10px;font-weight:800;">Order Summary:</div>
+          <div style="text-align:left;color:#475569;line-height:1.6;">
+            <div>Product: ${currentProduct.title}</div>
+            <div>Amount: PKR ${totalAmount}</div>
+            <div>Delivery: ${deliveryResult.deliveryInfo}</div>
+            <div style="margin-top:10px;color:#10b981;font-weight:700;">Address: ${selectedAddress.addressLine1}, ${selectedAddress.city}</div>
+          </div>
         </div>
       </div>
     `;
@@ -5836,12 +7421,13 @@ function showPaymentDetailsModal(context, totalAmount) {
         ` : ''}
         
         <div style="background:#f0f9ff;padding:15px;border-radius:16px;margin-top:20px;">
-          <div style="font-size:14px;color:#64748b;margin-bottom:10px;font-weight:800;">Instructions:</div>
-          <ol style="text-align:left;padding-left:20px;margin:12px 0;color:#475569;line-height:1.6;">
-            <li style="margin-bottom:8px;">Complete payment using the QR code or number above</li>
-            <li style="margin-bottom:8px;">Take screenshot of payment confirmation</li>
-            <li>Share screenshot via WhatsApp for order verification</li>
-          </ol>
+          <div style="font-size:14px;color:#64748b;margin-bottom:10px;font-weight:800;">Order Summary:</div>
+          <div style="text-align:left;color:#475569;line-height:1.6;">
+            <div>Items: ${cart.length} products</div>
+            <div>Amount: PKR ${totalAmount.toFixed(2)}</div>
+            <div>Delivery: ${deliveryResult.deliveryInfo}</div>
+            <div style="margin-top:10px;color:#10b981;font-weight:700;">Address: ${selectedAddress.addressLine1}, ${selectedAddress.city}</div>
+          </div>
         </div>
       </div>
     `;
@@ -5852,20 +7438,26 @@ function showPaymentDetailsModal(context, totalAmount) {
 }
 
 function confirmPayment() {
+  const selectedAddress = getSelectedAddress();
+  if (!selectedAddress) {
+    showNotification('Address not found');
+    return;
+  }
+  
   const subtotal = getCartSubtotal();
-  const result = calculateDeliveryCharges();
-  const totalAmount = subtotal + result.charge;
+  const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
+  const totalAmount = subtotal + deliveryResult.charge;
   
   if(currentPage === 'checkoutModal' || checkoutPaymentMethod === 'jazzcash') {
-    sendCheckoutOrder(totalAmount, result);
+    sendCheckoutOrder(totalAmount, deliveryResult, selectedAddress);
   } else {
-    sendBuyNowOrder(totalAmount, result);
+    sendBuyNowOrder(totalAmount, deliveryResult, selectedAddress);
   }
   closeModal('paymentDetailsModal');
 }
 
-function sendCheckoutOrder(totalAmount, deliveryResult) {
-  if(cart.length === 0) return;
+function sendCheckoutOrder(totalAmount, deliveryResult, selectedAddress) {
+  if(cart.length === 0 || !selectedAddress) return;
   
   const businessName = card.businessName || card.name || "Your Business";
   
@@ -5893,18 +7485,20 @@ function sendCheckoutOrder(totalAmount, deliveryResult) {
   message += `🎯 **Total:** PKR ${totalAmount.toFixed(2)}\n\n`;
   
   message += `💳 **Payment Method:** ${getPaymentMethodName(checkoutPaymentMethod)}\n`;
-  message += `📍 **Delivery Area:** ${selectedDeliveryOption === 'city' ? 'Within City' : 'Other Cities'}\n`;
-  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n`;
+  message += `📍 **Delivery Area:** ${deliveryResult.cityMatch ? 'Within City' : 'Other Cities'}\n`;
+  message += `⏱️ **Estimated Delivery:** ${deliveryResult.deliveryInfo}\n\n`;
+  
+  // Add address to message
+  message += formatAddressForWhatsApp(selectedAddress);
   
   if(checkoutPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
-    message += `📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
-    message += `💸 **Via:** ${card.payments.jazzcash.type === 'easypaisa' ? 'EasyPaisa' : 'JazzCash'}\n`;
+    message += `\n\n📱 **Payment Details:** Amount sent to ${card.payments.jazzcash.number || ''}\n`;
+    message += `💸 **Via:** ${card.payments.jazzcash.type === 'easypaisa' ? 'EasyPaisa' : 'JazzCash'}`;
   } else if(checkoutPaymentMethod === 'cod') {
-    message += `📦 **Delivery:** I prefer Cash on Delivery\n`;
+    message += `\n\n📦 **Delivery:** I prefer Cash on Delivery`;
   }
   
-  message += `\nPlease confirm all items are available and share estimated delivery time.\n`;
-  message += `Delivery address will be shared in next message.\n`;
+  message += `\n\nPlease confirm all items are available and share estimated delivery time.\n`;
   message += `Thank you!\n`;
   
   if(card.phone) {
@@ -5988,6 +7582,28 @@ function openDeliveryModal() {
 function closeDeliveryModal() {
   document.getElementById('deliveryStatusModal').style.display = 'none';
   document.body.style.overflow = 'auto';
+}
+
+// ===== FIXED: MOBILE POPUP HANDLER - REDIRECT TO CARD.HTML =====
+// Fix mobile popup to redirect to card.html instead of index.html
+function handleMobilePopup() {
+  // Check if we're on card.html
+  if (window.location.pathname.includes('card.html')) {
+    // We're already on card.html, do nothing
+    return;
+  }
+  
+  // Check for business ID in URL or localStorage
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id') || localStorage.getItem('lastCardId');
+  
+  if (id) {
+    // Redirect to card.html with the business ID
+    window.location.href = `card.html?id=${id}`;
+  } else {
+    // No business ID found, stay on current page
+    console.log('No business ID found for redirect');
+  }
 }
 
 // ===== INITIALIZE APP =====
@@ -6143,3 +7759,4 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 </body>
 </html>
+[file content end]
