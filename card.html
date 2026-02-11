@@ -3904,24 +3904,7 @@ function getCurrentLocation() {
 
 // Get address from coordinates (simplified - in real app, use Google Maps API)
 function getAddressFromCoordinates(lat, lng) {
-  // This is a simplified version. In production, you would use:
-  // 1. Google Maps Geocoding API
-  // 2. OpenStreetMap Nominatim
-  // 3. Other geocoding service
-  
-  // For now, we'll just update the coordinates display
   console.log(`Coordinates: ${lat}, ${lng}`);
-  
-  // You can implement actual reverse geocoding here
-  // Example with Google Maps (requires API key):
-  // fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=YOUR_API_KEY`)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     if (data.results[0]) {
-  //       const address = data.results[0].formatted_address;
-  //       // Parse address components and fill form
-  //     }
-  //   });
 }
 
 // Use current location to create address
@@ -4277,7 +4260,6 @@ function updateDefaultAddressSummary() {
 
 // Select address for viewing
 function selectAddressForView(addressId) {
-  // In future, could show address details in a modal
   console.log('Viewing address:', addressId);
 }
 
@@ -4462,43 +4444,54 @@ function formatAddressForWhatsApp(address) {
          `${address.instructions ? `\n📝 *Instructions:* ${address.instructions}` : ''}`;
 }
 
-// Calculate delivery charges based on address
+// ===== CRITICAL FIX: Calculate delivery charges based on address =====
 function calculateDeliveryChargesBasedOnAddress(address) {
-  if (!address) {
-    return calculateDeliveryCharges(); // Use default calculation
+  if (!address || !address.city) {
+    return {
+      charge: 0,
+      qualifiesForFreeDelivery: false,
+      deliveryInfo: 'Please enter address to calculate delivery',
+      cityMatch: false
+    };
   }
   
   const subtotal = getCartSubtotal();
   let charge = 0;
   let deliveryInfo = '';
   
-  // Simple logic: Check if city matches business city (you would implement more complex logic)
+  // AUTOMATIC city detection (no manual selection)
   const businessCity = card.address ? extractCity(card.address) : '';
   const customerCity = address.city || '';
   
-  if (businessCity && customerCity && 
-      businessCity.toLowerCase() === customerCity.toLowerCase()) {
-    // Same city
-    charge = deliverySettings.deliveryChargeCity;
-    deliveryInfo = `Within ${customerCity} - ${deliverySettings.deliveryTimeCity}`;
-    selectedDeliveryOption = 'city';
-  } else {
-    // Different city
-    charge = deliverySettings.deliveryChargeOther;
-    deliveryInfo = `${customerCity || 'Other city'} - ${deliverySettings.deliveryTimeOther}`;
-    selectedDeliveryOption = 'other';
+  // Automatic determination based on city match
+  let isSameCity = false;
+  if (businessCity && customerCity) {
+    isSameCity = businessCity.toLowerCase() === customerCity.toLowerCase();
   }
   
-  // Check for free delivery
+  if (isSameCity) {
+    charge = deliverySettings.deliveryChargeCity;
+    deliveryInfo = `Within ${customerCity} - ${deliverySettings.deliveryTimeCity}`;
+  } else {
+    charge = deliverySettings.deliveryChargeOther;
+    deliveryInfo = `${customerCity} - ${deliverySettings.deliveryTimeOther}`;
+  }
+  
+  // Free delivery check
   const qualifiesForFreeDelivery = subtotal >= deliverySettings.freeDeliveryMin;
   if (qualifiesForFreeDelivery) {
     charge = 0;
-    deliveryInfo += ' (FREE)';
+    deliveryInfo += ' (FREE Delivery)';
   }
   
   currentDeliveryCharge = charge;
   
-  return { charge, qualifiesForFreeDelivery, deliveryInfo, cityMatch: businessCity === customerCity };
+  return {
+    charge,
+    qualifiesForFreeDelivery,
+    deliveryInfo,
+    cityMatch: isSameCity
+  };
 }
 
 // Extract city from address string (simple implementation)
@@ -5043,7 +5036,7 @@ function sendExternalNotification(title, body, imageUrl = null) {
   
   const notificationOptions = {
     body: body,
-    icon: imageUrl || 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
+    icon: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
     badge: 'https://cdn-icons-png.flaticon.com/512/1006/1006771.png',
     vibrate: [200, 100, 200],
     data: {
@@ -7192,19 +7185,27 @@ function selectBuyNowPayment(method) {
   }
 }
 
+// ===== CRITICAL FIX: checkoutBuyNow() - Fixed sequence =====
 function checkoutBuyNow() {
-  if(!currentProduct) return;
+  if (!currentProduct) return;
   
-  // Check if address is selected
+  // CHECK 1: REQUIRE ADDRESS FIRST
   const selectedAddress = getSelectedAddress();
   if (!selectedAddress) {
-    showNotification('❌ Please select a delivery address');
-    selectAddressForBuyNow();
+    showNotification('❌ Please select a delivery address first');
+    selectAddressForBuyNow(); // Show address modal FIRST
     return;
   }
   
-  // Calculate delivery charges based on address
+  // CHECK 2: REQUIRE DELIVERY CALCULATION
   const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
+  if (deliveryResult.charge === undefined) {
+    showNotification('❌ Please calculate delivery charges first');
+    showDeliveryChargesModal(); // Show delivery modal SECOND
+    return;
+  }
+  
+  // ONLY THEN proceed to payment
   const productPrice = parseFloat(currentProduct.discountPrice || currentProduct.originalPrice || 0);
   const totalAmount = productPrice + deliveryResult.charge;
   
@@ -7340,19 +7341,28 @@ function selectCheckoutPayment(method) {
   }
 }
 
+// ===== CRITICAL FIX: proceedToPayment() - Fixed sequence =====
 function proceedToPayment() {
   if(cart.length === 0) return;
   
-  // Check if address is selected
+  // CHECK 1: REQUIRE ADDRESS FIRST
   const selectedAddress = getSelectedAddress();
   if (!selectedAddress) {
     showNotification('❌ Please select a delivery address');
-    selectAddressForCheckout();
+    selectAddressForCheckout(); // Show address modal FIRST
     return;
   }
   
-  const subtotal = getCartSubtotal();
+  // CHECK 2: REQUIRE DELIVERY CALCULATION
   const deliveryResult = calculateDeliveryChargesBasedOnAddress(selectedAddress);
+  if (deliveryResult.charge === undefined) {
+    showNotification('❌ Please calculate delivery charges first');
+    showDeliveryChargesModal(); // Show delivery modal SECOND
+    return;
+  }
+  
+  // Only then calculate amounts
+  const subtotal = getCartSubtotal();
   const totalAmount = subtotal + deliveryResult.charge;
   
   if(checkoutPaymentMethod === 'jazzcash' && card.payments?.jazzcash?.active) {
@@ -7362,7 +7372,25 @@ function proceedToPayment() {
   }
 }
 
+// ===== CRITICAL FIX: showPaymentDetailsModal() - Fixed validation =====
 function showPaymentDetailsModal(context, totalAmount, selectedAddress, deliveryResult) {
+  // CRITICAL VALIDATION
+  if (!selectedAddress) {
+    showNotification('❌ Address required before payment');
+    if (context === 'buyNow') {
+      selectAddressForBuyNow();
+    } else {
+      selectAddressForCheckout();
+    }
+    return;
+  }
+  
+  if (!deliveryResult || deliveryResult.charge === undefined) {
+    showNotification('❌ Delivery charges must be calculated');
+    showDeliveryChargesModal();
+    return;
+  }
+  
   const paymentMethodTitle = document.getElementById('paymentMethodTitle');
   const paymentDetailsContent = document.getElementById('paymentDetailsContent');
   const businessName = card.businessName || card.name || "Your Business";
@@ -7580,28 +7608,6 @@ function openDeliveryModal() {
 function closeDeliveryModal() {
   document.getElementById('deliveryStatusModal').style.display = 'none';
   document.body.style.overflow = 'auto';
-}
-
-// ===== FIXED: MOBILE POPUP HANDLER - REDIRECT TO CARD.HTML =====
-// Fix mobile popup to redirect to card.html instead of index.html
-function handleMobilePopup() {
-  // Check if we're on card.html
-  if (window.location.pathname.includes('card.html')) {
-    // We're already on card.html, do nothing
-    return;
-  }
-  
-  // Check for business ID in URL or localStorage
-  const urlParams = new URLSearchParams(window.location.search);
-  const id = urlParams.get('id') || localStorage.getItem('lastCardId');
-  
-  if (id) {
-    // Redirect to card.html with the business ID
-    window.location.href = `card.html?id=${id}`;
-  } else {
-    // No business ID found, stay on current page
-    console.log('No business ID found for redirect');
-  }
 }
 
 // ===== INITIALIZE APP =====
