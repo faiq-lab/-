@@ -1,370 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-  <title>Baraka Bazaar – local shops, prayer‑conscious</title>
-  <!-- Tailwind via CDN + basic interceptor -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome 6 (free) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Google Font: Poppins for modern touch -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Poppins', sans-serif; }
-    body {
-      background: #f3f4f6;
-      background-image: radial-gradient(circle at 10% 30%, rgba(16, 185, 129, 0.03) 0%, transparent 30%),
-                        radial-gradient(circle at 90% 70%, rgba(245, 158, 11, 0.03) 0%, transparent 30%);
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    .islamic-pattern {
-      background-color: #ffffff;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5L5 30L30 55L55 30L30 5z' fill='%2310b981' fill-opacity='0.03'/%3E%3C/svg%3E");
-    }
-    .bottom-nav {
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
-    }
-    /* smooth scroll for horizontal row */
-    .scrollable-x {
-      scrollbar-width: thin;
-      scrollbar-color: #10b981 #e5e7eb;
-    }
-    .scrollable-x::-webkit-scrollbar {
-      height: 4px;
-    }
-    .scrollable-x::-webkit-scrollbar-thumb {
-      background: #10b981;
-      border-radius: 20px;
-    }
-    .shop-card {
-      transition: all 0.2s ease;
-    }
-    .shop-card:active {
-      transform: scale(0.98);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Digital Business Card • Real System</title>
+    
+    <!-- Core -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <!-- SQL.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    
+    <style>
+        /* Your existing premium styles - I'll add real-time updates */
+        .real-time-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.3);
+            z-index: 9999;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .offline-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: none;
+        }
+    </style>
 </head>
-<body class="antialiased flex items-center justify-center min-h-screen p-3 islamic-pattern">
-  <!-- mobile-sized container · max-w-md, soft shadow -->
-  <div class="max-w-md w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/30 overflow-hidden relative">
+<body>
+    <!-- Real-Time Status -->
+    <div class="real-time-badge" id="liveStatus">
+        <i class="fas fa-circle me-2" style="color: #fff;"></i>
+        LIVE • Real Data
+    </div>
     
-    <!-- subtle header bar with bismillah -->
-    <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-400 via-amber-400 to-emerald-500"></div>
-    
-    <!-- MAIN APP CONTENT (all dynamic data populated via JS) -->
-    <div id="app-content" class="px-5 pt-7 pb-4">
-      
-      <!-- ========== HEADER : Assalam + location + prayer indicator ========= -->
-      <div class="flex justify-between items-center mb-3">
-        <div>
-          <h2 class="text-xl font-semibold text-gray-800">
-            <i class="fas fa-hand-sparkles text-emerald-500 mr-1"></i> Aslamoalikum
-          </h2>
-          <p class="text-xs text-gray-500 flex items-center mt-0.5">
-            <i class="fas fa-map-pin text-emerald-400 mr-1 text-[12px]"></i> Karachi, Pakistan
-          </p>
-        </div>
-        <div class="bg-emerald-50 px-3 py-1.5 rounded-2xl flex items-center shadow-sm border border-emerald-100">
-          <i class="fas fa-mosque text-emerald-600 mr-1.5 text-sm"></i>
-          <span id="nextPrayerLabel" class="text-xs font-medium text-emerald-800">Maghrib · 18:24</span>
-        </div>
-      </div>
-      
-      <!-- ========== PRAYER CARD : Countdown & motivation ========= -->
-      <div class="glass-card rounded-2xl p-4 mb-5 flex items-center justify-between border-l-8 border-l-emerald-400">
-        <div>
-          <p class="text-gray-500 text-xs uppercase tracking-wider">Next prayer</p>
-          <h3 id="prayerName" class="text-2xl font-bold text-gray-800">Maghrib</h3>
-          <p id="prayerCountdown" class="text-sm text-emerald-600 font-medium">in 2h 14m</p>
-        </div>
-        <div class="text-right">
-          <p class="text-xs text-gray-400">shops open after</p>
-          <div class="flex gap-2 mt-1 text-xs font-medium text-emerald-700">
-            <span class="bg-emerald-100 px-2 py-1 rounded-full">ʿAṣr</span>
-            <span class="bg-amber-100 px-2 py-1 rounded-full">Maghrib</span>
-          </div>
-        </div>
-      </div>
-      
-      <!-- ========== SEARCH ========= -->
-      <div class="relative mb-5">
-        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-        <input type="search" placeholder="Search for shops, grocery, tiffin..." 
-               class="w-full bg-gray-50/80 border border-gray-200 rounded-2xl py-3.5 pl-11 pr-12 text-sm focus:border-emerald-400 focus:ring-1 focus:ring-emerald-300 outline-none transition">
-        <i class="fas fa-sliders-h absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 text-sm bg-emerald-100 p-2 rounded-xl"></i>
-      </div>
-      
-      <!-- ========== CATEGORIES (dynamic, from JS) ========= -->
-      <div class="mb-6">
-        <div class="flex justify-between items-center mb-2">
-          <h3 class="font-semibold text-gray-800"><i class="fas fa-grid-2 text-emerald-500 mr-2"></i>Shop by need</h3>
-          <span class="text-xs text-emerald-600">see all <i class="fas fa-arrow-right ml-1 text-[10px]"></i></span>
-        </div>
-        <div id="categoriesContainer" class="grid grid-cols-5 gap-1">
-          <!-- JS populated -->
-        </div>
-      </div>
-      
-      <!-- ========== FEATURED / NEARBY SHOPS ========= -->
-      <div class="mb-4">
-        <div class="flex justify-between items-center">
-          <h3 class="font-semibold text-gray-800"><i class="fas fa-store-alt text-emerald-500 mr-2"></i>Nearby · open now</h3>
-          <span class="text-xs bg-amber-50 px-3 py-1 rounded-full text-amber-700 border border-amber-200">
-            <i class="fas fa-location-dot mr-1 text-[10px]"></i> 0.5 – 2 km
-          </span>
-        </div>
-        <!-- Horizontal scrollable shops (touch) -->
-        <div id="shopsContainer" class="flex scrollable-x gap-3 overflow-x-auto pb-3 pt-2 -mx-1 px-1">
-          <!-- JS will insert shop cards here -->
-        </div>
-      </div>
-      
-      <!-- ========== TODAY'S SPECIAL OFFERS (walk-in motivation) ========= -->
-      <div class="mt-4 mb-3 bg-gradient-to-br from-amber-50 to-emerald-50 rounded-2xl p-4 border border-amber-200/50 flex items-center">
-        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-          <i class="fas fa-tag fa-2x text-emerald-600"></i>
-        </div>
-        <div class="ml-4 flex-1">
-          <h4 class="font-bold text-gray-800 text-base">Friday barakah offer</h4>
-          <p class="text-xs text-gray-600">Visit any shop after Jumu’ah → get 10% off</p>
-          <div class="flex mt-1.5">
-            <span class="bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded-full">ends today</span>
-          </div>
-        </div>
-        <i class="fas fa-chevron-right text-gray-400"></i>
-      </div>
+    <div class="offline-indicator" id="offlineIndicator">
+        <i class="fas fa-wifi-slash me-2"></i> Offline Mode
+    </div>
 
-      <!-- ========== BOTTOM NAVIGATION (mobile friendly) ========= -->
-      <div class="bottom-nav mt-7 flex justify-around items-center pt-3 pb-1 border-t border-gray-100">
-        <button class="flex flex-col items-center text-emerald-600">
-          <i class="fas fa-home text-xl"></i>
-          <span class="text-[10px] mt-0.5">Home</span>
-        </button>
-        <button class="flex flex-col items-center text-gray-400">
-          <i class="fas fa-compass text-xl"></i>
-          <span class="text-[10px] mt-0.5">Explore</span>
-        </button>
-        <button class="flex flex-col items-center text-gray-400 relative">
-          <i class="fas fa-ticket-alt text-xl"></i>
-          <span class="text-[10px] mt-0.5">Offers</span>
-          <span class="absolute -top-1 -right-2 bg-amber-500 text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full">3</span>
-        </button>
-        <button class="flex flex-col items-center text-gray-400">
-          <i class="fas fa-user text-xl"></i>
-          <span class="text-[10px] mt-0.5">Account</span>
-        </button>
-      </div>
-      
-    </div> <!-- /app-content -->
-  </div> <!-- /mobile container -->
+    <div class="container py-4">
+        <div id="cardContent">
+            <!-- Dynamic Content Loaded Here -->
+        </div>
+    </div>
 
-  <script>
-    (function() {
-      "use strict";
+    <script>
+        // ========== REAL SUPABASE CONNECTION ==========
+        const supabase = supabase.createClient(
+            "https://dfvnefbxgayxqgjjgtrr.supabase.co",
+            "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
+        );
 
-      // ---------- SCALABLE MOCK DATA (seamless to extend) ----------
-      const categories = [
-        { name: 'Grocery', icon: 'fa-basket-shopping', color: 'bg-emerald-100' },
-        { name: 'Meat', icon: 'fa-drumstick-bite', color: 'bg-amber-100' },
-        { name: 'Bakery', icon: 'fa-bread-slice', color: 'bg-orange-100' },
-        { name: 'Pharmacy', icon: 'fa-pills', color: 'bg-blue-100' },
-        { name: 'Dates', icon: 'fa-calendar', color: 'bg-emerald-200' },   // ideological
-        { name: 'Attar', icon: 'fa-spray-can-sparkles', color: 'bg-purple-100' },
-        { name: 'Clinic', icon: 'fa-stethoscope', color: 'bg-red-100' },
-        { name: 'Stationery', icon: 'fa-book', color: 'bg-gray-200' },
-      ];  // we show only first 5 in grid, but scalable
+        // ========== LOCAL DATABASE (OFFLINE FIRST) ==========
+        let SQL = null;
+        let localDB = null;
+        let currentCardData = null;
+        let cardId = null;
 
-      const shops = [
-        {
-          id: 1,
-          name: 'Al‑Madina Grocery',
-          category: 'Grocery',
-          imageIcon: 'fa-store',
-          distance: '0.3 km',
-          rating: 4.8,
-          openUntil: '11:30 PM',
-          afterPrayer: 'Isha',
-          bgColor: 'from-emerald-400 to-teal-500'
-        },
-        {
-          id: 2,
-          name: 'Qaswa Bakery',
-          category: 'Bakery',
-          imageIcon: 'fa-cake-cup',
-          distance: '0.7 km',
-          rating: 4.6,
-          openUntil: '10:00 PM',
-          afterPrayer: 'Maghrib',
-          bgColor: 'from-amber-400 to-orange-400'
-        },
-        {
-          id: 3,
-          name: 'Tayyib Butchers',
-          category: 'Meat',
-          imageIcon: 'fa-drumstick',
-          distance: '1.2 km',
-          rating: 4.7,
-          openUntil: '8:30 PM',
-          afterPrayer: 'Asr',
-          bgColor: 'from-red-400 to-rose-500'
-        },
-        {
-          id: 4,
-          name: 'Barakah Pharmacy',
-          category: 'Pharmacy',
-          imageIcon: 'fa-capsules',
-          distance: '0.5 km',
-          rating: 4.9,
-          openUntil: '12:00 AM',
-          afterPrayer: 'Isha',
-          bgColor: 'from-blue-400 to-cyan-400'
-        },
-        {
-          id: 5,
-          name: 'Madinah Dates',
-          category: 'Dates',
-          imageIcon: 'fa-calendar-alt',
-          distance: '1.5 km',
-          rating: 5.0,
-          openUntil: '9:00 PM',
-          afterPrayer: 'Asr',
-          bgColor: 'from-emerald-700 to-green-600'
-        },
-        {
-          id: 6,
-          name: 'Oud Al‑Attar',
-          category: 'Attar',
-          imageIcon: 'fa-spray-can',
-          distance: '2.1 km',
-          rating: 4.5,
-          openUntil: '10:30 PM',
-          afterPrayer: 'Maghrib',
-          bgColor: 'from-purple-400 to-indigo-400'
+        // ========== INITIALIZE SYSTEM ==========
+        async function initSystem() {
+            await initLocalDatabase();
+            await loadCardData();
+            setupRealtimeSubscription();
+            setupOfflineSupport();
         }
-      ];
 
-      // ---------- PRAYER LOGIC (static example, but looks dynamic) ----------
-      const prayerTimes = {
-        Fajr: '05:12',
-        Dhuhr: '12:30',
-        Asr: '15:45',
-        Maghrib: '18:24',
-        Isha: '19:50'
-      };
-
-      function setNextPrayer() {
-        // for demo purpose we fix next prayer as Maghrib (after asr)
-        const now = new Date();
-        const maghribTime = '18:24';
-        // simple mock: always show next as Maghrib (but we set countdown based on time)
-        const prayerNameSpan = document.getElementById('prayerName');
-        const nextPrayerLabel = document.getElementById('nextPrayerLabel');
-        const countdownSpan = document.getElementById('prayerCountdown');
-        
-        if (prayerNameSpan) prayerNameSpan.innerText = 'Maghrib';
-        if (nextPrayerLabel) nextPrayerLabel.innerHTML = '<i class="fas fa-mosque text-emerald-600 mr-1.5 text-sm"></i>Maghrib · 18:24';
-        
-        // calculate dummy remaining time (feel alive)
-        const hr = now.getHours();
-        const min = now.getMinutes();
-        let remaining = '';
-        if (hr < 18 || (hr === 18 && min < 24)) {
-          remaining = `in ${17 - hr}h ${60 - min}m`;  // not perfect but gives flavour
-        } else {
-          remaining = `in 12h 14m`; // after isha
+        // ========== LOCAL DATABASE FOR OFFLINE ==========
+        async function initLocalDatabase() {
+            try {
+                SQL = await initSqlJs({
+                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+                });
+                
+                localDB = new SQL.Database();
+                
+                // Create tables for offline storage
+                localDB.run(`
+                    CREATE TABLE IF NOT EXISTS offline_cards (
+                        id TEXT PRIMARY KEY,
+                        data TEXT,
+                        last_updated TEXT,
+                        synced INTEGER DEFAULT 0
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS offline_orders (
+                        id TEXT PRIMARY KEY,
+                        card_id TEXT,
+                        order_data TEXT,
+                        created_at TEXT,
+                        synced INTEGER DEFAULT 0
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS backups (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        backup_date TEXT,
+                        backup_data TEXT,
+                        type TEXT
+                    );
+                `);
+                
+                console.log('✅ Local database ready');
+            } catch (error) {
+                console.error('Local DB error:', error);
+            }
         }
-        if (countdownSpan) countdownSpan.innerText = remaining;
-      }
 
-      // ---------- RENDER CATEGORIES (first 5, scalable) ----------
-      function renderCategories() {
-        const container = document.getElementById('categoriesContainer');
-        if (!container) return;
-        container.innerHTML = '';
-        categories.slice(0, 5).forEach(cat => {
-          const col = document.createElement('div');
-          col.className = 'flex flex-col items-center';
-          col.innerHTML = `
-            <div class="${cat.color} w-14 h-14 rounded-2xl flex items-center justify-center text-gray-700 shadow-sm border border-white/50">
-              <i class="fas ${cat.icon} text-xl"></i>
-            </div>
-            <span class="text-[11px] mt-1.5 font-medium text-gray-700">${cat.name}</span>
-          `;
-          container.appendChild(col);
-        });
-      }
+        // ========== LOAD CARD DATA ==========
+        async function loadCardData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            cardId = urlParams.get('id') || urlParams.get('short_id');
+            
+            if (!cardId) {
+                document.getElementById('cardContent').innerHTML = `
+                    <div class="text-center py-5">
+                        <i class="fas fa-exclamation-triangle fa-4x text-warning mb-3"></i>
+                        <h3>No Card ID Provided</h3>
+                        <p class="text-muted">Please provide a valid card ID</p>
+                    </div>
+                `;
+                return;
+            }
 
-      // ---------- RENDER SHOPS (horizontal scroll cards) ----------
-      function renderShops() {
-        const container = document.getElementById('shopsContainer');
-        if (!container) return;
-        container.innerHTML = '';
-        shops.forEach(shop => {
-          const card = document.createElement('div');
-          card.className = 'shop-card flex-none w-60 bg-white rounded-2xl p-3 shadow-md border border-gray-100/70 flex items-start gap-3';
-          // left icon / gradient
-          const iconDiv = document.createElement('div');
-          iconDiv.className = `w-14 h-14 rounded-xl bg-gradient-to-br ${shop.bgColor} flex items-center justify-center text-white shadow-md`;
-          iconDiv.innerHTML = `<i class="fas ${shop.imageIcon} text-2xl"></i>`;
-          
-          // info
-          const infoDiv = document.createElement('div');
-          infoDiv.className = 'flex-1';
-          infoDiv.innerHTML = `
-            <div class="flex justify-between items-start">
-              <h4 class="font-semibold text-gray-800 text-sm leading-tight">${shop.name}</h4>
-              <span class="flex items-center text-[11px] bg-amber-50 px-1.5 py-0.5 rounded-full text-amber-700">
-                <i class="fas fa-star text-[10px] mr-0.5 text-amber-500"></i>${shop.rating}
-              </span>
-            </div>
-            <p class="text-xs text-gray-500 mt-0.5 flex items-center">
-              <i class="fas fa-location-dot mr-1 text-emerald-500 text-[10px]"></i> ${shop.distance}
-            </p>
-            <div class="flex items-center mt-1.5 justify-between">
-              <span class="text-[10px] bg-emerald-50 px-2 py-0.5 rounded-full text-emerald-700 border border-emerald-200">
-                <i class="far fa-clock mr-0.5"></i> ${shop.openUntil}
-              </span>
-              <span class="text-[11px] font-medium text-emerald-600 flex items-center">
-                after ${shop.afterPrayer} <i class="fas fa-arrow-right ml-1 text-[9px]"></i>
-              </span>
-            </div>
-            <!-- visit button: direct call to action -->
-            <button class="w-full mt-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-xs py-1.5 rounded-xl shadow hover:shadow-md transition flex items-center justify-center gap-1">
-              <i class="fas fa-store"></i> Visit shop
-            </button>
-          `;
-          card.appendChild(iconDiv);
-          card.appendChild(infoDiv);
-          container.appendChild(card);
-        });
-      }
+            // Try to load from local DB first (offline)
+            await loadFromLocalDB();
+            
+            // Then load from Supabase (online)
+            await loadFromSupabase();
+        }
 
-      // ---------- RUN ALL RENDERING ----------
-      window.addEventListener('DOMContentLoaded', () => {
-        setNextPrayer();
-        renderCategories();
-        renderShops();
+        // ========== LOAD FROM LOCAL DATABASE ==========
+        async function loadFromLocalDB() {
+            if (!localDB) return;
+            
+            try {
+                const result = localDB.exec(
+                    "SELECT data FROM offline_cards WHERE id = ?",
+                    [cardId]
+                );
+                
+                if (result.length > 0 && result[0].values.length > 0) {
+                    currentCardData = JSON.parse(result[0].values[0][0]);
+                    renderCard(currentCardData);
+                    document.getElementById('offlineIndicator').style.display = 'block';
+                }
+            } catch (error) {
+                console.log('No offline data found');
+            }
+        }
 
-        // simulate countdown update every minute (optional but nice)
-        setInterval(() => {
-          setNextPrayer();
-        }, 60000);
-      });
+        // ========== LOAD FROM SUPABASE ==========
+        async function loadFromSupabase() {
+            try {
+                // Try short URL first
+                let { data: shortData, error: shortError } = await supabase
+                    .from('short_urls')
+                    .select('full_id')
+                    .eq('short_id', cardId)
+                    .single();
+                
+                let actualId = cardId;
+                if (shortData) {
+                    actualId = shortData.full_id;
+                }
+                
+                // Get card data
+                const { data: card, error } = await supabase
+                    .from('cards')
+                    .select('*')
+                    .eq('id', actualId)
+                    .single();
+                
+                if (error) throw error;
+                
+                if (card) {
+                    currentCardData = JSON.parse(card.data);
+                    renderCard(currentCardData);
+                    
+                    // Save to local DB for offline
+                    saveToLocalDB(actualId, currentCardData);
+                    
+                    // Update view count
+                    await supabase
+                        .from('cards')
+                        .update({ views: (card.views || 0) + 1 })
+                        .eq('id', actualId);
+                }
+            } catch (error) {
+                console.error('Supabase load error:', error);
+                // Already showing offline data
+            }
+        }
 
-    })();
-  </script>
-  
-  <!-- small footnote: ideological sealability -->
-  <div class="max-w-md mx-auto text-center mt-2 text-[10px] text-gray-400 flex justify-center gap-3">
-    <span><i class="fas fa-check-circle text-emerald-500"></i> barakah local</span>
-    <span><i class="fas fa-clock text-emerald-500"></i> prayer‑conscious</span>
-    <span><i class="fas fa-store text-emerald-500"></i> support offline shops</span>
-  </div>
+        // ========== SAVE TO LOCAL DATABASE ==========
+        function saveToLocalDB(id, data) {
+            if (!localDB) return;
+            
+            try {
+                const stmt = localDB.prepare(`
+                    INSERT OR REPLACE INTO offline_cards (id, data, last_updated, synced)
+                    VALUES (?, ?, ?, 1)
+                `);
+                
+                stmt.run([id, JSON.stringify(data), new Date().toISOString()]);
+                stmt.free();
+                
+                console.log('✅ Saved to local DB');
+            } catch (error) {
+                console.error('Save to local DB error:', error);
+            }
+        }
+
+        // ========== REALTIME SUBSCRIPTION ==========
+        function setupRealtimeSubscription() {
+            if (!cardId) return;
+            
+            const subscription = supabase
+                .channel('card_updates')
+                .on('postgres_changes', {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'cards',
+                    filter: `id=eq.${cardId}`
+                }, (payload) => {
+                    // Card was updated
+                    const newData = JSON.parse(payload.new.data);
+                    currentCardData = newData;
+                    renderCard(newData);
+                    
+                    // Show update notification
+                    showNotification('Card updated in real-time', 'info');
+                })
+                .subscribe();
+        }
+
+        // ========== OFFLINE SUPPORT ==========
+        function setupOfflineSupport() {
+            window.addEventListener('online', function() {
+                document.getElementById('offlineIndicator').style.display = 'none';
+                syncOfflineData();
+            });
+            
+            window.addEventListener('offline', function() {
+                document.getElementById('offlineIndicator').style.display = 'block';
+            });
+        }
+
+        // ========== SYNC OFFLINE DATA ==========
+        async function syncOfflineData() {
+            if (!localDB) return;
+            
+            try {
+                // Get unsynced orders
+                const result = localDB.exec(
+                    "SELECT * FROM offline_orders WHERE synced = 0"
+                );
+                
+                if (result.length > 0) {
+                    for (const row of result[0].values) {
+                        const orderData = JSON.parse(row[2]);
+                        
+                        // Upload to Supabase
+                        await supabase.from('orders').insert(orderData);
+                        
+                        // Mark as synced
+                        localDB.run(
+                            "UPDATE offline_orders SET synced = 1 WHERE id = ?",
+                            [row[0]]
+                        );
+                    }
+                    
+                    showNotification('Offline data synced!', 'success');
+                }
+            } catch (error) {
+                console.error('Sync error:', error);
+            }
+        }
+
+        // ========== RENDER CARD ==========
+        function renderCard(data) {
+            const container = document.getElementById('cardContent');
+            
+            if (!data) {
+                container.innerHTML = '<p class="text-center">No card data</p>';
+                return;
+            }
+
+            // Create beautiful card display
+            container.innerHTML = `
+                <div class="dubai-royal-card">
+                    <div class="text-center mb-4">
+                        ${data.profileImage ? 
+                            `<img src="${data.profileImage}" class="rounded-circle mb-3" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--theme-gold);">` : 
+                            `<div class="rounded-circle bg-warning d-inline-flex align-items-center justify-content-center mb-3" style="width: 120px; height: 120px;">
+                                <i class="fas fa-user fa-4x text-white"></i>
+                            </div>`
+                        }
+                        <h2 class="fw-800 mb-1">${data.businessName || 'Business Name'}</h2>
+                        <p class="text-muted">${data.name || 'Owner Name'}</p>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-3 text-center">
+                                <i class="fas fa-phone text-primary mb-2"></i>
+                                <h6 class="fw-600 mb-0">${data.phone || 'Not set'}</h6>
+                                <small class="text-muted">Click to call</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-light p-3 rounded-3 text-center">
+                                <i class="fas fa-envelope text-primary mb-2"></i>
+                                <h6 class="fw-600 mb-0">${data.email || 'Not set'}</h6>
+                                <small class="text-muted">Email</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${data.business?.about ? `
+                        <div class="mb-4">
+                            <h5 class="fw-700 mb-2">About</h5>
+                            <p class="text-muted">${data.business.about}</p>
+                        </div>
+                    ` : ''}
+                    
+                    ${data.products && data.products.length > 0 ? `
+                        <h5 class="fw-700 mb-3">Products & Offers</h5>
+                        <div class="offers-container mb-4">
+                            ${data.products.map(p => `
+                                <div class="offer-box">
+                                    ${p.image ? `<img src="${p.image}" class="product-image mb-2">` : ''}
+                                    <h6 class="fw-700">${p.title}</h6>
+                                    <p class="small text-muted">${p.desc}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            ${p.originalPrice ? `<small class="text-muted text-decoration-line-through">$${p.originalPrice}</small>` : ''}
+                                            <span class="fw-800 text-primary">$${p.discountPrice}</span>
+                                        </div>
+                                        <button class="btn btn-sm btn-warning" onclick="addToCart('${p.title}', ${p.discountPrice})">
+                                            Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                    
+                    ${data.deliverySettings ? `
+                        <div class="delivery-settings mb-4">
+                            <h5 class="fw-700 mb-3">Delivery Information</h5>
+                            <div class="bg-light p-3 rounded-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Within City:</span>
+                                    <span class="fw-700">PKR ${data.deliverySettings.deliveryChargeCity}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Other Cities:</span>
+                                    <span class="fw-700">PKR ${data.deliverySettings.deliveryChargeOther}</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Free Delivery:</span>
+                                    <span class="fw-700 text-success">Above PKR ${data.deliverySettings.freeDeliveryMin}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${data.payments?.whatsapp?.number ? `
+                        <div class="whatsapp-section mb-4">
+                            <a href="https://wa.me/${data.payments.whatsapp.number.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(data.payments.whatsapp.greeting || 'Hello! I want to order from your business')}" 
+                               class="btn btn-success w-100 py-3" target="_blank">
+                                <i class="fab fa-whatsapp me-2"></i> Order via WhatsApp
+                            </a>
+                        </div>
+                    ` : ''}
+                    
+                    ${data.socialMedia ? `
+                        <div class="social-section mt-4">
+                            <h5 class="fw-700 mb-3">Connect With Us</h5>
+                            <div class="d-flex gap-2 flex-wrap">
+                                ${Object.entries(data.socialMedia).map(([key, value]) => value ? `
+                                    <a href="${value}" class="btn btn-outline-secondary" target="_blank">
+                                        <i class="fab fa-${key}"></i>
+                                    </a>
+                                ` : '').join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            // Update page title
+            document.title = `${data.businessName || 'Business'} - Digital Card`;
+        }
+
+        // ========== NOTIFICATION SYSTEM ==========
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} position-fixed top-0 start-50 translate-middle-x mt-3`;
+            notification.style.zIndex = '99999';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+                ${message}
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // ========== ADD TO CART ==========
+        window.addToCart = function(name, price) {
+            // Store in local storage for checkout
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.push({
+                name: name,
+                price: price,
+                quantity: 1,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            showNotification('Added to cart!', 'success');
+            
+            // Redirect to checkout if exists
+            setTimeout(() => {
+                window.location.href = 'card-checkout.html';
+            }, 1500);
+        };
+
+        // ========== INITIALIZE ==========
+        initSystem();
+    </script>
 </body>
 </html>
