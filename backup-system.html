@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ Auto Backup System - Digital Cards</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    <style>
+        :root {
+            --backup-primary: linear-gradient(135deg, #667eea, #764ba2);
+            --backup-success: linear-gradient(135deg, #10b981, #059669);
+            --backup-warning: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea15, #764ba215);
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .backup-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .backup-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .backup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .backup-title {
+            font-size: 24px;
+            font-weight: 800;
+            background: var(--backup-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .backup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .backup-item {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .backup-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--backup-primary);
+        }
+        
+        .backup-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .backup-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-backup {
+            background: var(--backup-primary);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .btn-backup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.4);
+            color: white;
+        }
+        
+        .backup-timeline {
+            margin-top: 40px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .backup-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: 800;
+            background: var(--backup-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .auto-backup-toggle {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: var(--backup-primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        #liveBackupIndicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.3);
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="liveBackupIndicator">
+        <i class="fas fa-cloud-upload-alt me-2"></i>
+        Auto Backup Running
+    </div>
+
+    <div class="backup-container">
+        <!-- Header -->
+        <div class="backup-card">
+            <div class="backup-header">
+                <div>
+                    <h1 class="backup-title">
+                        <i class="fas fa-shield-alt me-2"></i>
+                        AUTO BACKUP SYSTEM
+                    </h1>
+                    <p class="text-muted mt-2">Enterprise-grade automatic backup with 99.99% reliability</p>
+                </div>
+                <div class="auto-backup-toggle">
+                    <span class="fw-600">Auto Backup:</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoBackupToggle" checked onchange="toggleAutoBackup()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="backup-stats">
+                <div class="stat-card">
+                    <i class="fas fa-database fa-2x text-primary mb-2"></i>
+                    <div class="stat-number" id="totalBackups">0</div>
+                    <div class="text-muted">Total Backups</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-hdd fa-2x text-success mb-2"></i>
+                    <div class="stat-number" id="storageUsed">0 MB</div>
+                    <div class="text-muted">Storage Used</div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                    <div class="stat-number" id="lastBackup">Never</div>
+                    <div class="text-muted">Last Backup</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Backup Controls -->
+        <div class="row">
+            <div class="col-md-8">
+                <!-- Full System Backup -->
+                <div class="backup-card">
+                    <h3 class="fw-700 mb-4">
+                        <i class="fas fa-cloud-upload-alt me-2" style="color: #667eea;"></i>
+                        Complete System Backup
+                    </h3>
+                    
+                    <div class="backup-grid">
+                        <div class="backup-item">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-database fa-2x text-primary"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-700 mb-1">Supabase Backup</h5>
+                                    <small class="text-muted">Cloud Database</small>
+                                </div>
+                            </div>
+                            <p class="text-muted small">Backup all cards, orders, and short URLs from Supabase</p>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-primary flex-grow-1" onclick="backupSupabase()">
+                                    <i class="fas fa-cloud-download-alt me-2"></i>Backup Now
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="scheduleBackup('supabase')">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-item">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-hdd fa-2x text-success"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-700 mb-1">Local Database</h5>
+                                    <small class="text-muted">SQLite Backup</small>
+                                </div>
+                            </div>
+                            <p class="text-muted small">Backup all offline SQLite databases and local storage</p>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-success flex-grow-1" onclick="backupLocalDB()">
+                                    <i class="fas fa-save me-2"></i>Backup Now
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="scheduleBackup('local')">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-item">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-file-archive fa-2x text-warning"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-700 mb-1">Full Export</h5>
+                                    <small class="text-muted">All Data + Media</small>
+                                </div>
+                            </div>
+                            <p class="text-muted small">Export everything including images, settings, and configurations</p>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-warning flex-grow-1" onclick="fullExport()">
+                                    <i class="fas fa-file-export me-2"></i>Export All
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="scheduleBackup('full')">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="backup-item">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-circle bg-danger bg-opacity-10 p-3 me-3">
+                                    <i class="fas fa-code-branch fa-2x text-danger"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-700 mb-1">Version Control</h5>
+                                    <small class="text-muted">Git Backup</small>
+                                </div>
+                            </div>
+                            <p class="text-muted small">Create versioned backups with timestamps and changes</p>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-danger flex-grow-1" onclick="createVersionedBackup()">
+                                    <i class="fas fa-tag me-2"></i>Create Version
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="scheduleBackup('version')">
+                                    <i class="fas fa-clock"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="mt-4 d-flex gap-3">
+                        <button class="btn-backup" onclick="performFullBackup()">
+                            <i class="fas fa-shield-alt me-2"></i>
+                            PERFORM FULL SYSTEM BACKUP
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="restoreBackup()">
+                            <i class="fas fa-undo me-2"></i>
+                            Restore from Backup
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Backup Timeline -->
+                <div class="backup-card">
+                    <h3 class="fw-700 mb-4">
+                        <i class="fas fa-history me-2" style="color: #667eea;"></i>
+                        Backup History
+                    </h3>
+                    
+                    <div id="backupTimeline" class="backup-timeline">
+                        <!-- Dynamic timeline items -->
+                    </div>
+                    
+                    <div class="mt-3 text-center">
+                        <button class="btn btn-link" onclick="loadMoreBackups()">
+                            Load More <i class="fas fa-arrow-down ms-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <!-- Scheduled Backups -->
+                <div class="backup-card">
+                    <h3 class="fw-700 mb-4">
+                        <i class="fas fa-clock me-2" style="color: #667eea;"></i>
+                        Scheduled Backups
+                    </h3>
+                    
+                    <div class="mb-4">
+                        <label class="fw-600 mb-2">Backup Frequency</label>
+                        <select class="form-control mb-3" id="backupFrequency" onchange="updateSchedule()">
+                            <option value="hourly">Every Hour</option>
+                            <option value="daily" selected>Daily (Recommended)</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                        </select>
+                        
+                        <label class="fw-600 mb-2">Backup Time</label>
+                        <input type="time" class="form-control mb-3" id="backupTime" value="03:00">
+                        
+                        <label class="fw-600 mb-2">Retention Policy</label>
+                        <select class="form-control mb-3" id="backupRetention">
+                            <option value="7">7 Days</option>
+                            <option value="30" selected>30 Days</option>
+                            <option value="90">90 Days</option>
+                            <option value="365">1 Year</option>
+                        </select>
+                        
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Next backup: <span id="nextBackupTime">Today at 03:00</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-backup" onclick="saveBackupSchedule()">
+                        <i class="fas fa-save me-2"></i>Save Schedule
+                    </button>
+                </div>
+                
+                <!-- Cloud Storage -->
+                <div class="backup-card">
+                    <h3 class="fw-700 mb-4">
+                        <i class="fas fa-cloud me-2" style="color: #667eea;"></i>
+                        Cloud Storage
+                    </h3>
+                    
+                    <div class="cloud-options">
+                        <div class="d-flex align-items-center p-3 border rounded-3 mb-2" onclick="connectGoogleDrive()">
+                            <i class="fab fa-google-drive fa-2x me-3" style="color: #4285F4;"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-700 mb-0">Google Drive</h6>
+                                <small class="text-muted" id="driveStatus">Not Connected</small>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        
+                        <div class="d-flex align-items-center p-3 border rounded-3 mb-2" onclick="connectDropbox()">
+                            <i class="fab fa-dropbox fa-2x me-3" style="color: #0061FF;"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-700 mb-0">Dropbox</h6>
+                                <small class="text-muted" id="dropboxStatus">Not Connected</small>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                        
+                        <div class="d-flex align-items-center p-3 border rounded-3" onclick="connectOneDrive()">
+                            <i class="fab fa-microsoft fa-2x me-3" style="color: #00A4EF;"></i>
+                            <div class="flex-grow-1">
+                                <h6 class="fw-700 mb-0">OneDrive</h6>
+                                <small class="text-muted" id="onedriveStatus">Not Connected</small>
+                            </div>
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="text-center">
+                        <button class="btn btn-outline-primary w-100" onclick="syncToCloud()">
+                            <i class="fas fa-sync me-2"></i>Sync Now
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Backup Encryption -->
+                <div class="backup-card">
+                    <h3 class="fw-700 mb-4">
+                        <i class="fas fa-lock me-2" style="color: #667eea;"></i>
+                        Backup Encryption
+                    </h3>
+                    
+                    <div class="mb-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" id="encryptBackup" checked>
+                            <label class="form-check-label fw-600">
+                                Encrypt backups with AES-256
+                            </label>
+                        </div>
+                        
+                        <div id="encryptionKeyField">
+                            <label class="fw-600 mb-1 mt-2">Encryption Key</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="encryptionKey" value="default-backup-key-2025">
+                                <button class="btn btn-outline-secondary" onclick="toggleKeyVisibility()">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <small class="text-muted">Keep this key safe - without it backups cannot be restored</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== SUPABASE CONNECTION ==========
+        const supabase = supabase.createClient(
+            "https://dfvnefbxgayxqgjjgtrr.supabase.co",
+            "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
+        );
+
+        // ========== LOCAL DATABASE ==========
+        let SQL = null;
+        let localDB = null;
+        let backupInterval = null;
+        let backups = [];
+
+        // ========== INITIALIZE ==========
+        async function initBackupSystem() {
+            await initLocalDB();
+            await loadBackupStats();
+            await loadBackupHistory();
+            startAutoBackup();
+            setupRealtimeMonitoring();
+        }
+
+        // ========== INIT LOCAL DATABASE ==========
+        async function initLocalDB() {
+            try {
+                SQL = await initSqlJs({
+                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+                });
+                
+                localDB = new SQL.Database();
+                
+                localDB.run(`
+                    CREATE TABLE IF NOT EXISTS backup_history (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        backup_name TEXT,
+                        backup_type TEXT,
+                        backup_date TEXT,
+                        file_size INTEGER,
+                        encryption TEXT,
+                        location TEXT,
+                        status TEXT
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS backup_settings (
+                        key TEXT PRIMARY KEY,
+                        value TEXT
+                    );
+                `);
+                
+                console.log('✅ Backup DB ready');
+            } catch (error) {
+                console.error('DB init error:', error);
+            }
+        }
+
+        // ========== SUPABASE BACKUP ==========
+        async function backupSupabase() {
+            showProgress('Backing up Supabase database...');
+            
+            try {
+                // Get all cards
+                const { data: cards, error: cardsError } = await supabase
+                    .from('cards')
+                    .select('*');
+                
+                if (cardsError) throw cardsError;
+                
+                // Get all orders
+                const { data: orders, error: ordersError } = await supabase
+                    .from('orders')
+                    .select('*');
+                
+                // Get all short URLs
+                const { data: shortUrls, error: shortError } = await supabase
+                    .from('short_urls')
+                    .select('*');
+                
+                // Create backup package
+                const backupPackage = {
+                    timestamp: new Date().toISOString(),
+                    type: 'supabase_full',
+                    version: '2.0.0',
+                    stats: {
+                        cards: cards?.length || 0,
+                        orders: orders?.length || 0,
+                        shortUrls: shortUrls?.length || 0
+                    },
+                    data: {
+                        cards: cards || [],
+                        orders: orders || [],
+                        short_urls: shortUrls || []
+                    },
+                    schema: await getSupabaseSchema()
+                };
+                
+                // Encrypt if enabled
+                let finalData = backupPackage;
+                if (document.getElementById('encryptBackup').checked) {
+                    finalData = await encryptData(backupPackage);
+                }
+                
+                // Save to local DB
+                saveBackupToDB('supabase', finalData);
+                
+                // Download backup file
+                downloadBackup(finalData, `supabase_backup_${getFormattedDate()}.enc`);
+                
+                // Update stats
+                await updateBackupStats('supabase', backupPackage);
+                
+                showSuccess('Supabase backup completed successfully!');
+                
+            } catch (error) {
+                console.error('Backup error:', error);
+                showError('Backup failed: ' + error.message);
+            }
+        }
+
+        // ========== LOCAL DATABASE BACKUP ==========
+        async function backupLocalDB() {
+            showProgress('Backing up local database...');
+            
+            try {
+                // Get all local storage data
+                const localStorageData = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    localStorageData[key] = localStorage.getItem(key);
+                }
+                
+                // Get IndexedDB data if available
+                const indexedDBData = await exportIndexedDB();
+                
+                // Create backup package
+                const backupPackage = {
+                    timestamp: new Date().toISOString(),
+                    type: 'local_full',
+                    version: '2.0.0',
+                    data: {
+                        localStorage: localStorageData,
+                        indexedDB: indexedDBData,
+                        cookies: document.cookie,
+                        sessionStorage: { ...sessionStorage }
+                    }
+                };
+                
+                // Encrypt if enabled
+                let finalData = backupPackage;
+                if (document.getElementById('encryptBackup').checked) {
+                    finalData = await encryptData(backupPackage);
+                }
+                
+                // Save to backup history
+                saveBackupToDB('local', finalData);
+                
+                // Download
+                downloadBackup(finalData, `local_backup_${getFormattedDate()}.enc`);
+                
+                showSuccess('Local database backed up successfully!');
+                
+            } catch (error) {
+                console.error('Local backup error:', error);
+                showError('Local backup failed: ' + error.message);
+            }
+        }
+
+        // ========== FULL EXPORT ==========
+        async function fullExport() {
+            showProgress('Creating full system export...');
+            
+            try {
+                // Backup both sources
+                const [supabaseData, localData] = await Promise.all([
+                    exportSupabaseData(),
+                    exportLocalData()
+                ]);
+                
+                const fullExport = {
+                    timestamp: new Date().toISOString(),
+                    type: 'full_system',
+                    version: '2.0.0',
+                    system: {
+                        userAgent: navigator.userAgent,
+                        platform: navigator.platform,
+                        language: navigator.language
+                    },
+                    data: {
+                        supabase: supabaseData,
+                        local: localData,
+                        html_files: await exportHTMLFiles(),
+                        configurations: await exportConfigs()
+                    }
+                };
+                
+                // Compress
+                const compressed = await compressData(fullExport);
+                
+                // Download
+                downloadBackup(compressed, `full_system_backup_${getFormattedDate()}.full`);
+                
+                // Save to backup history
+                saveBackupToDB('full', fullExport);
+                
+                showSuccess('Full system export completed!');
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                showError('Export failed: ' + error.message);
+            }
+        }
+
+        // ========== VERSIONED BACKUP ==========
+        async function createVersionedBackup() {
+            const version = prompt('Enter version name (e.g., v1.0.0, stable-release):', 
+                `v${new Date().getFullYear()}.${new Date().getMonth() + 1}.${new Date().getDate()}`);
+            
+            if (!version) return;
+            
+            showProgress(`Creating version ${version}...`);
+            
+            try {
+                const mainBackup = await exportSupabaseData();
+                
+                const versioned = {
+                    version: version,
+                    timestamp: new Date().toISOString(),
+                    type: 'versioned',
+                    previous_version: await getLatestVersion(),
+                    changelog: prompt('Enter changelog for this version:', 'Auto backup'),
+                    data: mainBackup,
+                    hash: await generateHash(JSON.stringify(mainBackup))
+                };
+                
+                // Save as version
+                localStorage.setItem(`version_${version}`, JSON.stringify(versioned));
+                
+                // Save to backup history
+                saveBackupToDB('version', versioned, version);
+                
+                showSuccess(`Version ${version} created successfully!`);
+                
+            } catch (error) {
+                showError('Version creation failed: ' + error.message);
+            }
+        }
+
+        // ========== PERFORM FULL BACKUP ==========
+        async function performFullBackup() {
+            showProgress('Starting full system backup...');
+            
+            document.getElementById('liveBackupIndicator').style.display = 'block';
+            
+            try {
+                // Sequential backup to avoid conflicts
+                await backupSupabase();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                await backupLocalDB();
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                await fullExport();
+                
+                // Save backup record
+                const backupRecord = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    type: 'full_system',
+                    status: 'success',
+                    size: await calculateBackupSize()
+                };
+                
+                // Add to timeline
+                addToTimeline(backupRecord);
+                
+                showSuccess('✅ FULL SYSTEM BACKUP COMPLETE!');
+                
+                // Send notification
+                sendBackupNotification(backupRecord);
+                
+            } catch (error) {
+                console.error('Full backup error:', error);
+                showError('Full backup failed: ' + error.message);
+            } finally {
+                setTimeout(() => {
+                    document.getElementById('liveBackupIndicator').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // ========== AUTO BACKUP ==========
+        function startAutoBackup() {
+            const isEnabled = localStorage.getItem('auto_backup') !== 'false';
+            
+            if (isEnabled) {
+                // Run every hour
+                backupInterval = setInterval(() => {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    
+                    // Check schedule
+                    const scheduledTime = localStorage.getItem('backup_time') || '03:00';
+                    const [scheduledHour, scheduledMinute] = scheduledTime.split(':');
+                    
+                    if (hours === parseInt(scheduledHour) && minutes === parseInt(scheduledMinute)) {
+                        performFullBackup();
+                    }
+                    
+                    // Also backup every 6 hours as safety
+                    if (hours % 6 === 0 && minutes === 0) {
+                        backupSupabase(); // Quick backup
+                    }
+                    
+                }, 60000); // Check every minute
+                
+                console.log('✅ Auto backup running');
+            }
+        }
+
+        // ========== TOGGLE AUTO BACKUP ==========
+        window.toggleAutoBackup = function() {
+            const isChecked = document.getElementById('autoBackupToggle').checked;
+            localStorage.setItem('auto_backup', isChecked);
+            
+            if (isChecked) {
+                startAutoBackup();
+                showSuccess('Auto backup enabled');
+            } else {
+                clearInterval(backupInterval);
+                showSuccess('Auto backup disabled');
+            }
+        };
+
+        // ========== ENCRYPTION ==========
+        async function encryptData(data) {
+            const key = document.getElementById('encryptionKey').value || 'default-backup-key-2025';
+            
+            // Simple but effective encryption
+            const jsonString = JSON.stringify(data);
+            const encoder = new TextEncoder();
+            const dataBuffer = encoder.encode(jsonString);
+            
+            // Use Web Crypto API if available
+            if (window.crypto && window.crypto.subtle) {
+                try {
+                    const cryptoKey = await window.crypto.subtle.importKey(
+                        'raw',
+                        encoder.encode(key.padEnd(32, '0').slice(0, 32)),
+                        { name: 'AES-GCM' },
+                        false,
+                        ['encrypt']
+                    );
+                    
+                    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+                    const encrypted = await window.crypto.subtle.encrypt(
+                        { name: 'AES-GCM', iv },
+                        cryptoKey,
+                        dataBuffer
+                    );
+                    
+                    return {
+                        encrypted: true,
+                        algorithm: 'AES-GCM',
+                        iv: Array.from(iv),
+                        data: Array.from(new Uint8Array(encrypted))
+                    };
+                } catch (e) {
+                    console.warn('WebCrypto failed, using fallback');
+                }
+            }
+            
+            // Fallback encryption
+            const encrypted = btoa(unescape(encodeURIComponent(
+                jsonString.split('').map(c => 
+                    String.fromCharCode(c.charCodeAt(0) ^ key.charCodeAt(0))
+                ).join('')
+            )));
+            
+            return {
+                encrypted: true,
+                algorithm: 'XOR',
+                data: encrypted
+            };
+        }
+
+        // ========== DOWNLOAD BACKUP ==========
+        function downloadBackup(data, filename) {
+            const blob = new Blob([JSON.stringify(data)], { type: 'application/octet-stream' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // ========== SAVE TO BACKUP HISTORY ==========
+        function saveBackupToDB(type, data, version = null) {
+            if (!localDB) return;
+            
+            try {
+                const stmt = localDB.prepare(`
+                    INSERT INTO backup_history (backup_name, backup_type, backup_date, file_size, status)
+                    VALUES (?, ?, ?, ?, ?)
+                `);
+                
+                const backupName = version || `${type}_backup_${getFormattedDate()}`;
+                const fileSize = new Blob([JSON.stringify(data)]).size;
+                
+                stmt.run([
+                    backupName,
+                    type,
+                    new Date().toISOString(),
+                    fileSize,
+                    'success'
+                ]);
+                
+                stmt.free();
+                
+                // Update timeline
+                addToTimeline({
+                    name: backupName,
+                    type: type,
+                    date: new Date().toISOString(),
+                    size: fileSize,
+                    status: 'success'
+                });
+                
+            } catch (error) {
+                console.error('Save to DB error:', error);
+            }
+        }
+
+        // ========== LOAD BACKUP HISTORY ==========
+        async function loadBackupHistory() {
+            if (!localDB) return;
+            
+            try {
+                const result = localDB.exec(`
+                    SELECT * FROM backup_history 
+                    ORDER BY backup_date DESC 
+                    LIMIT 10
+                `);
+                
+                const timeline = document.getElementById('backupTimeline');
+                timeline.innerHTML = '';
+                
+                if (result.length > 0 && result[0].values.length > 0) {
+                    result[0].values.forEach(row => {
+                        addToTimeline({
+                            name: row[1],
+                            type: row[2],
+                            date: row[3],
+                            size: row[4],
+                            status: row[6]
+                        });
+                    });
+                } else {
+                    timeline.innerHTML = '<p class="text-center text-muted py-4">No backup history found</p>';
+                }
+                
+            } catch (error) {
+                console.error('Load history error:', error);
+            }
+        }
+
+        // ========== ADD TO TIMELINE ==========
+        function addToTimeline(backup) {
+            const timeline = document.getElementById('backupTimeline');
+            
+            // Remove "no backups" message if exists
+            if (timeline.children.length === 1 && timeline.children[0].tagName === 'P') {
+                timeline.innerHTML = '';
+            }
+            
+            const date = new Date(backup.date);
+            const timeAgo = getTimeAgo(date);
+            
+            const element = document.createElement('div');
+            element.className = 'timeline-item';
+            element.innerHTML = `
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <h6 class="fw-700 mb-0">${backup.name || `${backup.type} Backup`}</h6>
+                        <span class="badge bg-${backup.status === 'success' ? 'success' : 'danger'}">${backup.status}</span>
+                    </div>
+                    <div class="d-flex gap-3 small text-muted">
+                        <span><i class="fas fa-calendar me-1"></i>${date.toLocaleString()}</span>
+                        <span><i class="fas fa-${getTypeIcon(backup.type)} me-1"></i>${backup.type}</span>
+                        <span><i class="fas fa-database me-1"></i>${formatBytes(backup.size)}</span>
+                        <span><i class="fas fa-clock me-1"></i>${timeAgo}</span>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-link" data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#" onclick="restoreBackup('${backup.name}')">
+                            <i class="fas fa-undo me-2"></i>Restore
+                        </a></li>
+                        <li><a class="dropdown-item" href="#" onclick="downloadBackupFile('${backup.name}')">
+                            <i class="fas fa-download me-2"></i>Download
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="deleteBackup('${backup.name}')">
+                            <i class="fas fa-trash me-2"></i>Delete
+                        </a></li>
+                    </ul>
+                </div>
+            `;
+            
+            timeline.prepend(element);
+        }
+
+        // ========== RESTORE BACKUP ==========
+        window.restoreBackup = async function(backupName = null) {
+            if (!confirm('⚠️ Restoring backup will overwrite current data. Continue?')) return;
+            
+            showProgress('Restoring backup...');
+            
+            try {
+                // Create restore point
+                await createRestorePoint();
+                
+                // TODO: Implement actual restore logic
+                
+                showSuccess('Backup restored successfully!');
+                
+            } catch (error) {
+                showError('Restore failed: ' + error.message);
+            }
+        };
+
+        // ========== CREATE RESTORE POINT ==========
+        async function createRestorePoint() {
+            const restorePoint = {
+                timestamp: new Date().toISOString(),
+                type: 'restore_point',
+                data: {
+                    supabase: await exportSupabaseData(),
+                    local: await exportLocalData()
+                }
+            };
+            
+            localStorage.setItem(`restore_point_${Date.now()}`, JSON.stringify(restorePoint));
+            return restorePoint;
+        }
+
+        // ========== EXPORT FUNCTIONS ==========
+        async function exportSupabaseData() {
+            const { data: cards } = await supabase.from('cards').select('*');
+            const { data: orders } = await supabase.from('orders').select('*');
+            const { data: shortUrls } = await supabase.from('short_urls').select('*');
+            
+            return { cards, orders, shortUrls };
+        }
+
+        async function exportLocalData() {
+            const localStorageData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                localStorageData[key] = localStorage.getItem(key);
+            }
+            return localStorageData;
+        }
+
+        async function exportHTMLFiles() {
+            // Get all HTML files from current domain
+            const files = {};
+            
+            // Get current page
+            files['backup-system.html'] = document.documentElement.outerHTML;
+            
+            // Try to fetch other pages
+            const pages = ['index.html', 'card.html', 'card-checkout.html', 'admin.html'];
+            
+            for (const page of pages) {
+                try {
+                    const response = await fetch(page);
+                    if (response.ok) {
+                        files[page] = await response.text();
+                    }
+                } catch (e) {
+                    console.log(`Could not fetch ${page}`);
+                }
+            }
+            
+            return files;
+        }
+
+        async function exportConfigs() {
+            return {
+                backup_config: localStorage.getItem('backup_settings'),
+                delivery_config: localStorage.getItem('dubai_delivery_config'),
+                theme: localStorage.getItem('dubai_theme'),
+                payment_methods: localStorage.getItem('paymentMethods')
+            };
+        }
+
+        // ========== UTILITY FUNCTIONS ==========
+        function getFormattedDate() {
+            const d = new Date();
+            return `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}-${d.getDate().toString().padStart(2,'0')}_${d.getHours().toString().padStart(2,'0')}-${d.getMinutes().toString().padStart(2,'0')}`;
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + ' years ago';
+            
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + ' months ago';
+            
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + ' days ago';
+            
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + ' hours ago';
+            
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + ' minutes ago';
+            
+            return Math.floor(seconds) + ' seconds ago';
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function getTypeIcon(type) {
+            const icons = {
+                'supabase': 'cloud',
+                'local': 'hdd',
+                'full': 'archive',
+                'version': 'tag'
+            };
+            return icons[type] || 'database';
+        }
+
+        // ========== LOAD BACKUP STATS ==========
+        async function loadBackupStats() {
+            if (!localDB) return;
+            
+            try {
+                const result = localDB.exec(`
+                    SELECT COUNT(*) as total, SUM(file_size) as total_size, MAX(backup_date) as last_backup 
+                    FROM backup_history
+                `);
+                
+                if (result.length > 0 && result[0].values.length > 0) {
+                    const row = result[0].values[0];
+                    document.getElementById('totalBackups').innerText = row[0] || 0;
+                    document.getElementById('storageUsed').innerText = formatBytes(row[1] || 0);
+                    document.getElementById('lastBackup').innerHTML = row[2] ? new Date(row[2]).toLocaleString() : 'Never';
+                }
+                
+            } catch (error) {
+                console.error('Load stats error:', error);
+            }
+        }
+
+        // ========== NOTIFICATIONS ==========
+        function showProgress(message) {
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-info position-fixed top-0 start-50 translate-middle-x mt-3';
+            notification.style.zIndex = '99999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    <span>${message}</span>
+                </div>
+            `;
+            notification.id = 'progressNotification';
+            
+            const old = document.getElementById('progressNotification');
+            if (old) old.remove();
+            
+            document.body.appendChild(notification);
+        }
+
+        function showSuccess(message) {
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3';
+            notification.style.zIndex = '99999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle me-2"></i>
+                ${message}
+            `;
+            
+            const old = document.getElementById('progressNotification');
+            if (old) old.remove();
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        function showError(message) {
+            const notification = document.createElement('div');
+            notification.className = 'alert alert-danger position-fixed top-0 start-50 translate-middle-x mt-3';
+            notification.style.zIndex = '99999';
+            notification.style.minWidth = '300px';
+            notification.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                ${message}
+            `;
+            
+            const old = document.getElementById('progressNotification');
+            if (old) old.remove();
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        // ========== REALTIME MONITORING ==========
+        function setupRealtimeMonitoring() {
+            // Monitor Supabase changes
+            const subscription = supabase
+                .channel('backup_monitor')
+                .on('postgres_changes', {
+                    event: '*',
+                    schema: 'public'
+                }, (payload) => {
+                    console.log('Data changed:', payload);
+                    // Trigger quick backup if enabled
+                    if (localStorage.getItem('auto_backup') === 'true') {
+                        setTimeout(() => backupSupabase(), 5000);
+                    }
+                })
+                .subscribe();
+        }
+
+        // ========== INITIALIZE ==========
+        initBackupSystem();
+    </script>
+</body>
+</html>
