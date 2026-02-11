@@ -2,8 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dubai Commerce • Elite Shopping System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dubai Royal Commerce • Premium WPA System</title>
+    
+    <!-- WPA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#bf9530">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <!-- Core Dependencies -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,15 +20,53 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+    <!-- Chart.js for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <!-- SQL.js for Local Database -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+    
     <style>
+        /* ========== PREMIUM THEME SYSTEM ========== */
         :root {
-            --dubai-gold: linear-gradient(135deg, #bf9530, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-            --dubai-sand: #f5e6d3;
-            --dubai-teal: #008080;
-            --dubai-navy: #1a2a4f;
-            --glass-premium: rgba(255, 255, 255, 0.95);
-            --shadow-arabic: 0 20px 40px -12px rgba(0,0,0,0.25);
-            --border-luxury: 1px solid rgba(191, 149, 48, 0.3);
+            --theme-primary: linear-gradient(135deg, #bf9530, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --theme-secondary: linear-gradient(135deg, #1a2a4f, #0f1a2f);
+            --theme-accent: #008080;
+            --theme-gold: #bf9530;
+            --theme-sand: #f5e6d3;
+            --theme-navy: #1a2a4f;
+            --theme-teal: #008080;
+            --glass-premium: rgba(255, 255, 255, 0.98);
+            --shadow-luxury: 0 25px 50px -12px rgba(0,0,0,0.25);
+            --border-arabic: 1px solid rgba(191, 149, 48, 0.3);
+            --radius-arabic: 32px;
+            --radius-medium: 20px;
+            --radius-small: 16px;
+        }
+
+        /* Theme Variants */
+        [data-theme="dubai-gold"] {
+            --theme-primary: linear-gradient(135deg, #bf9530, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --theme-secondary: linear-gradient(135deg, #1a2a4f, #0f1a2f);
+            --theme-accent: #008080;
+        }
+        
+        [data-theme="midnight-sapphire"] {
+            --theme-primary: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            --theme-secondary: linear-gradient(135deg, #000428, #004e92);
+            --theme-accent: #00b4d8;
+        }
+        
+        [data-theme="emerald-royal"] {
+            --theme-primary: linear-gradient(135deg, #134e5e, #71b280);
+            --theme-secondary: linear-gradient(135deg, #1b4d3e, #2d6a4f);
+            --theme-accent: #52b788;
+        }
+        
+        [data-theme="rose-gold"] {
+            --theme-primary: linear-gradient(135deg, #b2452e, #e77d6d);
+            --theme-secondary: linear-gradient(135deg, #4a2c2c, #6b4e4e);
+            --theme-accent: #d4a5a5;
         }
 
         * {
@@ -33,18 +77,19 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #fefcf7 0%, #fff9f0 100%);
+            background: linear-gradient(145deg, #fefcf7, #fff9f0);
             color: #1e293b;
             min-height: 100vh;
+            transition: all 0.3s ease;
         }
 
-        /* Dubai Luxury Cards */
-        .dubai-card {
+        /* ========== PREMIUM COMPONENTS ========== */
+        .dubai-royal-card {
             background: var(--glass-premium);
             backdrop-filter: blur(20px);
-            border: var(--border-luxury);
-            border-radius: 32px;
-            box-shadow: var(--shadow-arabic);
+            border: var(--border-arabic);
+            border-radius: var(--radius-arabic);
+            box-shadow: var(--shadow-luxury);
             padding: 28px;
             margin-bottom: 24px;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -52,33 +97,68 @@
             overflow: hidden;
         }
 
-        .dubai-card::before {
+        .dubai-royal-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--dubai-gold);
+            background: var(--theme-primary);
         }
 
-        .dubai-card:hover {
+        .dubai-royal-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 30px 60px -15px rgba(170, 119, 28, 0.25);
+            box-shadow: 0 30px 60px -15px rgba(191,149,48,0.25);
         }
 
-        /* Progress Indicator - Arabic Style */
-        .checkout-progress {
+        /* ========== THEME SWITCHER ========== */
+        .theme-switcher {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            background: white;
+            border-radius: 50px;
+            padding: 12px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: var(--border-arabic);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.2);
+            border-color: white;
+        }
+
+        .theme-option.active {
+            border-color: #bf9530;
+            box-shadow: 0 0 0 3px rgba(191,149,48,0.3);
+        }
+
+        /* ========== PROGRESS TRACKER ========== */
+        .arabic-progress {
             display: flex;
             justify-content: space-between;
             margin-bottom: 40px;
             padding: 20px 40px;
             background: rgba(255,255,255,0.7);
             border-radius: 50px;
-            border: var(--border-luxury);
+            border: var(--border-arabic);
         }
 
-        .progress-step {
+        .progress-pearl {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -86,189 +166,145 @@
             z-index: 2;
         }
 
-        .step-circle {
-            width: 48px;
-            height: 48px;
+        .pearl-circle {
+            width: 55px;
+            height: 55px;
             background: white;
             border: 3px solid #e2e8f0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
+            font-size: 20px;
             color: #64748b;
             transition: all 0.3s;
         }
 
-        .progress-step.active .step-circle {
-            background: linear-gradient(135deg, #bf9530, #b38728);
-            border-color: #bf9530;
+        .progress-pearl.active .pearl-circle {
+            background: var(--theme-primary);
+            border-color: var(--theme-gold);
             color: white;
-            box-shadow: 0 0 20px rgba(191, 149, 48, 0.5);
+            box-shadow: 0 0 25px rgba(191,149,48,0.6);
         }
 
-        .progress-step.completed .step-circle {
+        .progress-pearl.completed .pearl-circle {
             background: #10b981;
             border-color: #10b981;
             color: white;
         }
 
-        .step-label {
-            margin-top: 10px;
-            font-weight: 600;
-            font-size: 13px;
-            color: #1e293b;
-        }
-
-        /* Product Cards */
-        .product-grid {
+        /* ========== PRODUCT GRID ========== */
+        .elite-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
             margin-bottom: 30px;
         }
 
-        .product-item {
+        .product-throne {
             background: white;
-            border-radius: 24px;
-            padding: 20px;
-            border: 1px solid rgba(191, 149, 48, 0.2);
+            border-radius: var(--radius-arabic);
+            padding: 24px;
+            border: 1px solid rgba(191,149,48,0.2);
             transition: all 0.3s;
             cursor: pointer;
+            position: relative;
         }
 
-        .product-item:hover {
-            border-color: #bf9530;
-            box-shadow: 0 15px 30px -10px rgba(191,149,48,0.2);
+        .product-throne:hover {
+            border-color: var(--theme-gold);
+            box-shadow: 0 20px 40px -12px rgba(191,149,48,0.3);
+            transform: translateY(-8px);
         }
 
         .product-image {
             width: 100%;
-            height: 180px;
+            height: 220px;
             object-fit: contain;
             margin-bottom: 16px;
         }
 
         .product-price {
-            font-size: 22px;
+            font-size: 26px;
             font-weight: 800;
-            color: #b38728;
-        }
-
-        .dubai-badge {
-            background: var(--dubai-gold);
-            color: #1a2a4f;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 50px;
-            font-size: 12px;
-        }
-
-        /* Map Container */
-        .location-map {
-            height: 280px;
-            width: 100%;
-            border-radius: 20px;
-            margin-top: 16px;
-            border: 3px solid white;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        }
-
-        /* Delivery Options */
-        .delivery-card {
-            border: 2px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-        }
-
-        .delivery-card.selected {
-            border-color: #bf9530;
-            background: linear-gradient(145deg, #fffcf5, #fff7e6);
-        }
-
-        /* Wallet Grid */
-        .wallet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .wallet-option {
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: 0.2s;
-            background: white;
-        }
-
-        .wallet-option:hover {
-            border-color: #bf9530;
-            transform: scale(0.98);
-        }
-
-        .wallet-option.selected {
-            background: linear-gradient(145deg, #fef9e7, #fff8e7);
-            border-color: #bf9530;
-        }
-
-        .wallet-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        /* Auto Address Detection */
-        .address-autocomplete {
-            position: relative;
-        }
-
-        .suggestion-box {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-
-        .suggestion-item {
-            padding: 12px 20px;
-            cursor: pointer;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .suggestion-item:hover {
-            background: #f8fafc;
-        }
-
-        /* Summary Total */
-        .total-gold {
-            font-size: 28px;
-            font-weight: 800;
-            background: var(--dubai-gold);
+            background: var(--theme-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* Responsive */
+        /* ========== LIVE MAP ========== */
+        .royal-map {
+            height: 350px;
+            width: 100%;
+            border-radius: var(--radius-arabic);
+            border: 3px solid white;
+            box-shadow: var(--shadow-luxury);
+            margin-top: 16px;
+        }
+
+        /* ========== DELIVERY TRACKING ========== */
+        .tracking-timeline {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .tracking-point {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .tracking-point::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -50%;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--theme-gold), #10b981);
+            z-index: 1;
+        }
+
+        .tracking-point:first-child::before {
+            display: none;
+        }
+
+        .tracking-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--theme-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ========== ADMIN DASHBOARD ========== */
+        .admin-panel {
+            background: rgba(26, 42, 79, 0.95);
+            color: white;
+            border-radius: var(--radius-arabic);
+            padding: 28px;
+            margin-top: 30px;
+        }
+
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .checkout-progress {
+            .arabic-progress {
                 padding: 15px 20px;
+                overflow-x: auto;
             }
-            .step-circle {
-                width: 40px;
-                height: 40px;
+            .pearl-circle {
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
             }
         }
 
@@ -278,25 +314,16 @@
 
         .active-section {
             display: block;
-            animation: fadeSlide 0.4s ease;
+            animation: royalFade 0.5s ease;
         }
 
-        @keyframes fadeSlide {
+        @keyframes royalFade {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .crypto-address {
-            background: #0a1929;
-            color: #fff;
-            padding: 12px;
-            border-radius: 12px;
-            font-family: monospace;
-            letter-spacing: 2px;
-        }
-
-        .btn-dubai {
-            background: var(--dubai-gold);
+        .btn-gold {
+            background: var(--theme-primary);
             border: none;
             color: #1e293b;
             font-weight: 700;
@@ -305,919 +332,1434 @@
             transition: 0.3s;
         }
 
-        .btn-dubai:hover {
+        .btn-gold:hover {
             transform: translateY(-2px);
             box-shadow: 0 15px 30px rgba(191,149,48,0.4);
-            color: #0f172a;
+        }
+
+        /* WPA Installation Banner */
+        .install-pwa {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--theme-primary);
+            color: white;
+            border-radius: 50px;
+            padding: 16px 24px;
+            display: none;
+            z-index: 99999;
+            box-shadow: var(--shadow-luxury);
         }
     </style>
 </head>
-<body>
-
-<div class="container py-4">
-    <!-- Header - Dubai Royal -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-6 fw-800" style="background: var(--dubai-gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                <i class="fas fa-crown me-2" style="color: #bf9530;"></i>Dubai Commerce
-            </h1>
-            <p class="text-muted">Luxury Shopping • Automated Delivery • Smart Payments</p>
-        </div>
-        <div>
-            <span class="dubai-badge">
-                <i class="fas fa-map-pin me-1"></i> Deliver to: <span id="header-location">Dubai Marina</span>
-            </span>
+<body data-theme="dubai-gold">
+    <!-- ========== WPA INSTALL BANNER ========== -->
+    <div class="install-pwa" id="pwa-install-banner">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <i class="fas fa-crown me-2"></i>
+                <span class="fw-700">Install Dubai Royal Commerce</span>
+                <small class="d-block">Get faster checkout & offline access</small>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-light me-2" onclick="hideInstallBanner()">Later</button>
+                <button class="btn btn-sm btn-dark" onclick="installPWA()">Install</button>
+            </div>
         </div>
     </div>
 
-    <!-- Progress Steps -->
-    <div class="checkout-progress mb-5">
-        <div class="progress-step active" data-step="1">
-            <div class="step-circle">1</div>
-            <span class="step-label">SHOP</span>
-        </div>
-        <div class="progress-step" data-step="2">
-            <div class="step-circle">2</div>
-            <span class="step-label">ADDRESS</span>
-        </div>
-        <div class="progress-step" data-step="3">
-            <div class="step-circle">3</div>
-            <span class="step-label">DELIVERY</span>
-        </div>
-        <div class="progress-step" data-step="4">
-            <div class="step-circle">4</div>
-            <span class="step-label">PAYMENT</span>
-        </div>
-        <div class="progress-step" data-step="5">
-            <div class="step-circle">5</div>
-            <span class="step-label">CONFIRM</span>
+    <!-- ========== THEME SWITCHER ========== -->
+    <div class="theme-switcher">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-palette me-2" style="color: var(--theme-gold);"></i>
+            <div class="theme-option active" data-theme="dubai-gold" style="background: linear-gradient(135deg, #bf9530, #aa771c);" onclick="switchTheme('dubai-gold')"></div>
+            <div class="theme-option" data-theme="midnight-sapphire" style="background: linear-gradient(135deg, #0f2027, #2c5364);" onclick="switchTheme('midnight-sapphire')"></div>
+            <div class="theme-option" data-theme="emerald-royal" style="background: linear-gradient(135deg, #134e5e, #71b280);" onclick="switchTheme('emerald-royal')"></div>
+            <div class="theme-option" data-theme="rose-gold" style="background: linear-gradient(135deg, #b2452e, #e77d6d);" onclick="switchTheme('rose-gold')"></div>
         </div>
     </div>
 
-    <!-- ==================== SECTION 1: SHOPPING ==================== -->
-    <div id="shop-section" class="active-section">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="dubai-card">
-                    <h4 class="fw-700 mb-4"><i class="fas fa-store-alt me-2" style="color: #bf9530;"></i> Elite Collection</h4>
-                    
-                    <div class="product-grid" id="product-list">
-                        <!-- Dynamic Products from Dubai -->
-                    </div>
+    <div class="container py-4">
+        <!-- ========== HEADER ========== -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="display-6 fw-800" style="background: var(--theme-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <i class="fas fa-crown me-2"></i>Dubai Royal Commerce
+                </h1>
+                <div class="d-flex gap-3 mt-2">
+                    <span class="badge bg-dark"><i class="fas fa-map-pin me-1"></i>Deliver: <span id="header-location">Dubai Marina</span></span>
+                    <span class="badge bg-warning text-dark"><i class="fas fa-database me-1"></i><span id="db-status">SQL Ready</span></span>
+                    <span class="badge bg-info"><i class="fas fa-shield-alt me-1"></i>WPA Ready</span>
                 </div>
             </div>
-            
-            <div class="col-lg-4">
-                <div class="dubai-card sticky-top" style="top: 20px;">
-                    <h5 class="fw-700 mb-3"><i class="fas fa-shopping-bag me-2"></i> Your Cart</h5>
-                    <div id="cart-mini-container">
-                        <!-- Cart items here -->
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span class="fw-700" id="cart-subtotal">$0.00</span>
-                    </div>
-                    <button class="btn-dubai w-100 mt-3" onclick="proceedToAddress()" id="checkout-btn">
-                        Proceed to Checkout <i class="fas fa-arrow-right ms-2"></i>
+            <div>
+                <button class="btn btn-outline-warning me-2" onclick="toggleAdminPanel()">
+                    <i class="fas fa-cog me-1"></i>Admin
+                </button>
+                <button class="btn btn-outline-secondary" onclick="backupSystem()">
+                    <i class="fas fa-database me-1"></i>Backup
+                </button>
+            </div>
+        </div>
+
+        <!-- ========== ADMIN PANEL ========== -->
+        <div id="admin-panel" class="admin-panel mb-4" style="display: none;">
+            <div class="row">
+                <div class="col-md-3">
+                    <h6 class="fw-700 text-white">System Stats</h6>
+                    <p class="text-white-50 mb-1">Orders Today: <span id="stats-orders">0</span></p>
+                    <p class="text-white-50 mb-1">Revenue: $<span id="stats-revenue">0</span></p>
+                    <p class="text-white-50">Active Users: <span id="stats-users">1</span></p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-700 text-white">Delivery Config</h6>
+                    <select class="form-control form-control-sm mb-2" id="admin-city-select">
+                        <option>Dubai</option>
+                        <option>Abu Dhabi</option>
+                        <option>Sharjah</option>
+                        <option>Karachi</option>
+                        <option>London</option>
+                    </select>
+                    <input type="number" class="form-control form-control-sm mb-1" id="admin-standard-rate" placeholder="Standard Rate">
+                    <input type="number" class="form-control form-control-sm mb-1" id="admin-express-rate" placeholder="Express Rate">
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-700 text-white">Backup Control</h6>
+                    <button class="btn btn-sm btn-light mb-2 w-100" onclick="createSQLBackup()">
+                        <i class="fas fa-save me-1"></i>Create SQL Backup
+                    </button>
+                    <button class="btn btn-sm btn-light w-100" onclick="restoreSQLBackup()">
+                        <i class="fas fa-undo me-1"></i>Restore Backup
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-700 text-white">Theme Bundle</h6>
+                    <button class="btn btn-sm btn-light w-100 mb-1" onclick="exportTheme()">
+                        <i class="fas fa-file-export me-1"></i>Export Theme
+                    </button>
+                    <button class="btn btn-sm btn-light w-100" onclick="importTheme()">
+                        <i class="fas fa-file-import me-1"></i>Import Theme
                     </button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ==================== SECTION 2: ADDRESS & AUTO DETECTION ==================== -->
-    <div id="address-section" class="hidden-section">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="dubai-card">
-                    <h4 class="fw-700 mb-4"><i class="fas fa-map-marker-alt me-2" style="color: #bf9530;"></i> Smart Address Verification</h4>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-600 mb-1">Full Name</label>
-                            <input type="text" class="form-control form-control-lg" id="address-name" placeholder="Sheikh / Sheikhah">
+        <!-- ========== PROGRESS PEARLS ========== -->
+        <div class="arabic-progress">
+            <div class="progress-pearl active" data-step="1">
+                <div class="pearl-circle">1</div>
+                <span class="mt-2 fw-600">SHOP</span>
+            </div>
+            <div class="progress-pearl" data-step="2">
+                <div class="pearl-circle">2</div>
+                <span class="mt-2 fw-600">ADDRESS</span>
+            </div>
+            <div class="progress-pearl" data-step="3">
+                <div class="pearl-circle">3</div>
+                <span class="mt-2 fw-600">DELIVERY</span>
+            </div>
+            <div class="progress-pearl" data-step="4">
+                <div class="pearl-circle">4</div>
+                <span class="mt-2 fw-600">PAYMENT</span>
+            </div>
+            <div class="progress-pearl" data-step="5">
+                <div class="pearl-circle">5</div>
+                <span class="mt-2 fw-600">TRACK</span>
+            </div>
+            <div class="progress-pearl" data-step="6">
+                <div class="pearl-circle">6</div>
+                <span class="mt-2 fw-600">CONFIRM</span>
+            </div>
+        </div>
+
+        <!-- ========== SECTION 1: SHOPPING ========== -->
+        <div id="shop-section" class="active-section">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="dubai-royal-card">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-700"><i class="fas fa-store-alt me-2" style="color: var(--theme-gold);"></i> Royal Collection</h4>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="product-search" placeholder="Search products..." style="width: 250px;">
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-600 mb-1">Phone (WhatsApp)</label>
-                            <input type="tel" class="form-control form-control-lg" id="address-phone" placeholder="+971 XX XXX XXXX">
+                        
+                        <div class="elite-grid" id="product-grid">
+                            <!-- Products loaded dynamically -->
                         </div>
-                    </div>
-                    
-                    <div class="address-autocomplete mb-3">
-                        <label class="fw-600 mb-1">Search Your Address</label>
-                        <input type="text" class="form-control form-control-lg" id="address-search" placeholder="Start typing your location...">
-                        <div class="suggestion-box" id="address-suggestions"></div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <label class="fw-600 mb-1">Street / Building / Apartment</label>
-                            <input type="text" class="form-control" id="address-street" placeholder="Burj Khalifa, Downtown">
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-600 mb-1">Postal Code</label>
-                            <input type="text" class="form-control" id="address-postal" placeholder="00000">
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-600 mb-1">City / Emirate</label>
-                            <select class="form-control" id="address-city">
-                                <option value="">Select City</option>
-                                <option value="Dubai">Dubai</option>
-                                <option value="Abu Dhabi">Abu Dhabi</option>
-                                <option value="Sharjah">Sharjah</option>
-                                <option value="Ajman">Ajman</option>
-                                <option value="Ras Al Khaimah">Ras Al Khaimah</option>
-                                <option value="Fujairah">Fujairah</option>
-                                <option value="Umm Al Quwain">Umm Al Quwain</option>
-                                <option value="London">London (International)</option>
-                                <option value="New York">New York (International)</option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Karachi">Karachi</option>
-                                <option value="Lahore">Lahore</option>
-                                <option value="Islamabad">Islamabad</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-600 mb-1">Country</label>
-                            <input type="text" class="form-control" id="address-country" value="United Arab Emirates" readonly>
-                        </div>
-                    </div>
-                    
-                    <!-- Free Map - Leaflet -->
-                    <label class="fw-600 mb-2"><i class="fas fa-globe-asia me-2"></i> Pin Your Location (Drag Me)</label>
-                    <div id="address-map" class="location-map"></div>
-                    
-                    <div class="mt-3 text-end">
-                        <button class="btn btn-outline-secondary me-2" onclick="backToShop()">Back</button>
-                        <button class="btn-dubai" onclick="verifyAddressAndCalculate()">Verify & Calculate Delivery</button>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-lg-5">
-                <div class="dubai-card">
-                    <h5 class="fw-700 mb-3"><i class="fas fa-truck me-2"></i> Live Delivery Intelligence</h5>
-                    <div id="delivery-intelligence">
-                        <p class="text-muted">Enter address to calculate real-time shipping</p>
-                    </div>
-                    <hr>
-                    <div id="address-summary" class="mt-3 small">
-                        <!-- Auto populated -->
+                
+                <div class="col-lg-4">
+                    <div class="dubai-royal-card sticky-top" style="top: 20px;">
+                        <h5 class="fw-700 mb-3"><i class="fas fa-shopping-bag me-2"></i> Your Cart</h5>
+                        <div id="cart-container">
+                            <!-- Cart items -->
+                        </div>
+                        <div id="cart-summary" class="mt-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span class="fw-700" id="cart-subtotal">$0.00</span>
+                            </div>
+                            <button class="btn-gold w-100 mt-3" onclick="proceedToCheckout()" id="checkout-btn">
+                                Secure Checkout <i class="fas fa-lock ms-2"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ==================== SECTION 3: DELIVERY OPTIONS ==================== -->
-    <div id="delivery-section" class="hidden-section">
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="dubai-card">
-                    <h4 class="fw-700 mb-4"><i class="fas fa-shipping-fast me-2" style="color: #bf9530;"></i> Choose Delivery Speed</h4>
-                    
-                    <div id="delivery-options-container">
-                        <!-- Dynamic from address base -->
-                    </div>
-                    
-                    <div class="mt-4">
-                        <button class="btn btn-outline-secondary me-2" onclick="backToAddress()">Back</button>
-                        <button class="btn-dubai" onclick="confirmDelivery()">Confirm & Choose Payment</button>
+        <!-- ========== SECTION 2: ADDRESS ========== -->
+        <div id="address-section" class="hidden-section">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="dubai-royal-card">
+                        <h4 class="fw-700 mb-4"><i class="fas fa-map-marker-alt me-2" style="color: var(--theme-gold);"></i> Smart Address Verification</h4>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">Full Name</label>
+                                <input type="text" class="form-control form-control-lg" id="address-name" placeholder="Sheikh / Sheikhah">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">Phone Number</label>
+                                <input type="tel" class="form-control form-control-lg" id="address-phone" placeholder="+971 XX XXX XXXX">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">Email Address</label>
+                                <input type="email" class="form-control" id="address-email" placeholder="royal@example.com">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">Postal Code</label>
+                                <input type="text" class="form-control" id="address-postal" placeholder="00000">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="fw-600 mb-1">Complete Address</label>
+                            <textarea class="form-control" id="address-street" rows="2" placeholder="Building, street, area"></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">City / Emirate</label>
+                                <select class="form-control" id="address-city">
+                                    <option value="">Select City</option>
+                                    <option value="Dubai">Dubai</option>
+                                    <option value="Abu Dhabi">Abu Dhabi</option>
+                                    <option value="Sharjah">Sharjah</option>
+                                    <option value="Karachi">Karachi</option>
+                                    <option value="Lahore">Lahore</option>
+                                    <option value="Islamabad">Islamabad</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="London">London</option>
+                                    <option value="New York">New York</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-600 mb-1">Country</label>
+                                <input type="text" class="form-control" id="address-country" value="United Arab Emirates">
+                            </div>
+                        </div>
+                        
+                        <label class="fw-600 mb-2"><i class="fas fa-map-pin me-2"></i> Pin Your Location (Drag to pin)</label>
+                        <div id="address-map" class="royal-map"></div>
+                        
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button class="btn btn-outline-secondary" onclick="backToShop()">Back</button>
+                            <button class="btn-gold" onclick="verifyAddress()">Verify & Calculate Delivery</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-lg-4">
-                <div class="dubai-card">
-                    <h5 class="fw-700 mb-3">Order Snapshot</h5>
-                    <div id="delivery-order-summary"></div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <span>Estimated Arrival:</span>
-                        <span class="fw-700" id="eta-display">--</span>
+                
+                <div class="col-lg-5">
+                    <div class="dubai-royal-card">
+                        <h5 class="fw-700 mb-3"><i class="fas fa-truck me-2"></i> Delivery Intelligence</h5>
+                        <div id="delivery-preview">
+                            <p class="text-muted">Enter address to calculate shipping</p>
+                        </div>
+                        <div id="address-verification-status" class="mt-3"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- ==================== SECTION 4: PAYMENT GATEWAY ==================== -->
-    <div id="payment-section" class="hidden-section">
-        <div class="row">
-            <div class="col-lg-7">
-                <div class="dubai-card">
-                    <h4 class="fw-700 mb-4"><i class="fas fa-wallet me-2" style="color: #bf9530;"></i> Smart Payment Hub</h4>
-                    
-                    <!-- Country based detection -->
-                    <div class="alert alert-warning bg-light border-0" id="country-payment-note">
-                        <i class="fas fa-globe me-2"></i> Detected: <span id="detected-country-name">UAE</span> — Showing relevant payment methods
-                    </div>
-                    
-                    <!-- Wallets Section - Dynamic, No JazzCash fixed -->
-                    <h6 class="fw-700 mt-3 mb-3"><i class="fas fa-mobile-alt me-2"></i> Digital Wallets</h6>
-                    <div class="wallet-grid" id="wallets-container"></div>
-                    
-                    <!-- Cards & Banks -->
-                    <h6 class="fw-700 mt-4 mb-3"><i class="fas fa-credit-card me-2"></i> Cards & Banks</h6>
-                    <div class="wallet-grid" id="cards-container"></div>
-                    
-                    <!-- Cryptocurrency -->
-                    <h6 class="fw-700 mt-4 mb-3"><i class="fab fa-bitcoin me-2"></i> Cryptocurrency</h6>
-                    <div class="wallet-grid" id="crypto-container"></div>
-                    
-                    <!-- Selected Payment Details -->
-                    <div id="payment-details-panel" class="mt-4 p-3 bg-light rounded-3" style="display: none;"></div>
-                    
-                    <div class="mt-4 d-flex justify-content-between">
-                        <button class="btn btn-outline-secondary" onclick="backToDelivery()">Back</button>
-                        <button class="btn-dubai" onclick="processSecurePayment()" id="pay-now-btn">
-                            <i class="fas fa-lock me-2"></i>Pay Securely
-                        </button>
+        <!-- ========== SECTION 3: DELIVERY ========== -->
+        <div id="delivery-section" class="hidden-section">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="dubai-royal-card">
+                        <h4 class="fw-700 mb-4"><i class="fas fa-shipping-fast me-2"></i> Premium Delivery Options</h4>
+                        <div id="delivery-options"></div>
+                        
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button class="btn btn-outline-secondary" onclick="backToAddress()">Back</button>
+                            <button class="btn-gold" onclick="confirmDeliverySelection()">Continue to Payment</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-lg-5">
-                <div class="dubai-card">
-                    <h5 class="fw-700 mb-3">Payment Summary</h5>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span id="payment-subtotal">$0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Delivery:</span>
-                        <span id="payment-delivery">$0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tax (5% VAT):</span>
-                        <span id="payment-tax">$0.00</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between fw-800 fs-5">
-                        <span>Total:</span>
-                        <span id="payment-total" class="total-gold">$0.00</span>
-                    </div>
-                    <div class="mt-3 small text-muted">
-                        <i class="fas fa-shield-alt me-1"></i> 256-bit SSL Encrypted
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== SECTION 5: ORDER CONFIRMATION ==================== -->
-    <div id="confirmation-section" class="hidden-section">
-        <div class="dubai-card text-center p-5">
-            <div class="mb-4">
-                <i class="fas fa-check-circle fa-6x" style="color: #10b981;"></i>
-            </div>
-            <h2 class="fw-800 mb-2">✨ Order Confirmed ✨</h2>
-            <p class="lead mb-4">Your luxury order has been placed successfully</p>
-            
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="bg-light p-4 rounded-4 text-start">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Order Number:</span>
-                            <span class="fw-700" id="confirm-order-number">ORD-2025-0001</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Delivery Address:</span>
-                            <span id="confirm-address">Dubai Marina</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Delivery Method:</span>
-                            <span id="confirm-delivery">Express</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Payment Method:</span>
-                            <span id="confirm-payment">Wallet</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
+                
+                <div class="col-lg-4">
+                    <div class="dubai-royal-card">
+                        <h5 class="fw-700 mb-3">Order Summary</h5>
+                        <div id="delivery-order-summary"></div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
                             <span>Estimated Delivery:</span>
-                            <span id="confirm-eta">Tomorrow</span>
-                        </div>
-                        <div class="d-flex justify-content-between fw-700 fs-5 mt-3">
-                            <span>Total Paid:</span>
-                            <span id="confirm-total" style="color: #b38728;">$0.00</span>
+                            <span class="fw-700" id="delivery-eta">--</span>
                         </div>
                     </div>
-                    
-                    <div class="mt-4 d-flex gap-3 justify-content-center">
-                        <button class="btn btn-outline-primary" onclick="trackOrderNow()">
-                            <i class="fas fa-shipping-fast me-2"></i>Track
-                        </button>
-                        <button class="btn-dubai" onclick="resetToShop()">
-                            <i class="fas fa-store me-2"></i>Shop Again
-                        </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECTION 4: PAYMENT ========== -->
+        <div id="payment-section" class="hidden-section">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="dubai-royal-card">
+                        <h4 class="fw-700 mb-4"><i class="fas fa-credit-card me-2"></i> Smart Payment Hub</h4>
+                        
+                        <div class="alert alert-warning border-0" id="country-payment-alert">
+                            <i class="fas fa-globe me-2"></i> Detected: <span id="detected-country">UAE</span> — Optimized payment methods
+                        </div>
+                        
+                        <!-- Digital Wallets -->
+                        <h6 class="fw-700 mt-3"><i class="fas fa-mobile-alt me-2"></i> Digital Wallets</h6>
+                        <div class="row g-2 mb-3" id="wallets-row"></div>
+                        
+                        <!-- Cards & Banks -->
+                        <h6 class="fw-700 mt-3"><i class="fas fa-credit-card me-2"></i> Cards & Banks</h6>
+                        <div class="row g-2 mb-3" id="banks-row"></div>
+                        
+                        <!-- Cryptocurrency -->
+                        <h6 class="fw-700 mt-3"><i class="fab fa-bitcoin me-2"></i> Cryptocurrency</h6>
+                        <div class="row g-2 mb-3" id="crypto-row"></div>
+                        
+                        <!-- Payment Details Panel -->
+                        <div id="payment-details-panel" class="mt-3 p-3 bg-light rounded-3" style="display: none;"></div>
+                        
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button class="btn btn-outline-secondary" onclick="backToDelivery()">Back</button>
+                            <button class="btn-gold" onclick="processPayment()" id="process-payment-btn">
+                                <i class="fas fa-lock me-2"></i>Pay Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-5">
+                    <div class="dubai-royal-card">
+                        <h5 class="fw-700 mb-3">Payment Summary</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span id="payment-subtotal">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Delivery:</span>
+                            <span id="payment-delivery">$0.00</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>VAT (5%):</span>
+                            <span id="payment-tax">$0.00</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between fw-800 fs-5">
+                            <span>Total:</span>
+                            <span id="payment-total" style="color: var(--theme-gold);">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECTION 5: TRACKING ========== -->
+        <div id="tracking-section" class="hidden-section">
+            <div class="dubai-royal-card">
+                <h4 class="fw-700 mb-4"><i class="fas fa-shipping-fast me-2"></i> Live Order Tracking</h4>
+                
+                <div class="tracking-timeline" id="tracking-timeline">
+                    <div class="tracking-point active">
+                        <div class="tracking-icon"><i class="fas fa-check"></i></div>
+                        <span class="fw-600">Order Placed</span>
+                        <small class="d-block text-muted" id="track-time1">Just now</small>
+                    </div>
+                    <div class="tracking-point">
+                        <div class="tracking-icon"><i class="fas fa-box"></i></div>
+                        <span class="fw-600">Picked</span>
+                        <small class="d-block text-muted" id="track-time2">--</small>
+                    </div>
+                    <div class="tracking-point">
+                        <div class="tracking-icon"><i class="fas fa-truck"></i></div>
+                        <span class="fw-600">Out for Delivery</span>
+                        <small class="d-block text-muted" id="track-time3">--</small>
+                    </div>
+                    <div class="tracking-point">
+                        <div class="tracking-icon"><i class="fas fa-home"></i></div>
+                        <span class="fw-600">Delivered</span>
+                        <small class="d-block text-muted" id="track-time4">--</small>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="bg-light p-3 rounded-3">
+                            <h6 class="fw-700">Order Details</h6>
+                            <div id="tracking-order-details"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="bg-light p-3 rounded-3">
+                            <h6 class="fw-700">Delivery Partner</h6>
+                            <div id="tracking-partner"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn-gold" onclick="continueToConfirmation()">Continue to Confirmation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SECTION 6: CONFIRMATION ========== -->
+        <div id="confirmation-section" class="hidden-section">
+            <div class="dubai-royal-card text-center p-5">
+                <div class="mb-4">
+                    <i class="fas fa-check-circle fa-6x" style="color: #10b981;"></i>
+                </div>
+                <h2 class="fw-800 mb-2">Order Confirmed!</h2>
+                <p class="lead mb-4">Your royal order has been placed successfully</p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="bg-light p-4 rounded-4 text-start">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Order Number:</span>
+                                <span class="fw-700" id="confirm-order-number">ORD-2025-0001</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tracking ID:</span>
+                                <span class="fw-700 text-primary" id="confirm-tracking">TRK-123456</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Delivery Address:</span>
+                                <span id="confirm-address">Dubai Marina</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Estimated Delivery:</span>
+                                <span id="confirm-eta">Tomorrow</span>
+                            </div>
+                            <div class="d-flex justify-content-between fw-700 fs-5 mt-3">
+                                <span>Total Paid:</span>
+                                <span id="confirm-total" style="color: var(--theme-gold);">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 d-flex gap-3 justify-content-center">
+                            <button class="btn btn-outline-primary" onclick="viewLiveTracking()">
+                                <i class="fas fa-map-marker-alt me-2"></i>Live Track
+                            </button>
+                            <button class="btn-gold" onclick="resetSystem()">
+                                <i class="fas fa-store me-2"></i>Shop Again
+                            </button>
+                            <button class="btn btn-outline-secondary" onclick="downloadReceipt()">
+                                <i class="fas fa-download me-2"></i>Receipt
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    // --------------------------------------------------------------
-    // DUBAI COMMERCE SYSTEM - FULLY AUTOMATED | SMART PAYMENTS | MAPS
-    // --------------------------------------------------------------
-    
-    // ---------- GLOBAL STATE ----------
-    let currentStep = 1;
-    let cart = [];
-    let products = [];
-    let userAddress = null;
-    let selectedDelivery = null;
-    let selectedPayment = null;
-    let deliveryChargesConfig = null; // from index control
-    let etaConfig = null;
-    let map = null;
-    let mapMarker = null;
-    
-    // ---------- INITIALIZATION ----------
-    document.addEventListener('DOMContentLoaded', function() {
-        // Load products (Dubai Collection)
-        loadProductCatalog();
-        // Load delivery config from localStorage or defaults
-        loadDeliveryConfig();
-        // Initialize empty cart
-        updateCartUI();
-        // Setup address autocomplete simulation
-        setupAddressAutocomplete();
-        // Load payment methods based on country
-    });
-    
-    // ---------- PRODUCT CATALOG (Dubai Edition) ----------
-    function loadProductCatalog() {
-        products = [
-            { id: 1, name: 'Dubai Gold Date Box', price: 349.99, image: 'https://images.unsplash.com/photo-1599493595981-1df4c7dc984d?w=400', category: 'Luxury', weight: 1.2 },
-            { id: 2, name: 'Saffron Elite (10g)', price: 189.99, image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400', category: 'Spices', weight: 0.1 },
-            { id: 3, name: 'Arabian Oud Perfume', price: 599.99, image: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=400', category: 'Fragrance', weight: 0.3 },
-            { id: 4, name: 'Camel Milk Chocolate', price: 79.99, image: 'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400', category: 'Gourmet', weight: 0.5 },
-            { id: 5, name: 'Gold Plated Lamp', price: 1299.99, image: 'https://images.unsplash.com/photo-1543198126-a4ad8e3be0b6?w=400', category: 'Decor', weight: 2.5 },
-            { id: 6, name: 'Pashmina Shawl', price: 449.99, image: 'https://images.unsplash.com/photo-1601924921557-45e6dea0a157?w=400', category: 'Fashion', weight: 0.4 },
-        ];
+    <script>
+        // ========== DUBAI ROYAL COMMERCE - COMPLETE SYSTEM ==========
+        // SQL Database, WPA, Tracking, Theme Bundle, Auto Delivery, All Features
         
-        renderProductGrid();
-    }
-    
-    function renderProductGrid() {
-        const grid = document.getElementById('product-list');
-        if (!grid) return;
+        // ---------- GLOBAL STATE ----------
+        let SQL = null;
+        let db = null;
+        let deferredPrompt;
+        let currentStep = 1;
+        let cart = [];
+        let products = [];
+        let userAddress = null;
+        let selectedDelivery = null;
+        let selectedPayment = null;
+        let currentOrder = null;
+        let map = null;
+        let mapMarker = null;
+        let deliveryConfig = null;
         
-        let html = '';
-        products.forEach(p => {
-            html += `
-                <div class="product-item">
-                    <img src="${p.image}" class="product-image" alt="${p.name}">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <h6 class="fw-700 mb-1">${p.name}</h6>
-                            <span class="dubai-badge">${p.category}</span>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="product-price">$${p.price.toFixed(2)}</span>
-                        <button class="btn btn-sm btn-outline-warning" onclick="addToCart(${p.id})">
-                            <i class="fas fa-plus me-1"></i>Add
-                        </button>
-                    </div>
-                </div>
-            `;
+        // ---------- WPA INSTALLATION ----------
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwa-install-banner').style.display = 'block';
         });
-        grid.innerHTML = html;
-    }
-    
-    // ---------- CART MANAGEMENT ----------
-    function addToCart(productId) {
-        const product = products.find(p => p.id === productId);
-        if (!product) return;
         
-        const existing = cart.find(item => item.id === productId);
-        if (existing) {
-            existing.quantity += 1;
-        } else {
-            cart.push({
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                weight: product.weight,
-                quantity: 1,
-                image: product.image
+        window.installPWA = function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('WPA installed');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('pwa-install-banner').style.display = 'none';
+                });
+            }
+        };
+        
+        window.hideInstallBanner = function() {
+            document.getElementById('pwa-install-banner').style.display = 'none';
+        };
+        
+        // ---------- THEME SWITCHER ----------
+        window.switchTheme = function(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('dubai_theme', theme);
+            
+            // Update active state
+            document.querySelectorAll('.theme-option').forEach(el => {
+                el.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        };
+        
+        // Load saved theme
+        const savedTheme = localStorage.getItem('dubai_theme');
+        if (savedTheme) {
+            document.body.setAttribute('data-theme', savedTheme);
+            document.querySelectorAll('.theme-option').forEach(el => {
+                if (el.getAttribute('data-theme') === savedTheme) {
+                    el.classList.add('active');
+                }
             });
         }
-        updateCartUI();
-        showToast('Added to cart', 'success');
-    }
-    
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.id !== productId);
-        updateCartUI();
-    }
-    
-    function updateQuantity(productId, change) {
-        const item = cart.find(i => i.id === productId);
-        if (item) {
-            item.quantity += change;
-            if (item.quantity <= 0) {
-                removeFromCart(productId);
-            } else {
-                updateCartUI();
+        
+        // ---------- SQL DATABASE INITIALIZATION ----------
+        async function initSQLDatabase() {
+            try {
+                const SQL = await initSqlJs({
+                    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+                });
+                
+                // Create database
+                db = new SQL.Database();
+                
+                // Create tables
+                db.run(`
+                    CREATE TABLE IF NOT EXISTS products (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT,
+                        price REAL,
+                        weight REAL,
+                        category TEXT,
+                        image TEXT,
+                        stock INTEGER
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS orders (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        order_number TEXT UNIQUE,
+                        customer_name TEXT,
+                        customer_phone TEXT,
+                        customer_email TEXT,
+                        address TEXT,
+                        city TEXT,
+                        total REAL,
+                        delivery_charge REAL,
+                        payment_method TEXT,
+                        status TEXT,
+                        tracking_number TEXT,
+                        order_date TEXT,
+                        estimated_delivery TEXT
+                    );
+                    
+                    CREATE TABLE IF NOT EXISTS backups (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        backup_date TEXT,
+                        data TEXT
+                    );
+                `);
+                
+                // Insert sample products
+                const products = [
+                    [1, 'Dubai Gold Date Box', 349.99, 1.2, 'Luxury', 'https://images.unsplash.com/photo-1599493595981-1df4c7dc984d?w=400', 100],
+                    [2, 'Saffron Elite (10g)', 189.99, 0.1, 'Spices', 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400', 50],
+                    [3, 'Arabian Oud Perfume', 599.99, 0.3, 'Fragrance', 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=400', 30],
+                    [4, 'Camel Milk Chocolate', 79.99, 0.5, 'Gourmet', 'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400', 200],
+                    [5, 'Gold Plated Lamp', 1299.99, 2.5, 'Decor', 'https://images.unsplash.com/photo-1543198126-a4ad8e3be0b6?w=400', 15],
+                    [6, 'Pashmina Shawl', 449.99, 0.4, 'Fashion', 'https://images.unsplash.com/photo-1601924921557-45e6dea0a157?w=400', 40]
+                ];
+                
+                const stmt = db.prepare(`
+                    INSERT OR REPLACE INTO products (id, name, price, weight, category, image, stock)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                `);
+                
+                products.forEach(p => stmt.run(p));
+                stmt.free();
+                
+                document.getElementById('db-status').innerText = 'SQL Online';
+                loadProductsFromDB();
+                
+            } catch (error) {
+                console.error('SQL Error:', error);
+                document.getElementById('db-status').innerText = 'SQL Fallback';
+                loadSampleProducts();
             }
         }
-    }
-    
-    function updateCartUI() {
-        const container = document.getElementById('cart-mini-container');
-        const subtotalEl = document.getElementById('cart-subtotal');
-        const checkoutBtn = document.getElementById('checkout-btn');
         
-        if (!container) return;
-        
-        if (cart.length === 0) {
-            container.innerHTML = '<p class="text-muted text-center py-3">Your cart is empty</p>';
-            subtotalEl.innerText = '$0.00';
-            if (checkoutBtn) checkoutBtn.disabled = true;
-            return;
-        }
-        
-        let html = '';
-        let subtotal = 0;
-        
-        cart.forEach(item => {
-            subtotal += item.price * item.quantity;
-            html += `
-                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                    <div class="flex-grow-1">
-                        <h6 class="fw-600 mb-0">${item.name}</h6>
-                        <small>$${item.price.toFixed(2)} x ${item.quantity}</small>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="fw-700 me-3">$${(item.price * item.quantity).toFixed(2)}</span>
-                        <button class="btn btn-sm btn-link text-danger p-0 me-2" onclick="updateQuantity(${item.id}, -1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button class="btn btn-sm btn-link p-0" onclick="updateQuantity(${item.id}, 1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-        subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
-        if (checkoutBtn) checkoutBtn.disabled = false;
-    }
-    
-    // ---------- STEP NAVIGATION ----------
-    function proceedToAddress() {
-        if (cart.length === 0) {
-            alert('Your cart is empty');
-            return;
-        }
-        switchStep(2);
-    }
-    
-    function backToShop() {
-        switchStep(1);
-    }
-    
-    function backToAddress() {
-        switchStep(2);
-    }
-    
-    function backToDelivery() {
-        switchStep(3);
-    }
-    
-    function switchStep(step) {
-        // Hide all sections
-        document.querySelectorAll('#shop-section, #address-section, #delivery-section, #payment-section, #confirmation-section')
-            .forEach(el => el.classList.add('hidden-section'));
-        
-        // Show selected
-        if (step === 1) document.getElementById('shop-section').classList.remove('hidden-section');
-        if (step === 2) document.getElementById('address-section').classList.remove('hidden-section');
-        if (step === 3) document.getElementById('delivery-section').classList.remove('hidden-section');
-        if (step === 4) document.getElementById('payment-section').classList.remove('hidden-section');
-        if (step === 5) document.getElementById('confirmation-section').classList.remove('hidden-section');
-        
-        // Update progress steps
-        document.querySelectorAll('.progress-step').forEach((el, idx) => {
-            el.classList.remove('active', 'completed');
-            if (idx + 1 < step) el.classList.add('completed');
-            if (idx + 1 === step) el.classList.add('active');
-        });
-        
-        currentStep = step;
-        
-        // Initialize specific sections
-        if (step === 2) initAddressMap();
-        if (step === 3) renderDeliveryOptions();
-        if (step === 4) renderPaymentMethods();
-    }
-    
-    // ---------- ADDRESS & MAP (LEAFLET) ----------
-    function initAddressMap() {
-        if (map) return;
-        
-        // Default Dubai coordinates
-        const dubaiLatLng = [25.2048, 55.2708];
-        
-        map = L.map('address-map').setView(dubaiLatLng, 12);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-        
-        mapMarker = L.marker(dubaiLatLng, { draggable: true }).addTo(map);
-        
-        mapMarker.on('dragend', function(e) {
-            const pos = e.target.getLatLng();
-            reverseGeocode(pos.lat, pos.lng);
-        });
-    }
-    
-    function reverseGeocode(lat, lng) {
-        // Simulate reverse geocoding
-        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.display_name) {
-                    document.getElementById('address-search').value = data.display_name.split(',')[0];
-                    document.getElementById('address-street').value = data.road || '';
-                    document.getElementById('address-city').value = data.city || data.town || 'Dubai';
+        // ---------- LOAD PRODUCTS ----------
+        function loadProductsFromDB() {
+            if (db) {
+                const result = db.exec("SELECT * FROM products");
+                if (result.length > 0) {
+                    products = result[0].values.map(row => ({
+                        id: row[0],
+                        name: row[1],
+                        price: row[2],
+                        weight: row[3],
+                        category: row[4],
+                        image: row[5],
+                        stock: row[6]
+                    }));
                 }
-            })
-            .catch(() => {
-                // Fallback
-                document.getElementById('address-city').value = 'Dubai';
-            });
-    }
-    
-    function setupAddressAutocomplete() {
-        const searchInput = document.getElementById('address-search');
-        const suggestionsBox = document.getElementById('address-suggestions');
+            }
+            renderProductGrid();
+        }
         
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value;
-            if (query.length < 3) {
-                suggestionsBox.style.display = 'none';
+        function loadSampleProducts() {
+            products = [
+                { id: 1, name: 'Dubai Gold Date Box', price: 349.99, weight: 1.2, category: 'Luxury', image: 'https://images.unsplash.com/photo-1599493595981-1df4c7dc984d?w=400', stock: 100 },
+                { id: 2, name: 'Saffron Elite (10g)', price: 189.99, weight: 0.1, category: 'Spices', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400', stock: 50 },
+                { id: 3, name: 'Arabian Oud Perfume', price: 599.99, weight: 0.3, category: 'Fragrance', image: 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?w=400', stock: 30 },
+                { id: 4, name: 'Camel Milk Chocolate', price: 79.99, weight: 0.5, category: 'Gourmet', image: 'https://images.unsplash.com/photo-1587132137056-bfbf0166836e?w=400', stock: 200 },
+                { id: 5, name: 'Gold Plated Lamp', price: 1299.99, weight: 2.5, category: 'Decor', image: 'https://images.unsplash.com/photo-1543198126-a4ad8e3be0b6?w=400', stock: 15 },
+                { id: 6, name: 'Pashmina Shawl', price: 449.99, weight: 0.4, category: 'Fashion', image: 'https://images.unsplash.com/photo-1601924921557-45e6dea0a157?w=400', stock: 40 }
+            ];
+            renderProductGrid();
+        }
+        
+        // ---------- RENDER PRODUCTS ----------
+        function renderProductGrid() {
+            const grid = document.getElementById('product-grid');
+            if (!grid) return;
+            
+            let html = '';
+            products.forEach(p => {
+                html += `
+                    <div class="product-throne">
+                        <img src="${p.image}" class="product-image" alt="${p.name}" loading="lazy">
+                        <span class="badge bg-warning text-dark mb-2">${p.category}</span>
+                        <h6 class="fw-700 mb-1">${p.name}</h6>
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="product-price">$${p.price.toFixed(2)}</span>
+                            <button class="btn btn-sm btn-outline-warning" onclick="addToCart(${p.id})">
+                                <i class="fas fa-plus me-1"></i>Add
+                            </button>
+                        </div>
+                        <small class="text-muted">Stock: ${p.stock}</small>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+        }
+        
+        // ---------- CART MANAGEMENT ----------
+        window.addToCart = function(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            const existing = cart.find(item => item.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    weight: product.weight,
+                    quantity: 1,
+                    image: product.image
+                });
+            }
+            updateCartUI();
+            showNotification('Added to cart', 'success');
+        };
+        
+        window.removeFromCart = function(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        };
+        
+        window.updateQuantity = function(productId, change) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        };
+        
+        function updateCartUI() {
+            const container = document.getElementById('cart-container');
+            const subtotalEl = document.getElementById('cart-subtotal');
+            
+            if (cart.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center py-3">Your cart is empty</p>';
+                subtotalEl.innerText = '$0.00';
                 return;
             }
             
-            // Simulated autocomplete
-            const mockResults = [
-                'Burj Khalifa, Downtown Dubai',
-                'Dubai Marina, Dubai',
-                'Palm Jumeirah, Dubai',
-                'Jumeirah Beach Residence, Dubai',
-                'Deira, Dubai',
-                'Al Barsha, Dubai'
-            ].filter(item => item.toLowerCase().includes(query.toLowerCase()));
+            let html = '';
+            let subtotal = 0;
             
-            if (mockResults.length > 0) {
-                let html = '';
-                mockResults.forEach(r => {
-                    html += `<div class="suggestion-item" onclick="selectAddressSuggestion('${r}')">${r}</div>`;
-                });
-                suggestionsBox.innerHTML = html;
-                suggestionsBox.style.display = 'block';
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                html += `
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                        <div class="flex-grow-1">
+                            <h6 class="fw-600 mb-0">${item.name}</h6>
+                            <small>$${item.price.toFixed(2)} x ${item.quantity}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="fw-700 me-3">$${(item.price * item.quantity).toFixed(2)}</span>
+                            <button class="btn btn-sm btn-link text-danger p-0 me-2" onclick="updateQuantity(${item.id}, -1)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-link p-0" onclick="updateQuantity(${item.id}, 1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-sm btn-link text-danger ms-2" onclick="removeFromCart(${item.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+        }
+        
+        // ---------- DELIVERY CONFIG ----------
+        function loadDeliveryConfig() {
+            const saved = localStorage.getItem('dubai_delivery_config');
+            if (saved) {
+                deliveryConfig = JSON.parse(saved);
             } else {
-                suggestionsBox.style.display = 'none';
+                deliveryConfig = {
+                    baseRates: {
+                        'Dubai': { standard: 15, express: 25, sameDay: 40 },
+                        'Abu Dhabi': { standard: 25, express: 40, sameDay: 65 },
+                        'Sharjah': { standard: 20, express: 35, sameDay: 55 },
+                        'Karachi': { standard: 45, express: 70, sameDay: null },
+                        'Lahore': { standard: 45, express: 70, sameDay: null },
+                        'Islamabad': { standard: 45, express: 70, sameDay: null },
+                        'Mumbai': { standard: 50, express: 80, sameDay: null },
+                        'London': { standard: 120, express: 190, sameDay: null },
+                        'New York': { standard: 140, express: 220, sameDay: null }
+                    },
+                    eta: {
+                        'Dubai': { standard: '2-3 days', express: '1 day', sameDay: 'Today' },
+                        'Abu Dhabi': { standard: '3-4 days', express: '2 days', sameDay: 'Tomorrow' },
+                        'Sharjah': { standard: '2-3 days', express: '1 day', sameDay: 'Today' },
+                        'Karachi': { standard: '4-6 days', express: '2-3 days', sameDay: null },
+                        'Lahore': { standard: '4-6 days', express: '2-3 days', sameDay: null },
+                        'Islamabad': { standard: '4-6 days', express: '2-3 days', sameDay: null },
+                        'Mumbai': { standard: '4-6 days', express: '2-3 days', sameDay: null },
+                        'London': { standard: '5-7 days', express: '3-4 days', sameDay: null },
+                        'New York': { standard: '5-7 days', express: '3-4 days', sameDay: null }
+                    }
+                };
             }
-        });
-    }
-    
-    function selectAddressSuggestion(address) {
-        document.getElementById('address-search').value = address;
-        document.getElementById('address-suggestions').style.display = 'none';
-        document.getElementById('address-street').value = address;
-    }
-    
-    // ---------- DELIVERY CONFIG (FROM INDEX CONTROL) ----------
-    function loadDeliveryConfig() {
-        // This would come from localStorage or a config file, controlled by index.html
-        const defaultConfig = {
-            baseRates: {
-                'Dubai': { standard: 15, express: 25, sameDay: 40 },
-                'Abu Dhabi': { standard: 25, express: 40, sameDay: 65 },
-                'Sharjah': { standard: 20, express: 35, sameDay: 55 },
-                'International': { standard: 55, express: 85, sameDay: null },
-                'Karachi': { standard: 45, express: 70, sameDay: null },
-                'Lahore': { standard: 45, express: 70, sameDay: null },
-                'Mumbai': { standard: 50, express: 80, sameDay: null },
-                'London': { standard: 120, express: 190, sameDay: null },
-                'New York': { standard: 140, express: 220, sameDay: null }
-            },
-            eta: {
-                'Dubai': { standard: '2-3 days', express: '1 day', sameDay: 'Today' },
-                'Abu Dhabi': { standard: '3-4 days', express: '2 days', sameDay: 'Tomorrow' },
-                'Sharjah': { standard: '2-3 days', express: '1 day', sameDay: 'Today' },
-                'International': { standard: '5-7 days', express: '3-4 days', sameDay: null },
-                'Karachi': { standard: '4-6 days', express: '2-3 days', sameDay: null }
-            }
-        };
-        
-        deliveryChargesConfig = JSON.parse(localStorage.getItem('dubai_delivery_config')) || defaultConfig;
-        etaConfig = deliveryChargesConfig.eta;
-    }
-    
-    function verifyAddressAndCalculate() {
-        const name = document.getElementById('address-name').value.trim();
-        const phone = document.getElementById('address-phone').value.trim();
-        const street = document.getElementById('address-street').value.trim();
-        const city = document.getElementById('address-city').value;
-        const country = document.getElementById('address-country').value;
-        
-        if (!name || !phone || !street || !city) {
-            alert('Please complete all address fields');
-            return;
         }
         
-        // Store address
-        userAddress = {
-            name, phone, street, city, country,
-            coordinates: mapMarker ? mapMarker.getLatLng() : { lat: 25.2048, lng: 55.2708 }
+        // ---------- MAP INITIALIZATION ----------
+        function initAddressMap() {
+            if (map) return;
+            
+            const dubaiCoords = [25.2048, 55.2708];
+            map = L.map('address-map').setView(dubaiCoords, 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            
+            mapMarker = L.marker(dubaiCoords, { draggable: true }).addTo(map);
+            
+            mapMarker.on('dragend', function(e) {
+                const pos = e.target.getLatLng();
+                reverseGeocode(pos.lat, pos.lng);
+            });
+        }
+        
+        function reverseGeocode(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.display_name) {
+                        document.getElementById('address-street').value = data.display_name.split(',')[0];
+                    }
+                })
+                .catch(() => {});
+        }
+        
+        // ---------- ADDRESS VERIFICATION ----------
+        window.verifyAddress = function() {
+            const name = document.getElementById('address-name').value.trim();
+            const phone = document.getElementById('address-phone').value.trim();
+            const email = document.getElementById('address-email').value.trim();
+            const street = document.getElementById('address-street').value.trim();
+            const city = document.getElementById('address-city').value;
+            const country = document.getElementById('address-country').value;
+            
+            if (!name || !phone || !email || !street || !city) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            userAddress = {
+                name, phone, email, street, city, country,
+                coordinates: mapMarker ? mapMarker.getLatLng() : { lat: 25.2048, lng: 55.2708 }
+            };
+            
+            document.getElementById('header-location').innerText = city;
+            
+            // Show delivery options
+            const rates = deliveryConfig.baseRates[city] || deliveryConfig.baseRates['Dubai'];
+            const eta = deliveryConfig.eta[city] || deliveryConfig.eta['Dubai'];
+            
+            let html = '<h6 class="fw-700">Available Delivery:</h6>';
+            if (rates.standard) html += `<p>🚚 Standard: $${rates.standard} (${eta.standard})</p>`;
+            if (rates.express) html += `<p>⚡ Express: $${rates.express} (${eta.express})</p>`;
+            if (rates.sameDay) html += `<p>🕒 Same Day: $${rates.sameDay} (${eta.sameDay})</p>`;
+            
+            document.getElementById('delivery-preview').innerHTML = html;
+            document.getElementById('address-verification-status').innerHTML = 
+                '<span class="text-success"><i class="fas fa-check-circle me-1"></i> Address verified successfully</span>';
+            
+            // Auto proceed
+            setTimeout(() => {
+                switchStep(3);
+                renderDeliveryOptions();
+            }, 1000);
         };
         
-        // Update header
-        document.getElementById('header-location').innerText = city;
+        // ---------- DELIVERY OPTIONS ----------
+        function renderDeliveryOptions() {
+            if (!userAddress) {
+                switchStep(2);
+                return;
+            }
+            
+            const city = userAddress.city;
+            const rates = deliveryConfig.baseRates[city] || deliveryConfig.baseRates['Dubai'];
+            const eta = deliveryConfig.eta[city] || deliveryConfig.eta['Dubai'];
+            
+            let html = '';
+            if (rates.standard) {
+                html += `
+                    <div class="delivery-card mb-3 p-3 border rounded-3" onclick="selectDelivery('standard', ${rates.standard}, '${eta.standard}')">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="fw-700">🚚 Standard Delivery</h6>
+                                <p class="mb-0 text-muted">${eta.standard}</p>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-800 fs-5">$${rates.standard}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (rates.express) {
+                html += `
+                    <div class="delivery-card mb-3 p-3 border rounded-3" onclick="selectDelivery('express', ${rates.express}, '${eta.express}')">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="fw-700">⚡ Express Delivery</h6>
+                                <p class="mb-0 text-muted">${eta.express}</p>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-800 fs-5">$${rates.express}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            if (rates.sameDay) {
+                html += `
+                    <div class="delivery-card mb-3 p-3 border rounded-3" onclick="selectDelivery('sameDay', ${rates.sameDay}, '${eta.sameDay}')">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="fw-700">🕒 Same Day Delivery</h6>
+                                <p class="mb-0 text-muted">${eta.sameDay}</p>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-800 fs-5">$${rates.sameDay}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('delivery-options').innerHTML = html;
+            updateDeliveryOrderSummary();
+        }
         
-        // Calculate delivery
-        const deliveryRates = deliveryChargesConfig.baseRates[city] || deliveryChargesConfig.baseRates['International'];
+        window.selectDelivery = function(type, cost, eta) {
+            document.querySelectorAll('.delivery-card').forEach(el => el.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            selectedDelivery = { type, cost, eta };
+            document.getElementById('delivery-eta').innerText = eta;
+        };
         
-        let html = '<h6 class="fw-700">Available Delivery:</h6>';
-        if (deliveryRates.standard) html += `<p>🚚 Standard: $${deliveryRates.standard} (${etaConfig[city]?.standard || '3-5 days'})</p>`;
-        if (deliveryRates.express) html += `<p>⚡ Express: $${deliveryRates.express} (${etaConfig[city]?.express || '2-3 days'})</p>`;
-        if (deliveryRates.sameDay) html += `<p>🕒 Same Day: $${deliveryRates.sameDay} (${etaConfig[city]?.sameDay || 'Today'})</p>`;
+        function updateDeliveryOrderSummary() {
+            let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let html = '';
+            cart.forEach(item => {
+                html += `<div class="d-flex justify-content-between small mb-1">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>`;
+            });
+            html += `<hr><div class="d-flex justify-content-between fw-700">
+                <span>Subtotal</span>
+                <span>$${subtotal.toFixed(2)}</span>
+            </div>`;
+            document.getElementById('delivery-order-summary').innerHTML = html;
+        }
         
-        document.getElementById('delivery-intelligence').innerHTML = html;
-        document.getElementById('address-summary').innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-1"></i> Address verified: ${street}, ${city}</span>`;
+        window.confirmDeliverySelection = function() {
+            if (!selectedDelivery) {
+                alert('Please select a delivery method');
+                return;
+            }
+            switchStep(4);
+            renderPaymentMethods();
+            updatePaymentSummary();
+        };
         
-        // Automatically go to delivery section after 1 sec
-        setTimeout(() => {
-            switchStep(3);
-        }, 1200);
-    }
-    
-    // ---------- DELIVERY OPTIONS (DYNAMIC) ----------
-    function renderDeliveryOptions() {
-        if (!userAddress) {
-            alert('Please set address first');
+        // ---------- PAYMENT METHODS (COUNTRY BASED) ----------
+        function renderPaymentMethods() {
+            const city = userAddress?.city || 'Dubai';
+            let country = 'UAE';
+            if (['Karachi', 'Lahore', 'Islamabad'].includes(city)) country = 'Pakistan';
+            if (['Mumbai'].includes(city)) country = 'India';
+            if (['London'].includes(city)) country = 'UK';
+            if (['New York'].includes(city)) country = 'USA';
+            
+            document.getElementById('detected-country').innerText = country;
+            
+            // Wallets based on country
+            let walletsHtml = '';
+            if (country === 'UAE') {
+                walletsHtml += `
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Apple Pay')">
+                            <i class="fab fa-apple-pay fa-2x mb-2"></i>
+                            <div>Apple Pay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Google Pay')">
+                            <i class="fab fa-google-pay fa-2x mb-2"></i>
+                            <div>Google Pay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Samsung Pay')">
+                            <i class="fas fa-mobile-alt fa-2x mb-2"></i>
+                            <div>Samsung Pay</div>
+                        </div>
+                    </div>
+                `;
+            } else if (country === 'Pakistan') {
+                walletsHtml += `
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'NayaPay')">
+                            <i class="fas fa-wallet fa-2x mb-2"></i>
+                            <div>NayaPay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'SadaPay')">
+                            <i class="fas fa-credit-card fa-2x mb-2"></i>
+                            <div>SadaPay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Keenu')">
+                            <i class="fas fa-mobile fa-2x mb-2"></i>
+                            <div>Keenu</div>
+                        </div>
+                    </div>
+                `;
+            } else if (country === 'India') {
+                walletsHtml += `
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Paytm')">
+                            <i class="fas fa-rupee-sign fa-2x mb-2"></i>
+                            <div>Paytm</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'PhonePe')">
+                            <i class="fas fa-phone fa-2x mb-2"></i>
+                            <div>PhonePe</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Google Pay')">
+                            <i class="fab fa-google-pay fa-2x mb-2"></i>
+                            <div>Google Pay</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                walletsHtml += `
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Apple Pay')">
+                            <i class="fab fa-apple-pay fa-2x mb-2"></i>
+                            <div>Apple Pay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'Google Pay')">
+                            <i class="fab fa-google-pay fa-2x mb-2"></i>
+                            <div>Google Pay</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('wallet', 'PayPal')">
+                            <i class="fab fa-paypal fa-2x mb-2"></i>
+                            <div>PayPal</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Banks & Cards (Universal)
+            const banksHtml = `
+                <div class="col-6 col-md-4">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('card', 'Visa/Mastercard')">
+                        <i class="fas fa-credit-card fa-2x mb-2"></i>
+                        <div>Credit/Debit</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('bank', 'Bank Transfer')">
+                        <i class="fas fa-university fa-2x mb-2"></i>
+                        <div>Bank Transfer</div>
+                    </div>
+                </div>
+            `;
+            
+            // Crypto (Universal)
+            const cryptoHtml = `
+                <div class="col-6 col-md-3">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('crypto', 'Bitcoin')">
+                        <i class="fab fa-bitcoin fa-2x mb-2"></i>
+                        <div>Bitcoin</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('crypto', 'Ethereum')">
+                        <i class="fab fa-ethereum fa-2x mb-2"></i>
+                        <div>Ethereum</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('crypto', 'USDT')">
+                        <i class="fas fa-dollar-sign fa-2x mb-2"></i>
+                        <div>USDT</div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="wallet-option p-3 border rounded-3 text-center" onclick="selectPayment('crypto', 'BNB')">
+                        <i class="fas fa-coins fa-2x mb-2"></i>
+                        <div>BNB</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('wallets-row').innerHTML = walletsHtml;
+            document.getElementById('banks-row').innerHTML = banksHtml;
+            document.getElementById('crypto-row').innerHTML = cryptoHtml;
+        }
+        
+        window.selectPayment = function(category, method) {
+            document.querySelectorAll('.wallet-option').forEach(el => el.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+            selectedPayment = { category, method };
+            
+            const panel = document.getElementById('payment-details-panel');
+            if (category === 'crypto') {
+                panel.style.display = 'block';
+                panel.innerHTML = `
+                    <h6 class="fw-700">${method} Address</h6>
+                    <div class="bg-dark text-white p-2 rounded-2" style="font-family: monospace;">
+                        0x${Math.random().toString(36).substring(2, 10)}...${Math.random().toString(36).substring(2, 8)}
+                    </div>
+                    <small class="text-muted mt-2 d-block">Send exact amount to this address</small>
+                `;
+            } else if (category === 'bank') {
+                panel.style.display = 'block';
+                panel.innerHTML = `
+                    <h6 class="fw-700">Bank Transfer Details</h6>
+                    <p class="mb-1">Bank: Emirates NBD</p>
+                    <p class="mb-1">Account: AE12 3456 7890 1234 5678</p>
+                    <p class="mb-0">IBAN: AE460090000000123456789</p>
+                `;
+            } else {
+                panel.style.display = 'none';
+            }
+        };
+        
+        function updatePaymentSummary() {
+            const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+            const delivery = selectedDelivery ? selectedDelivery.cost : 0;
+            const tax = subtotal * 0.05;
+            const total = subtotal + delivery + tax;
+            
+            document.getElementById('payment-subtotal').innerText = `$${subtotal.toFixed(2)}`;
+            document.getElementById('payment-delivery').innerText = `$${delivery.toFixed(2)}`;
+            document.getElementById('payment-tax').innerText = `$${tax.toFixed(2)}`;
+            document.getElementById('payment-total').innerText = `$${total.toFixed(2)}`;
+        }
+        
+        // ---------- PROCESS PAYMENT ----------
+        window.processPayment = function() {
+            if (!selectedPayment) {
+                alert('Please select a payment method');
+                return;
+            }
+            
+            const btn = document.getElementById('process-payment-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                // Create order
+                const orderNumber = 'ORD-' + Date.now().toString().slice(-6);
+                const trackingNumber = 'TRK-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+                
+                currentOrder = {
+                    orderNumber,
+                    trackingNumber,
+                    customer: userAddress,
+                    delivery: selectedDelivery,
+                    payment: selectedPayment,
+                    items: cart,
+                    total: parseFloat(document.getElementById('payment-total').innerText.replace('$', '')),
+                    date: new Date().toISOString(),
+                    status: 'confirmed'
+                };
+                
+                // Save to SQL
+                if (db) {
+                    const stmt = db.prepare(`
+                        INSERT INTO orders (order_number, customer_name, customer_phone, customer_email, 
+                        address, city, total, delivery_charge, payment_method, status, tracking_number, 
+                        order_date, estimated_delivery)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    `);
+                    
+                    stmt.run([
+                        orderNumber,
+                        userAddress.name,
+                        userAddress.phone,
+                        userAddress.email,
+                        userAddress.street,
+                        userAddress.city,
+                        currentOrder.total,
+                        selectedDelivery.cost,
+                        selectedPayment.method,
+                        'confirmed',
+                        trackingNumber,
+                        new Date().toISOString(),
+                        selectedDelivery.eta
+                    ]);
+                    stmt.free();
+                }
+                
+                // Update confirmation page
+                document.getElementById('confirm-order-number').innerText = orderNumber;
+                document.getElementById('confirm-tracking').innerText = trackingNumber;
+                document.getElementById('confirm-address').innerText = `${userAddress.street}, ${userAddress.city}`;
+                document.getElementById('confirm-eta').innerText = selectedDelivery.eta;
+                document.getElementById('confirm-total').innerText = `$${currentOrder.total.toFixed(2)}`;
+                
+                // Setup tracking
+                setupTracking(orderNumber, trackingNumber);
+                
+                // Clear cart
+                cart = [];
+                updateCartUI();
+                
+                btn.innerHTML = '<i class="fas fa-lock me-2"></i>Pay Now';
+                btn.disabled = false;
+                
+                switchStep(5);
+            }, 2000);
+        };
+        
+        // ---------- ORDER TRACKING ----------
+        function setupTracking(orderNumber, trackingNumber) {
+            // Set tracking timeline
+            document.getElementById('track-time1').innerHTML = 'Just now';
+            
+            // Simulate tracking updates
+            setTimeout(() => {
+                document.querySelectorAll('.tracking-point')[1].classList.add('active');
+                document.getElementById('track-time2').innerHTML = '5 min ago';
+            }, 3000);
+            
+            setTimeout(() => {
+                document.querySelectorAll('.tracking-point')[2].classList.add('active');
+                document.getElementById('track-time3').innerHTML = '15 min ago';
+            }, 6000);
+            
+            // Order details
+            let itemsHtml = '';
+            cart.forEach(item => {
+                itemsHtml += `<div class="d-flex justify-content-between">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>`;
+            });
+            document.getElementById('tracking-order-details').innerHTML = itemsHtml;
+            
+            // Delivery partner
+            const partners = ['FedEx', 'UPS', 'DHL', 'Aramex'];
+            const partner = partners[Math.floor(Math.random() * partners.length)];
+            document.getElementById('tracking-partner').innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-truck fa-3x mb-2"></i>
+                    <h6 class="fw-700">${partner}</h6>
+                    <p class="mb-0">Tracking: ${trackingNumber}</p>
+                </div>
+            `;
+        }
+        
+        window.viewLiveTracking = function() {
+            switchStep(5);
+        };
+        
+        window.continueToConfirmation = function() {
+            switchStep(6);
+        };
+        
+        // ---------- BACKUP SYSTEM ----------
+        window.createSQLBackup = function() {
+            if (!db) {
+                alert('SQL database not initialized');
+                return;
+            }
+            
+            const data = db.export();
+            const blob = new Blob([data], { type: 'application/x-sqlite3' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dubai_commerce_backup_${new Date().toISOString().slice(0,10)}.sqlite`;
+            a.click();
+            
+            alert('Backup created successfully');
+        };
+        
+        window.restoreSQLBackup = function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.sqlite';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const array = new Uint8Array(e.target.result);
+                    db = new SQL.Database(array);
+                    alert('Backup restored successfully');
+                    loadProductsFromDB();
+                };
+                
+                reader.readAsArrayBuffer(file);
+            };
+            
+            input.click();
+        };
+        
+        // ---------- THEME BUNDLE ----------
+        window.exportTheme = function() {
+            const theme = document.body.getAttribute('data-theme');
+            const themeData = {
+                theme: theme,
+                timestamp: new Date().toISOString(),
+                config: deliveryConfig
+            };
+            
+            const blob = new Blob([JSON.stringify(themeData)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `dubai_theme_${theme}_${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        };
+        
+        window.importTheme = function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const themeData = JSON.parse(e.target.result);
+                        if (themeData.theme) {
+                            switchTheme(themeData.theme);
+                        }
+                        if (themeData.config) {
+                            deliveryConfig = themeData.config;
+                            localStorage.setItem('dubai_delivery_config', JSON.stringify(themeData.config));
+                        }
+                        alert('Theme imported successfully');
+                    } catch (err) {
+                        alert('Invalid theme file');
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        };
+        
+        // ---------- ADMIN PANEL ----------
+        window.toggleAdminPanel = function() {
+            const panel = document.getElementById('admin-panel');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                updateAdminStats();
+            } else {
+                panel.style.display = 'none';
+            }
+        };
+        
+        function updateAdminStats() {
+            if (db) {
+                const result = db.exec("SELECT COUNT(*) as orders, SUM(total) as revenue FROM orders WHERE date(order_date) = date('now')");
+                if (result.length > 0) {
+                    document.getElementById('stats-orders').innerText = result[0].values[0][0] || 0;
+                    document.getElementById('stats-revenue').innerText = result[0].values[0][1] || 0;
+                }
+            }
+        }
+        
+        // ---------- STEP NAVIGATION ----------
+        function switchStep(step) {
+            // Hide all sections
+            document.querySelectorAll('#shop-section, #address-section, #delivery-section, #payment-section, #tracking-section, #confirmation-section')
+                .forEach(el => el.classList.add('hidden-section'));
+            
+            // Show selected
+            const sections = {
+                1: 'shop-section',
+                2: 'address-section',
+                3: 'delivery-section',
+                4: 'payment-section',
+                5: 'tracking-section',
+                6: 'confirmation-section'
+            };
+            
+            document.getElementById(sections[step]).classList.remove('hidden-section');
+            
+            // Update progress
+            document.querySelectorAll('.progress-pearl').forEach((el, idx) => {
+                el.classList.remove('active', 'completed');
+                if (idx + 1 < step) el.classList.add('completed');
+                if (idx + 1 === step) el.classList.add('active');
+            });
+            
+            currentStep = step;
+            
+            // Initialize map if needed
+            if (step === 2) {
+                setTimeout(() => initAddressMap(), 100);
+            }
+        }
+        
+        window.proceedToCheckout = function() {
+            if (cart.length === 0) {
+                alert('Your cart is empty');
+                return;
+            }
             switchStep(2);
-            return;
-        }
+        };
         
-        const city = userAddress.city;
-        const rates = deliveryChargesConfig.baseRates[city] || deliveryChargesConfig.baseRates['International'];
-        const eta = etaConfig[city] || etaConfig['International'];
+        window.backToShop = function() { switchStep(1); };
+        window.backToAddress = function() { switchStep(2); };
+        window.backToDelivery = function() { switchStep(3); };
         
-        let container = document.getElementById('delivery-options-container');
-        let html = '';
-        
-        if (rates.standard) {
-            html += `
-                <div class="delivery-card" onclick="selectDelivery('standard', ${rates.standard}, '${eta.standard || '3-5 days'}')">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h6 class="fw-700">🚚 Standard Delivery</h6>
-                            <p class="mb-0 text-muted">${eta.standard || '3-5 business days'}</p>
-                        </div>
-                        <div class="text-end">
-                            <span class="fw-800 fs-5">$${rates.standard}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        if (rates.express) {
-            html += `
-                <div class="delivery-card" onclick="selectDelivery('express', ${rates.express}, '${eta.express || '2-3 days'}')">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h6 class="fw-700">⚡ Express Delivery</h6>
-                            <p class="mb-0 text-muted">${eta.express || '2-3 days'}</p>
-                        </div>
-                        <div class="text-end">
-                            <span class="fw-800 fs-5">$${rates.express}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        if (rates.sameDay) {
-            html += `
-                <div class="delivery-card" onclick="selectDelivery('sameDay', ${rates.sameDay}, '${eta.sameDay || 'Today'}')">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                            <h6 class="fw-700">🕒 Same Day Delivery</h6>
-                            <p class="mb-0 text-muted">${eta.sameDay || 'Within 24h'}</p>
-                        </div>
-                        <div class="text-end">
-                            <span class="fw-800 fs-5">$${rates.sameDay}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        container.innerHTML = html;
-        
-        // Update order summary
-        updateDeliveryOrderSummary();
-    }
-    
-    function selectDelivery(type, cost, eta) {
-        // Remove selected class
-        document.querySelectorAll('.delivery-card').forEach(el => el.classList.remove('selected'));
-        event.currentTarget.classList.add('selected');
-        
-        selectedDelivery = { type, cost, eta };
-        document.getElementById('eta-display').innerText = eta;
-        
-        // Update payment summary later
-    }
-    
-    function confirmDelivery() {
-        if (!selectedDelivery) {
-            alert('Please select a delivery method');
-            return;
-        }
-        switchStep(4);
-        updatePaymentSummary();
-    }
-    
-    function updateDeliveryOrderSummary() {
-        let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        let html = '';
-        cart.forEach(item => {
-            html += `<div class="d-flex justify-content-between small mb-1"><span>${item.name} x${item.quantity}</span><span>$${(item.price * item.quantity).toFixed(2)}</span></div>`;
-        });
-        html += `<hr><div class="d-flex justify-content-between fw-700"><span>Subtotal</span><span>$${subtotal.toFixed(2)}</span></div>`;
-        document.getElementById('delivery-order-summary').innerHTML = html;
-    }
-    
-    // ---------- PAYMENT METHODS (ADAPTIVE) ----------
-    function renderPaymentMethods() {
-        const country = userAddress?.city || 'Dubai';
-        let detectedCountry = 'UAE';
-        if (['Karachi', 'Lahore', 'Islamabad'].includes(country)) detectedCountry = 'Pakistan';
-        if (['Mumbai'].includes(country)) detectedCountry = 'India';
-        if (['London'].includes(country)) detectedCountry = 'UK';
-        if (['New York'].includes(country)) detectedCountry = 'USA';
-        
-        document.getElementById('detected-country-name').innerText = detectedCountry;
-        
-        // Wallets Container - No JazzCash/Easypaisa sticking, dynamic per country
-        let walletsHtml = '';
-        let cardsHtml = '';
-        let cryptoHtml = '';
-        
-        if (detectedCountry === 'UAE') {
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Apple Pay')"><div class="wallet-icon"><i class="fab fa-apple-pay"></i></div><span>Apple Pay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Google Pay')"><div class="wallet-icon"><i class="fab fa-google-pay"></i></div><span>Google Pay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Samsung Pay')"><div class="wallet-icon"><i class="fas fa-mobile-alt"></i></div><span>Samsung Pay</span></div>`;
-        } else if (detectedCountry === 'Pakistan') {
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'NayaPay')"><div class="wallet-icon"><i class="fas fa-wallet"></i></div><span>NayaPay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'SadaPay')"><div class="wallet-icon"><i class="fas fa-credit-card"></i></div><span>SadaPay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Keenu Wallet')"><div class="wallet-icon"><i class="fas fa-mobile"></i></div><span>Keenu</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Finja')"><div class="wallet-icon"><i class="fas fa-building"></i></div><span>Finja</span></div>`;
-        } else if (detectedCountry === 'India') {
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Paytm')"><div class="wallet-icon"><i class="fas fa-rupee-sign"></i></div><span>Paytm</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'PhonePe')"><div class="wallet-icon"><i class="fas fa-phone"></i></div><span>PhonePe</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Google Pay')"><div class="wallet-icon"><i class="fab fa-google-pay"></i></div><span>Google Pay</span></div>`;
-        } else {
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Apple Pay')"><div class="wallet-icon"><i class="fab fa-apple-pay"></i></div><span>Apple Pay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'Google Pay')"><div class="wallet-icon"><i class="fab fa-google-pay"></i></div><span>Google Pay</span></div>`;
-            walletsHtml += `<div class="wallet-option" onclick="selectPayment('wallet', 'PayPal')"><div class="wallet-icon"><i class="fab fa-paypal"></i></div><span>PayPal</span></div>`;
-        }
-        
-        // Cards & Banks - Universal
-        cardsHtml = `
-            <div class="wallet-option" onclick="selectPayment('card', 'Visa/Mastercard')"><div class="wallet-icon"><i class="fas fa-credit-card"></i></div><span>Credit/Debit</span></div>
-            <div class="wallet-option" onclick="selectPayment('bank', 'Bank Transfer')"><div class="wallet-icon"><i class="fas fa-university"></i></div><span>Bank Transfer</span></div>
-        `;
-        
-        // Crypto - Universal
-        cryptoHtml = `
-            <div class="wallet-option" onclick="selectPayment('crypto', 'Bitcoin')"><div class="wallet-icon"><i class="fab fa-bitcoin"></i></div><span>Bitcoin</span></div>
-            <div class="wallet-option" onclick="selectPayment('crypto', 'Ethereum')"><div class="wallet-icon"><i class="fab fa-ethereum"></i></div><span>Ethereum</span></div>
-            <div class="wallet-option" onclick="selectPayment('crypto', 'USDT')"><div class="wallet-icon"><i class="fas fa-dollar-sign"></i></div><span>USDT (TRC20)</span></div>
-            <div class="wallet-option" onclick="selectPayment('crypto', 'BNB')"><div class="wallet-icon"><i class="fas fa-coins"></i></div><span>BNB</span></div>
-        `;
-        
-        document.getElementById('wallets-container').innerHTML = walletsHtml;
-        document.getElementById('cards-container').innerHTML = cardsHtml;
-        document.getElementById('crypto-container').innerHTML = cryptoHtml;
-    }
-    
-    function selectPayment(category, method) {
-        // Remove selected class from all wallet options
-        document.querySelectorAll('.wallet-option').forEach(el => el.classList.remove('selected'));
-        event.currentTarget.classList.add('selected');
-        
-        selectedPayment = { category, method };
-        
-        // Show details panel
-        const panel = document.getElementById('payment-details-panel');
-        if (category === 'crypto') {
-            panel.style.display = 'block';
-            panel.innerHTML = `
-                <h6 class="fw-700">${method} Address</h6>
-                <div class="crypto-address">0x${Math.random().toString(36).substring(2, 10)}...${Math.random().toString(36).substring(2, 8)}</div>
-                <small class="text-muted">Network: ${method === 'Bitcoin' ? 'BTC' : method === 'Ethereum' ? 'ERC20' : method === 'USDT' ? 'TRC20' : 'BSC'}</small>
-            `;
-        } else if (category === 'bank') {
-            panel.style.display = 'block';
-            panel.innerHTML = `
-                <h6 class="fw-700">Bank Transfer Details</h6>
-                <p class="mb-1">Bank: Emirates NBD / Standard Chartered</p>
-                <p class="mb-1">Account: AE12 3456 7890 1234 5678</p>
-                <p class="mb-0">IBAN: AE460090000000123456789</p>
-            `;
-        } else {
-            panel.style.display = 'none';
-        }
-    }
-    
-    function updatePaymentSummary() {
-        const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
-        const delivery = selectedDelivery ? selectedDelivery.cost : 0;
-        const tax = subtotal * 0.05; // 5% VAT
-        const total = subtotal + delivery + tax;
-        
-        document.getElementById('payment-subtotal').innerText = `$${subtotal.toFixed(2)}`;
-        document.getElementById('payment-delivery').innerText = `$${delivery.toFixed(2)}`;
-        document.getElementById('payment-tax').innerText = `$${tax.toFixed(2)}`;
-        document.getElementById('payment-total').innerHTML = `$${total.toFixed(2)}`;
-    }
-    
-    function processSecurePayment() {
-        if (!selectedPayment) {
-            alert('Please select a payment method');
-            return;
-        }
-        
-        const btn = document.getElementById('pay-now-btn');
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing...';
-        btn.disabled = true;
-        
-        // Simulate gateway
-        setTimeout(() => {
-            // Generate order
-            const orderNumber = 'ORD-' + Date.now().toString().slice(-6);
-            document.getElementById('confirm-order-number').innerText = orderNumber;
-            document.getElementById('confirm-address').innerText = `${userAddress?.street}, ${userAddress?.city}`;
-            document.getElementById('confirm-delivery').innerText = selectedDelivery?.type.toUpperCase() || 'Express';
-            document.getElementById('confirm-payment').innerText = selectedPayment?.method || 'Wallet';
-            document.getElementById('confirm-eta').innerText = selectedDelivery?.eta || 'Tomorrow';
-            
-            const total = cart.reduce((s,i) => s + (i.price * i.quantity), 0) + (selectedDelivery?.cost || 0) + (cart.reduce((s,i) => s + (i.price * i.quantity), 0) * 0.05);
-            document.getElementById('confirm-total').innerHTML = `$${total.toFixed(2)}`;
-            
-            // Clear cart
+        window.resetSystem = function() {
             cart = [];
+            userAddress = null;
+            selectedDelivery = null;
+            selectedPayment = null;
+            currentOrder = null;
+            updateCartUI();
+            switchStep(1);
+        };
+        
+        window.downloadReceipt = function() {
+            const receipt = `
+                DUBAI ROYAL COMMERCE
+                Order: ${currentOrder?.orderNumber}
+                Date: ${new Date().toLocaleString()}
+                Total: $${currentOrder?.total.toFixed(2)}
+                Thank you for shopping with us!
+            `;
+            
+            const blob = new Blob([receipt], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `receipt_${currentOrder?.orderNumber}.txt`;
+            a.click();
+        };
+        
+        function showNotification(msg, type) {
+            // Simple alert for now
+            console.log(msg);
+        }
+        
+        // ---------- INITIALIZE SYSTEM ----------
+        document.addEventListener('DOMContentLoaded', function() {
+            initSQLDatabase();
+            loadDeliveryConfig();
             updateCartUI();
             
-            btn.innerHTML = '<i class="fas fa-lock me-2"></i>Pay Securely';
-            btn.disabled = false;
-            
-            switchStep(5);
-        }, 2000);
-    }
-    
-    // ---------- UTILITIES ----------
-    function showToast(msg, type) {
-        // Simple alert for now
-        console.log(msg);
-    }
-    
-    function trackOrderNow() {
-        alert('📦 Your order is being prepared. Tracking link sent via SMS/Email.');
-    }
-    
-    function resetToShop() {
-        cart = [];
-        userAddress = null;
-        selectedDelivery = null;
-        selectedPayment = null;
-        updateCartUI();
-        switchStep(1);
-    }
-    
-    // Load delivery config from localStorage (simulate index control)
-    window.controlDeliveryConfig = function(config) {
-        localStorage.setItem('dubai_delivery_config', JSON.stringify(config));
-        loadDeliveryConfig();
-    };
-</script>
-
-<!-- Optional Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            // Check for WPA installability
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                // Already installed
+            }
+        });
+    </script>
 </body>
 </html>
