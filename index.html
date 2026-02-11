@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Create Digital Card</title>
+<title>Create Digital Business Card</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2563eb">
@@ -27,13 +27,13 @@ body{
 h2{
   margin-top:20px;
   margin-bottom:10px;
-  color:#0f172a; /* DARK COLOR FOR VISIBILITY */
+  color:#0f172a;
   display:flex;
   align-items:center;
   gap:10px;
   font-size:18px;
   font-weight:600;
-  background: rgba(255, 255, 255, 0.95); /* SOLID WHITE BACKGROUND */
+  background: rgba(255, 255, 255, 0.95);
   padding: 12px 16px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -148,41 +148,31 @@ button:hover {
   outline: none;
 }
 
-/* Offers - Horizontal Scroll like Facebook Ads */
-.offers-container {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 10px 0;
+/* Products - Grid Layout */
+.products-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
   margin-top: 10px;
-  scrollbar-width: thin;
 }
 
-.offers-container::-webkit-scrollbar {
-  height: 6px;
-}
-
-.offers-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
-}
-
-.offers-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-}
-
-.offer-box {
-  min-width: 280px;
+.product-box {
   background: white;
   border-radius: 16px;
-  padding: 16px;
+  padding: 20px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  border: 1px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s;
 }
 
-.offer-box h3 {
+.product-box:hover {
+  border-color: #667eea;
+  box-shadow: 0 8px 25px rgba(102,126,234,0.2);
+}
+
+.product-box h3 {
   margin-top: 0;
+  margin-bottom: 15px;
   color: #1e293b;
   font-size: 16px;
   font-weight: 600;
@@ -190,15 +180,71 @@ button:hover {
   align-items: center;
   gap: 8px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.remove-product {
+  background: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s;
+}
+
+.remove-product:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.price-field {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.price-field label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.price-field input {
+  margin: 0;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #e2e8f0;
 }
 
 .badgeGrid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
-  margin-top:10px;
-  font-size:14px;
+  margin-top:15px;
+  padding-top:15px;
+  border-top:1px solid #e2e8f0;
 }
 .badgeGrid label{
   display:flex;
@@ -219,21 +265,74 @@ button:hover {
   accent-color: #667eea;
 }
 
+/* Delivery Settings Section */
+.delivery-settings {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  border: 2px solid #e2e8f0;
+}
+
+.delivery-settings h3 {
+  color: #1e293b;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delivery-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.delivery-field {
+  background: white;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.delivery-field label {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.delivery-field input {
+  margin: 0;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+}
+
 .dayBox{
   background:#fff;
-  padding:10px;
-  border-radius:10px;
-  margin-bottom:8px;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:10px;
   display:grid;
   grid-template-columns:28px 1fr;
-  gap:8px;
+  gap:12px;
   align-items:center;
-  border:1px solid #e2e8f0;
+  border:2px solid #e2e8f0;
+  transition: all 0.2s;
 }
+
+.dayBox:hover {
+  border-color: #667eea;
+}
+
 .dayCheck{display:flex;justify-content:center}
-.dayContent{display:flex;flex-direction:column;gap:6px}
-.dayRow{display:flex;align-items:center;gap:8px}
-.dayRow label{font-weight:500;min-width:80px; color: #475569;}
+.dayContent{display:flex;flex-direction:column;gap:8px}
+.dayRow{display:flex;align-items:center;gap:12px}
+.dayRow label{font-weight:600;min-width:80px; color: #475569;}
 
 .holidayBox{
   background:#fff;
@@ -259,12 +358,16 @@ button:hover {
   background:#10b981;
   color:white;
   border:none;
-  padding:8px 16px;
-  border-radius:8px;
+  padding:10px 20px;
+  border-radius:10px;
   cursor:pointer;
   font-size:14px;
-  font-weight:500;
+  font-weight:600;
   transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: auto;
 }
 .addHolidayBtn:hover {
   background: #0da271;
@@ -273,16 +376,16 @@ button:hover {
 .holidayItem{
   display:grid;
   grid-template-columns:1fr 120px auto;
-  gap:10px;
+  gap:12px;
   align-items:center;
-  margin:8px 0;
-  padding:10px;
+  margin:10px 0;
+  padding:12px;
   background:#f8fafc;
-  border-radius:10px;
-  border:1px solid #e2e8f0;
+  border-radius:12px;
+  border:2px solid #e2e8f0;
 }
 .holidayItem input[type="text"]{
-  padding:10px;
+  padding:12px;
   border:1px solid #e2e8f0;
   border-radius:8px;
   font-size:14px;
@@ -290,7 +393,7 @@ button:hover {
   color: #1e293b;
 }
 .holidayItem input[type="date"]{
-  padding:10px;
+  padding:12px;
   border:1px solid #e2e8f0;
   border-radius:8px;
   font-size:14px;
@@ -318,6 +421,7 @@ button:hover {
   background:#dc2626;
   transform: scale(1.05);
 }
+
 @media (max-width:480px){
   .holidayItem{
     grid-template-columns:1fr;
@@ -328,6 +432,12 @@ button:hover {
   }
   .social-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .delivery-row {
+    grid-template-columns: 1fr;
+  }
+  .price-grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -439,6 +549,69 @@ input[type="file"]:hover {
 h2 i {
   color: #667eea;
 }
+
+/* Info Box */
+.info-box {
+  background: #e0f2fe;
+  border-left: 4px solid #3b82f6;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 15px 0;
+  font-size: 13px;
+  color: #1e293b;
+}
+
+.info-box i {
+  color: #3b82f6;
+  margin-right: 8px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 15px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 10px;
+}
+
+.toggle-switch input[type="checkbox"] {
+  width: 50px;
+  height: 24px;
+  appearance: none;
+  background: #cbd5e1;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked {
+  background: #10b981;
+}
+
+.toggle-switch input[type="checkbox"]::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s;
+}
+
+.toggle-switch input[type="checkbox"]:checked::before {
+  left: 28px;
+}
+
+.toggle-switch span {
+  font-weight: 600;
+  color: #1e293b;
+}
 </style>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -447,15 +620,17 @@ h2 i {
 <body>
 <div class="wrap">
 
+<!-- Profile Information -->
 <div class="form-section">
 <h2><i class="fas fa-user" style="color:#667eea;"></i> Profile Information</h2>
 <input type="file" id="profileImage" accept="image/*">
-<input id="fullName" placeholder="Full Name">
-<input id="phoneNumber" placeholder="Phone Number" type="tel">
+<input id="fullName" placeholder="Full Name *" required>
+<input id="phoneNumber" placeholder="Phone Number *" type="tel" required>
 <input id="email" placeholder="Email Address" type="email">
 <input id="address" placeholder="Business Address">
 </div>
 
+<!-- Business Details -->
 <div class="form-section">
 <h2><i class="fas fa-building" style="color:#667eea;"></i> Business Details</h2>
 <input id="businessName" placeholder="Business Title">
@@ -492,11 +667,13 @@ h2 i {
 </div>
 </div>
 
+<!-- Business Hours -->
 <div class="form-section">
 <h2><i class="fas fa-clock" style="color:#667eea;"></i> Business Hours</h2>
 <div id="daysContainer"></div>
 </div>
 
+<!-- Special Holidays -->
 <div class="form-section">
 <h2><i class="fas fa-calendar-times" style="color:#667eea;"></i> Special Holidays</h2>
 <div id="holidaysContainer">
@@ -506,21 +683,67 @@ h2 i {
    <button type="button" class="removeHoliday" onclick="removeHoliday(this)">×</button>
   </div>
 </div>
-<button type="button" class="addHolidayBtn" onclick="addHoliday()">+ Add Holiday</button>
+<button type="button" class="addHolidayBtn" onclick="addHoliday()"><i class="fas fa-plus"></i> Add Holiday</button>
 </div>
 
+<!-- Delivery Settings - NEW SECTION -->
+<div class="form-section">
+<h2><i class="fas fa-truck" style="color:#667eea;"></i> Delivery Settings</h2>
+<div class="delivery-settings">
+  <h3><i class="fas fa-map-marker-alt"></i> Delivery Charges</h3>
+  
+  <div class="delivery-row">
+    <div class="delivery-field">
+      <label><i class="fas fa-city"></i> Within City</label>
+      <input type="number" id="deliveryChargeCity" placeholder="150" value="150" min="0">
+      <small style="color:#64748b;">PKR</small>
+    </div>
+    <div class="delivery-field">
+      <label><i class="fas fa-map-marked-alt"></i> Other Cities</label>
+      <input type="number" id="deliveryChargeOther" placeholder="300" value="300" min="0">
+      <small style="color:#64748b;">PKR</small>
+    </div>
+  </div>
+  
+  <div class="delivery-row">
+    <div class="delivery-field">
+      <label><i class="fas fa-clock"></i> Within City Time</label>
+      <input type="text" id="deliveryTimeCity" placeholder="1-2 days" value="1-2 days">
+    </div>
+    <div class="delivery-field">
+      <label><i class="fas fa-clock"></i> Other Cities Time</label>
+      <input type="text" id="deliveryTimeOther" placeholder="3-5 days" value="3-5 days">
+    </div>
+  </div>
+  
+  <div class="delivery-field">
+    <label><i class="fas fa-gift"></i> Free Delivery Minimum</label>
+    <input type="number" id="freeDeliveryMin" placeholder="2000" value="2000" min="0">
+    <small style="color:#64748b;">Minimum order amount for free delivery (PKR)</small>
+  </div>
+  
+  <div class="info-box">
+    <i class="fas fa-info-circle"></i>
+    Delivery charges will be calculated based on customer's address and order total.
+  </div>
+</div>
+</div>
+
+<!-- Products & Offers -->
 <div class="form-section">
 <h2><i class="fas fa-gift" style="color:#667eea;"></i> Products & Offers</h2>
-<div id="offersForm"></div>
-<button type="button" onclick="addOffer()" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);margin-top:12px">
+<div id="productsContainer" class="products-container"></div>
+<button type="button" onclick="addProduct()" style="background:linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);margin-top:12px">
  <i class="fas fa-plus"></i> Add Product
 </button>
 </div>
 
-<button type="button" onclick="openPaymentModal()" style="background:linear-gradient(135deg, #059669 0%, #10b981 100%);margin-top:24px;position:relative;" id="paymentButton">
+<!-- Payment & WhatsApp -->
+<button type="button" onclick="openPaymentModal()" style="background:linear-gradient(135deg, #059669 0%, #10b981 100%);margin-top:24px;" id="paymentButton">
   <i class="fas fa-credit-card"></i> Configure Payment & WhatsApp
 </button>
 
+<!-- Generate Card -->
 <button type="button" onclick="generate()" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);margin-top:24px">
  <i class="fas fa-magic"></i> Generate Digital Card
 </button>
@@ -538,9 +761,17 @@ h2 i {
       <h3 style="color: #1e293b; margin-bottom: 15px; font-size: 18px; font-weight: 600;">💳 Payment Methods</h3>
       
       <div style="margin:20px 0;">
-        <label style="font-weight:600;display:block;margin-bottom:8px;color: #475569;">WhatsApp Number</label>
+        <label style="font-weight:600;display:block;margin-bottom:8px;color: #475569;">WhatsApp Business Number *</label>
         <input type="text" id="whatsappNumber" placeholder="+92 300 1234567" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:10px;color: #1e293b;">
-        <small style="color:#666;display:block;margin-top:5px;">This number will be used for orders and customer service</small>
+        <small style="color:#666;display:block;margin-top:5px;">This number receives order confirmations and customer inquiries</small>
+      </div>
+      
+      <div class="whatsapp-preview">
+        <h4><i class="fab fa-whatsapp"></i> WhatsApp Greeting Preview</h4>
+        <div class="preview-message" id="whatsappPreview">
+          Hello! 👋 Welcome to [Business Name]. 
+          How may I assist you today?
+        </div>
       </div>
       
       <div style="margin:20px 0;">
@@ -556,20 +787,26 @@ h2 i {
         <div style="margin:15px 0;">
           <label style="font-weight:600;display:block;margin-bottom:8px;color: #475569;">QR Code / Barcode</label>
           <input type="file" id="jazzcashBarcode" accept="image/*" style="width:100%;padding:10px;border:2px dashed #e2e8f0;border-radius:10px;background:white;">
+          <small style="color:#666;margin-top:5px;display:block;">Upload JazzCash/EasyPaisa QR code for easy payments</small>
         </div>
       </div>
       
-      <div class="whatsapp-preview">
-        <h4><i class="fab fa-whatsapp"></i> WhatsApp Message Preview</h4>
-        <div class="preview-message">
-          Hello! 👋 Welcome to [Business Name]. 
-          How may I assist you today?
+      <div style="margin:20px 0;">
+        <h4 style="color: #1e293b; margin-bottom: 10px; font-size: 16px; font-weight: 600;">🔧 Additional Settings</h4>
+        
+        <div class="toggle-switch">
+          <input type="checkbox" id="enableCOD" checked>
+          <span>Enable Cash on Delivery</span>
         </div>
-        <small style="color:#666;">Professional greeting message for customers</small>
+        
+        <div style="margin-top:15px;">
+          <label style="font-weight:600;display:block;margin-bottom:8px;color: #475569;">Order Confirmation Message</label>
+          <textarea id="orderConfirmationMessage" rows="3" style="width:100%;padding:12px;border:2px solid #e2e8f0;border-radius:10px;color: #1e293b;">Thank you for your order! ✅ We have received your order and will process it shortly. Your order details have been confirmed. We'll update you on the delivery status via WhatsApp.</textarea>
+        </div>
       </div>
       
       <button onclick="savePaymentMethods()" style="width:100%;padding:15px;background:linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:white;border:none;border-radius:12px;font-size:16px;font-weight:600;margin-top:20px;cursor:pointer;">
-        <i class="fab fa-whatsapp"></i> Save & Configure WhatsApp
+        <i class="fab fa-whatsapp"></i> Save Payment Configuration
       </button>
     </div>
   </div>
@@ -582,8 +819,10 @@ const db = supabase.createClient(
  "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
 
-// Initialize business hours
+// ========== BUSINESS HOURS ==========
 const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const daysContainer = document.getElementById('daysContainer');
+
 days.forEach(d => {
  const dayBox = document.createElement("div");
  dayBox.className = "dayBox";
@@ -623,7 +862,7 @@ days.forEach(d => {
  });
 });
 
-// Holiday management
+// ========== HOLIDAY MANAGEMENT ==========
 function addHoliday() {
  const container = document.getElementById('holidaysContainer');
  const holidayItem = document.createElement('div');
@@ -640,41 +879,67 @@ function removeHoliday(button) {
  button.parentElement.remove();
 }
 
-// Product/Offer management
+// ========== PRODUCT MANAGEMENT ==========
 let productCount = 0;
-function addOffer(){
+
+function addProduct(){
  productCount++;
- const box = document.createElement("div");
- box.className = "offer-box";
- box.innerHTML = `
-  <h3><i class="fas fa-tag"></i> Product ${productCount}</h3>
-  <input type="file" class="productImg" accept="image/*" style="width:100%;margin:10px 0;">
-  <input class="productTitle" placeholder="Product Title" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
+ const container = document.getElementById('productsContainer');
+ const productBox = document.createElement("div");
+ productBox.className = "product-box";
+ productBox.innerHTML = `
+  <div class="product-header">
+   <h3><i class="fas fa-tag"></i> Product ${productCount}</h3>
+   <button type="button" class="remove-product" onclick="removeProduct(this)">
+    <i class="fas fa-trash"></i> Remove
+   </button>
+  </div>
+  
+  <div style="margin-bottom:15px;">
+   <label style="font-weight:600;color:#475569;margin-bottom:5px;display:block;">Product Image</label>
+   <input type="file" class="productImg" accept="image/*" style="width:100%;">
+  </div>
+  
+  <input class="productTitle" placeholder="Product Title *" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
   <textarea class="productDesc" placeholder="Product Description" rows="2" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;"></textarea>
   
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;">
-    <input type="number" class="originalPrice" placeholder="Original Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
-    <input type="number" class="discountPrice" placeholder="Discounted Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
+  <div class="price-grid">
+   <div class="price-field">
+    <label>Original Price (PKR)</label>
+    <input type="number" class="originalPrice" placeholder="2999" style="width:100%;">
+   </div>
+   <div class="price-field">
+    <label>Discounted Price (PKR)</label>
+    <input type="number" class="discountPrice" placeholder="1999" style="width:100%;">
+   </div>
   </div>
   
-  <div class="badgeGrid">
-   <label><input type="checkbox" value="🔥 Hot Deal"> Hot Deal</label>
-   <label><input type="checkbox" value="⭐ Best Seller"> Best Seller</label>
-   <label><input type="checkbox" value="💸 Discount"> Discount</label>
-   <label><input type="checkbox" value="⏳ Limited Stock"> Limited Stock</label>
-   <label><input type="checkbox" value="🛒 In Stock"> In Stock</label>
-   <label><input type="checkbox" value="🚚 Free Delivery"> Free Delivery</label>
+  <div style="margin-top:10px;">
+   <label style="font-weight:600;color:#475569;">Product Badges</label>
+   <div class="badgeGrid">
+    <label><input type="checkbox" value="🔥 Hot Deal"> 🔥 Hot Deal</label>
+    <label><input type="checkbox" value="⭐ Best Seller"> ⭐ Best Seller</label>
+    <label><input type="checkbox" value="💸 Discount"> 💸 Discount</label>
+    <label><input type="checkbox" value="⏳ Limited Stock"> ⏳ Limited Stock</label>
+    <label><input type="checkbox" value="🛒 In Stock"> 🛒 In Stock</label>
+    <label><input type="checkbox" value="🚚 Free Delivery"> 🚚 Free Delivery</label>
+   </div>
   </div>
  `;
- offersForm.appendChild(box);
- 
- // Apply horizontal scrolling
- document.getElementById('offersForm').classList.add('offers-container');
+ container.appendChild(productBox);
 }
 
-// Image compression
+function removeProduct(button) {
+ if(confirm('Remove this product?')) {
+   button.closest('.product-box').remove();
+   productCount--;
+ }
+}
+
+// ========== IMAGE COMPRESSION ==========
 function resizeImage(file){
- return new Promise(res => {
+ return new Promise((resolve, reject) => {
+  if(!file) resolve('');
   const img = new Image();
   img.onload = () => {
    const canvas = document.createElement("canvas");
@@ -684,25 +949,33 @@ function resizeImage(file){
    canvas.height = img.height * ratio;
    const ctx = canvas.getContext("2d");
    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-   res(canvas.toDataURL("image/jpeg", 0.85));
+   resolve(canvas.toDataURL("image/jpeg", 0.85));
   };
+  img.onerror = reject;
   img.src = URL.createObjectURL(file);
  });
 }
 
-// Payment Modal Functions
+// ========== PAYMENT MODAL ==========
 function openPaymentModal() {
   document.getElementById('paymentModal').style.display = 'flex';
+  
+  // Update WhatsApp preview with business name
+  const businessName = document.getElementById('businessName').value || 'our business';
+  document.getElementById('whatsappPreview').innerHTML = 
+    `Hello! 👋 Welcome to ${businessName}. How may I assist you today?`;
 }
 
 function closePaymentModal() {
   document.getElementById('paymentModal').style.display = 'none';
 }
 
-async function savePaymentMethods() {
+function savePaymentMethods() {
   const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
   const jazzcashType = document.getElementById('mobileWalletType').value;
   const jazzcashNumber = document.getElementById('jazzcashNumber').value.trim();
+  const enableCOD = document.getElementById('enableCOD').checked;
+  const orderConfirmationMessage = document.getElementById('orderConfirmationMessage').value;
   
   if(!whatsappNumber) {
     alert('Please enter WhatsApp number for customer service');
@@ -713,28 +986,39 @@ async function savePaymentMethods() {
     whatsapp: { 
       active: true, 
       number: whatsappNumber,
-      greeting: "Hello! 👋 Welcome to " + (document.getElementById('businessName').value || 'our business') + ". How may I assist you today?"
+      greeting: "Hello! 👋 Welcome to " + (document.getElementById('businessName').value || 'our business') + ". How may I assist you today?",
+      confirmationMessage: orderConfirmationMessage
     },
     jazzcash: { 
       active: jazzcashNumber.length > 0, 
       type: jazzcashType,
       barcode: '',
       number: jazzcashNumber
+    },
+    cod: {
+      active: enableCOD
     }
   };
   
   // Save barcode if exists
   const barcodeFile = document.getElementById('jazzcashBarcode').files[0];
   if(barcodeFile) {
-    paymentMethods.jazzcash.barcode = await resizeImage(barcodeFile);
+    resizeImage(barcodeFile).then(barcode => {
+      paymentMethods.jazzcash.barcode = barcode;
+      savePaymentToStorage(paymentMethods);
+    });
+  } else {
+    savePaymentToStorage(paymentMethods);
   }
-  
+}
+
+function savePaymentToStorage(paymentMethods) {
   localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
-  alert('✅ Payment methods saved! WhatsApp configured professionally.');
+  alert('✅ Payment methods saved successfully!');
   closePaymentModal();
 }
 
-// Generate card
+// ========== GENERATE CARD ==========
 async function generate(){
  if(!fullName.value || !phoneNumber.value){
   alert("Name & Phone number are required");
@@ -774,9 +1058,18 @@ async function generate(){
   }
  });
 
+ // Collect delivery settings
+ const deliverySettings = {
+   deliveryChargeCity: parseFloat(document.getElementById('deliveryChargeCity').value) || 150,
+   deliveryChargeOther: parseFloat(document.getElementById('deliveryChargeOther').value) || 300,
+   deliveryTimeCity: document.getElementById('deliveryTimeCity').value || "1-2 days",
+   deliveryTimeOther: document.getElementById('deliveryTimeOther').value || "3-5 days",
+   freeDeliveryMin: parseFloat(document.getElementById('freeDeliveryMin').value) || 2000
+ };
+
  // Collect products
  const productsArray = [];
- const productBoxes = document.querySelectorAll(".offer-box");
+ const productBoxes = document.querySelectorAll(".product-box");
  
  for(let i = 0; i < productBoxes.length; i++){
   const box = productBoxes[i];
@@ -793,8 +1086,8 @@ async function generate(){
    const productData = {
     title: title || "",
     desc: desc || "",
-    originalPrice: originalPrice || null,
-    discountPrice: discountPrice || null,
+    originalPrice: originalPrice ? parseFloat(originalPrice) : null,
+    discountPrice: discountPrice ? parseFloat(discountPrice) : null,
     badges: badges,
     image: ""
    };
@@ -809,8 +1102,9 @@ async function generate(){
 
  // Load payment methods
  let paymentMethods = {
-   whatsapp: { active: false, number: '', greeting: '' },
-   jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' }
+   whatsapp: { active: false, number: '', greeting: '', confirmationMessage: '' },
+   jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' },
+   cod: { active: true }
  };
  
  const savedPayment = localStorage.getItem('paymentMethods');
@@ -828,7 +1122,7 @@ async function generate(){
    tiktok: document.getElementById('tiktok').value.trim()
  };
 
- // Prepare card data
+ // Prepare card data - COMPLETE E-COMMERCE SETUP
  const cardData = {
   name: fullName.value.trim(),
   phone: phoneNumber.value.trim(),
@@ -844,7 +1138,10 @@ async function generate(){
   holidays: holidaysArray,
   products: productsArray,
   payments: paymentMethods,
-  ecommerce: true
+  deliverySettings: deliverySettings,
+  ecommerce: true,
+  version: "2.0",
+  createdAt: new Date().toISOString()
  };
 
  // Add profile image
@@ -866,21 +1163,52 @@ async function generate(){
 
  // Store ID and redirect
  localStorage.setItem("lastCardId", inserted.id);
+ 
+ // Clear payment methods from localStorage after successful save
+ localStorage.removeItem('paymentMethods');
+ 
+ // Redirect to card view
  location.href = "card.html?id=" + inserted.id;
 }
 
-// Initialize
+// ========== INITIALIZATION ==========
 document.addEventListener('DOMContentLoaded', function() {
-  // Make offers horizontal
-  document.getElementById('offersForm').classList.add('offers-container');
+  // Add initial product
+  addProduct();
   
-  // Add current date to holiday date fields
+  // Set today's date for holiday fields
   const today = new Date().toISOString().split('T')[0];
   const holidayDateFields = document.querySelectorAll('.holidayDate');
   holidayDateFields.forEach(field => {
     if(!field.value) {
       field.value = today;
     }
+  });
+  
+  // Load saved payment methods if any
+  const savedPayment = localStorage.getItem('paymentMethods');
+  if(savedPayment) {
+    const payment = JSON.parse(savedPayment);
+    if(payment.whatsapp?.number) {
+      document.getElementById('whatsappNumber').value = payment.whatsapp.number;
+    }
+    if(payment.jazzcash?.number) {
+      document.getElementById('jazzcashNumber').value = payment.jazzcash.number;
+      document.getElementById('mobileWalletType').value = payment.jazzcash.type || 'jazzcash';
+    }
+    if(payment.cod?.active !== undefined) {
+      document.getElementById('enableCOD').checked = payment.cod.active;
+    }
+    if(payment.whatsapp?.confirmationMessage) {
+      document.getElementById('orderConfirmationMessage').value = payment.whatsapp.confirmationMessage;
+    }
+  }
+  
+  // Update WhatsApp preview when business name changes
+  document.getElementById('businessName').addEventListener('input', function() {
+    const businessName = this.value || 'our business';
+    document.getElementById('whatsappPreview').innerHTML = 
+      `Hello! 👋 Welcome to ${businessName}. How may I assist you today?`;
   });
 });
 </script>
