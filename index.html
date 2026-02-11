@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,17 +23,53 @@ body{
   padding:20px;
 }
 
-/* CLEAR VISIBLE HEADINGS WITH DARK COLOR */
+/* BACKUP BUTTON STYLES */
+.backup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.backup-btn {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(220,38,38,0.3);
+  width: auto;
+  margin-top: 0;
+}
+
+.backup-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220,38,38,0.4);
+}
+
+.backup-btn i {
+  font-size: 16px;
+}
+
 h2{
   margin-top:20px;
   margin-bottom:10px;
-  color:#0f172a; /* DARK COLOR FOR VISIBILITY */
+  color:#0f172a;
   display:flex;
   align-items:center;
   gap:10px;
   font-size:18px;
   font-weight:600;
-  background: rgba(255, 255, 255, 0.95); /* SOLID WHITE BACKGROUND */
+  background: rgba(255, 255, 255, 0.95);
   padding: 12px 16px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -149,7 +184,6 @@ button:hover {
   outline: none;
 }
 
-/* Offers - Horizontal Scroll like Facebook Ads */
 .offers-container {
   display: flex;
   gap: 16px;
@@ -320,7 +354,6 @@ button:hover {
   transform: scale(1.05);
 }
 
-/* Delivery Settings Section */
 .delivery-settings {
   background: white;
   border-radius: 16px;
@@ -380,7 +413,6 @@ button:hover {
   }
 }
 
-/* Payment Modal */
 .payment-modal {
   display: none;
   position: fixed;
@@ -436,7 +468,6 @@ button:hover {
   background: rgba(255,255,255,0.3);
 }
 
-/* WhatsApp Preview */
 .whatsapp-preview {
   margin: 20px;
   padding: 15px;
@@ -461,7 +492,6 @@ button:hover {
   line-height: 1.5;
 }
 
-/* Form Labels */
 .form-label {
   color: #0f172a;
   font-weight: 600;
@@ -470,7 +500,6 @@ button:hover {
   font-size: 14px;
 }
 
-/* File Input Styling */
 input[type="file"] {
   padding: 10px;
   background: white;
@@ -484,12 +513,10 @@ input[type="file"]:hover {
   background: #f8fafc;
 }
 
-/* Icon colors in headings */
 h2 i {
   color: #667eea;
 }
 
-/* Success Message */
 .success-message {
   position: fixed;
   top: 20px;
@@ -514,7 +541,6 @@ h2 i {
   to { top: 20px; opacity: 1; }
 }
 
-/* Loading Overlay */
 .loading-overlay {
   display: none;
   position: fixed;
@@ -557,6 +583,16 @@ h2 i {
 
 <body>
 <div class="wrap">
+
+<!-- BACKUP BUTTON - ADDED HERE -->
+<div class="backup-header">
+  <h1 style="font-size:20px; color:white; margin:0; text-shadow:0 2px 5px rgba(0,0,0,0.2);">
+    <i class="fas fa-id-card"></i> Digital Card Creator
+  </h1>
+  <a href="backup-system.html" class="backup-btn">
+    <i class="fas fa-shield-alt"></i> BACKUP
+  </a>
+</div>
 
 <!-- Success Message -->
 <div class="success-message" id="successMessage"></div>
@@ -735,7 +771,8 @@ h2 i {
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-const db = supabase.createClient(
+// ========== SUPABASE CONNECTION ==========
+const supabase = supabase.createClient(
  "https://dfvnefbxgayxqgjjgtrr.supabase.co",
  "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
@@ -913,188 +950,211 @@ async function savePaymentMethods() {
   closePaymentModal();
 }
 
-// Generate card - MAIN FUNCTION
-async function generate(){
- // Validate required fields
- if(!document.getElementById('fullName').value || !document.getElementById('phoneNumber').value){
-  alert("Name & Phone number are required");
-  return;
- }
-
- if(!document.getElementById('businessName').value){
-  alert("Business title is required");
-  return;
- }
-
- showLoading();
-
- try {
-   const id = crypto.randomUUID();
-
-   // Collect business hours
-   const businessHoursArray = [];
-   const dayBoxes = document.querySelectorAll(".dayBox");
-   dayBoxes.forEach(box => {
-    const open = box.querySelector(".dayOpen").checked;
-    const status = box.querySelector(".dayStatus").value;
-    const start = box.querySelector(".dayStart").value;
-    const end = box.querySelector(".dayEnd").value;
-    
-    businessHoursArray.push({
-     open: open && status === 'open',
-     status: status,
-     start: (open && status === 'open') ? start : null,
-     end: (open && status === 'open') ? end : null
-    });
-   });
-
-   // Collect holidays
-   const holidaysArray = [];
-   const holidayItems = document.querySelectorAll(".holidayItem");
-   holidayItems.forEach(item => {
-    const name = item.querySelector(".holidayName").value;
-    const date = item.querySelector(".holidayDate").value;
-    if(name.trim() && date) {
-     holidaysArray.push({
-      name: name.trim(),
-      date: date
-     });
+// ========== FIXED GENERATE FUNCTION ==========
+async function generate() {
+    // Validate required fields
+    if(!document.getElementById('fullName').value || !document.getElementById('phoneNumber').value){
+        alert("Name & Phone number are required");
+        return;
     }
-   });
 
-   // Collect products
-   const productsArray = [];
-   const productBoxes = document.querySelectorAll(".offer-box");
-   
-   for(let i = 0; i < productBoxes.length; i++){
-    const box = productBoxes[i];
-    const title = box.querySelector(".productTitle").value;
-    const desc = box.querySelector(".productDesc").value;
-    const file = box.querySelector(".productImg").files[0];
-    const originalPrice = box.querySelector(".originalPrice").value;
-    const discountPrice = box.querySelector(".discountPrice").value;
-    
-    if(title || desc || file){
-     const badges = Array.from(box.querySelectorAll("input[type=checkbox]:checked"))
-      .map(cb => cb.value);
-     
-     const productData = {
-      title: title || "",
-      desc: desc || "",
-      originalPrice: originalPrice || null,
-      discountPrice: discountPrice || null,
-      badges: badges,
-      image: ""
-     };
-     
-     if(file){
-      productData.image = await resizeImage(file);
-     }
-     
-     productsArray.push(productData);
+    if(!document.getElementById('businessName').value){
+        alert("Business title is required");
+        return;
     }
-   }
 
-   // Load payment methods
-   let paymentMethods = {
-     whatsapp: { active: false, number: '', greeting: '' },
-     jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' }
-   };
-   
-   const savedPayment = localStorage.getItem('paymentMethods');
-   if(savedPayment) {
-     paymentMethods = JSON.parse(savedPayment);
-   }
+    showLoading();
 
-   // Social Media
-   const socialMedia = {
-     facebook: document.getElementById('facebook').value.trim(),
-     instagram: document.getElementById('instagram').value.trim(),
-     twitter: document.getElementById('twitter').value.trim(),
-     linkedin: document.getElementById('linkedin').value.trim(),
-     youtube: document.getElementById('youtube').value.trim(),
-     tiktok: document.getElementById('tiktok').value.trim()
-   };
+    try {
+        const id = crypto.randomUUID();
 
-   // Delivery Settings
-   const deliverySettings = {
-     deliveryChargeCity: parseInt(document.getElementById('deliveryChargeCity').value) || 150,
-     deliveryChargeOther: parseInt(document.getElementById('deliveryChargeOther').value) || 300,
-     deliveryTimeCity: document.getElementById('deliveryTimeCity').value.trim() || "1-2 days",
-     deliveryTimeOther: document.getElementById('deliveryTimeOther').value.trim() || "3-5 days",
-     freeDeliveryMin: parseInt(document.getElementById('freeDeliveryMin').value) || 2000
-   };
+        // Collect business hours
+        const businessHoursArray = [];
+        const dayBoxes = document.querySelectorAll(".dayBox");
+        dayBoxes.forEach(box => {
+            const open = box.querySelector(".dayOpen").checked;
+            const status = box.querySelector(".dayStatus").value;
+            const start = box.querySelector(".dayStart").value;
+            const end = box.querySelector(".dayEnd").value;
+            
+            businessHoursArray.push({
+                open: open && status === 'open',
+                status: status,
+                start: (open && status === 'open') ? start : null,
+                end: (open && status === 'open') ? end : null
+            });
+        });
 
-   // Prepare card data
-   const cardData = {
-    name: document.getElementById('fullName').value.trim(),
-    phone: document.getElementById('phoneNumber').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    address: document.getElementById('address').value.trim(),
-    website: document.getElementById('website').value.trim(),
-    businessName: document.getElementById('businessName').value.trim(),
-    business: {
-     about: document.getElementById('businessAbout').value.trim()
-    },
-    socialMedia: socialMedia,
-    businessHours: businessHoursArray,
-    holidays: holidaysArray,
-    products: productsArray,
-    payments: paymentMethods,
-    deliverySettings: deliverySettings,
-    ecommerce: true
-   };
+        // Collect holidays
+        const holidaysArray = [];
+        const holidayItems = document.querySelectorAll(".holidayItem");
+        holidayItems.forEach(item => {
+            const name = item.querySelector(".holidayName").value;
+            const date = item.querySelector(".holidayDate").value;
+            if(name.trim() && date) {
+                holidaysArray.push({
+                    name: name.trim(),
+                    date: date
+                });
+            }
+        });
 
-   // Add profile image
-   if(document.getElementById('profileImage').files[0]){
-    cardData.profileImage = await resizeImage(document.getElementById('profileImage').files[0]);
-   }
+        // Collect products
+        const productsArray = [];
+        const productBoxes = document.querySelectorAll(".offer-box");
+        
+        for(let i = 0; i < productBoxes.length; i++){
+            const box = productBoxes[i];
+            const title = box.querySelector(".productTitle")?.value || "";
+            const desc = box.querySelector(".productDesc")?.value || "";
+            const file = box.querySelector(".productImg")?.files[0];
+            const originalPrice = box.querySelector(".originalPrice")?.value || "";
+            const discountPrice = box.querySelector(".discountPrice")?.value || "";
+            
+            if(title || desc || file){
+                const badges = Array.from(box.querySelectorAll("input[type=checkbox]:checked"))
+                    .map(cb => cb.value);
+                
+                const productData = {
+                    title: title,
+                    desc: desc,
+                    originalPrice: originalPrice || null,
+                    discountPrice: discountPrice || null,
+                    badges: badges,
+                    image: ""
+                };
+                
+                if(file){
+                    productData.image = await resizeImage(file);
+                }
+                
+                productsArray.push(productData);
+            }
+        }
 
-   // Save to Supabase
-   const { data: inserted, error } = await db.from("cards").insert({
-     id: id,
-     data: JSON.stringify(cardData)
-   }).select().single();
+        // Load payment methods
+        let paymentMethods = {
+            whatsapp: { active: false, number: '', greeting: '' },
+            jazzcash: { active: false, type: 'jazzcash', barcode: '', number: '' }
+        };
+        
+        const savedPayment = localStorage.getItem('paymentMethods');
+        if(savedPayment) {
+            paymentMethods = JSON.parse(savedPayment);
+        }
 
-   if(error){
-     hideLoading();
-     console.error("Supabase error:", error);
-     alert("Failed to save card: " + error.message);
-     return;
-   }
+        // Social Media
+        const socialMedia = {
+            facebook: document.getElementById('facebook')?.value.trim() || '',
+            instagram: document.getElementById('instagram')?.value.trim() || '',
+            twitter: document.getElementById('twitter')?.value.trim() || '',
+            linkedin: document.getElementById('linkedin')?.value.trim() || '',
+            youtube: document.getElementById('youtube')?.value.trim() || '',
+            tiktok: document.getElementById('tiktok')?.value.trim() || ''
+        };
 
-   // Store ID and redirect
-   localStorage.setItem("lastCardId", inserted.id);
-   
-   hideLoading();
-   showSuccess('✅ Digital card created successfully! Redirecting...');
-   
-   // Generate short URL
-   try {
-     const shortId = generateShortId();
-     await db.from("short_urls").insert({
-       short_id: shortId,
-       full_id: inserted.id
-     });
-     
-     // Redirect to short URL
-     setTimeout(() => {
-       location.href = "card.html?id=" + shortId;
-     }, 1500);
-     
-   } catch (shortUrlError) {
-     // Fallback to full ID if short URL fails
-     console.log("Short URL creation failed, using full ID:", shortUrlError);
-     setTimeout(() => {
-       location.href = "card.html?id=" + inserted.id;
-     }, 1500);
-   }
+        // Delivery Settings
+        const deliverySettings = {
+            deliveryChargeCity: parseInt(document.getElementById('deliveryChargeCity')?.value) || 150,
+            deliveryChargeOther: parseInt(document.getElementById('deliveryChargeOther')?.value) || 300,
+            deliveryTimeCity: document.getElementById('deliveryTimeCity')?.value.trim() || "1-2 days",
+            deliveryTimeOther: document.getElementById('deliveryTimeOther')?.value.trim() || "3-5 days",
+            freeDeliveryMin: parseInt(document.getElementById('freeDeliveryMin')?.value) || 2000
+        };
 
- } catch (error) {
-   hideLoading();
-   console.error("Error generating card:", error);
-   alert("An error occurred while creating your digital card. Please try again.");
- }
+        // Prepare card data
+        const cardData = {
+            name: document.getElementById('fullName')?.value.trim() || '',
+            phone: document.getElementById('phoneNumber')?.value.trim() || '',
+            email: document.getElementById('email')?.value.trim() || '',
+            address: document.getElementById('address')?.value.trim() || '',
+            website: document.getElementById('website')?.value.trim() || '',
+            businessName: document.getElementById('businessName')?.value.trim() || '',
+            business: {
+                about: document.getElementById('businessAbout')?.value.trim() || ''
+            },
+            socialMedia: socialMedia,
+            businessHours: businessHoursArray,
+            holidays: holidaysArray,
+            products: productsArray,
+            payments: paymentMethods,
+            deliverySettings: deliverySettings,
+            ecommerce: true,
+            createdAt: new Date().toISOString()
+        };
+
+        // Add profile image
+        if(document.getElementById('profileImage')?.files[0]){
+            cardData.profileImage = await resizeImage(document.getElementById('profileImage').files[0]);
+        }
+
+        console.log("Saving card data:", cardData);
+
+        // Save to Supabase
+        const { data: inserted, error } = await supabase
+            .from("cards")
+            .insert({
+                id: id,
+                data: JSON.stringify(cardData),
+                views: 0,
+                created_at: new Date().toISOString()
+            })
+            .select()
+            .single();
+
+        if(error){
+            hideLoading();
+            console.error("Supabase error:", error);
+            alert("Failed to save card: " + error.message);
+            return;
+        }
+
+        console.log("Card saved successfully:", inserted);
+
+        // Store ID in localStorage
+        localStorage.setItem("lastCardId", inserted.id);
+        
+        hideLoading();
+        showSuccess('✅ Digital card created successfully! Redirecting...');
+        
+        // Generate short ID and redirect
+        try {
+            const shortId = generateShortId();
+            
+            // Save short URL
+            const { error: shortError } = await supabase
+                .from("short_urls")
+                .insert({
+                    short_id: shortId,
+                    full_id: inserted.id,
+                    created_at: new Date().toISOString()
+                });
+            
+            if (shortError) {
+                console.log("Short URL error, using full ID:", shortError);
+                // Redirect with full ID
+                setTimeout(() => {
+                    window.location.href = "card.html?id=" + inserted.id;
+                }, 1500);
+            } else {
+                // Redirect with short ID
+                setTimeout(() => {
+                    window.location.href = "card.html?id=" + shortId;
+                }, 1500);
+            }
+            
+        } catch (shortUrlError) {
+            console.log("Short URL creation failed, using full ID:", shortUrlError);
+            setTimeout(() => {
+                window.location.href = "card.html?id=" + inserted.id;
+            }, 1500);
+        }
+
+    } catch (error) {
+        hideLoading();
+        console.error("Error generating card:", error);
+        alert("An error occurred while creating your digital card. Please try again.");
+    }
 }
 
 // Generate short ID (6 characters)
