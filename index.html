@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
+/* ALL YOUR EXISTING STYLES - KEEP THEM EXACTLY AS THEY ARE */
 body{
   margin:0;
   font-family:'Poppins',system-ui;
@@ -140,7 +141,6 @@ button:hover {
   border: 2px solid rgba(255,255,255,0.2);
 }
 
-/* Social Media Section */
 .social-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -584,7 +584,7 @@ h2 i {
 <body>
 <div class="wrap">
 
-<!-- BACKUP BUTTON - ADDED HERE -->
+<!-- BACKUP BUTTON -->
 <div class="backup-header">
   <h1 style="font-size:20px; color:white; margin:0; text-shadow:0 2px 5px rgba(0,0,0,0.2);">
     <i class="fas fa-id-card"></i> Digital Card Creator
@@ -771,183 +771,183 @@ h2 i {
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
-// ========== SUPABASE CONNECTION ==========
-const supabase = supabase.createClient(
- "https://dfvnefbxgayxqgjjgtrr.supabase.co",
- "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
+// ========== SINGLE SUPABASE INSTANCE - FIXED ==========
+const supabase = supabaseCreateClient || supabase.createClient(
+    "https://dfvnefbxgayxqgjjgtrr.supabase.co",
+    "sb_publishable_WypeFELCIlVDlqGY4PdWwA_snqoPUSE"
 );
 
 // Show success message
 function showSuccess(message) {
-  const successMessage = document.getElementById('successMessage');
-  successMessage.textContent = message;
-  successMessage.style.display = 'block';
-  
-  setTimeout(() => {
-    successMessage.style.display = 'none';
-  }, 3000);
+    const successMessage = document.getElementById('successMessage');
+    successMessage.textContent = message;
+    successMessage.style.display = 'block';
+    
+    setTimeout(() => {
+        successMessage.style.display = 'none';
+    }, 3000);
 }
 
 // Show loading overlay
 function showLoading() {
-  document.getElementById('loadingOverlay').style.display = 'flex';
+    document.getElementById('loadingOverlay').style.display = 'flex';
 }
 
 // Hide loading overlay
 function hideLoading() {
-  document.getElementById('loadingOverlay').style.display = 'none';
+    document.getElementById('loadingOverlay').style.display = 'none';
 }
 
 // Initialize business hours
 const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 days.forEach(d => {
- const dayBox = document.createElement("div");
- dayBox.className = "dayBox";
- dayBox.innerHTML = `
-  <div class="dayCheck">
-   <input type="checkbox" checked class="dayOpen">
-  </div>
-  <div class="dayContent">
-   <div class="dayRow">
-    <label style="min-width:100px">${d}</label>
-    <select class="dayStatus" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
-     <option value="open">Open</option>
-     <option value="closed">Closed</option>
-    </select>
-   </div>
-   <div class="dayRow">
-    <input type="time" class="dayStart" value="09:00" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
-    <span>to</span>
-    <input type="time" class="dayEnd" value="17:00" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
-   </div>
-  </div>
- `;
- daysContainer.appendChild(dayBox);
- 
- const statusSelect = dayBox.querySelector('.dayStatus');
- const timeInputs = dayBox.querySelectorAll('.dayStart, .dayEnd');
- const openCheckbox = dayBox.querySelector('.dayOpen');
- 
- statusSelect.addEventListener('change', function() {
-  if(this.value === 'closed') {
-   timeInputs.forEach(input => input.disabled = true);
-   openCheckbox.checked = false;
-  } else {
-   timeInputs.forEach(input => input.disabled = false);
-   openCheckbox.checked = true;
-  }
- });
+    const dayBox = document.createElement("div");
+    dayBox.className = "dayBox";
+    dayBox.innerHTML = `
+        <div class="dayCheck">
+            <input type="checkbox" checked class="dayOpen">
+        </div>
+        <div class="dayContent">
+            <div class="dayRow">
+                <label style="min-width:100px">${d}</label>
+                <select class="dayStatus" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
+                    <option value="open">Open</option>
+                    <option value="closed">Closed</option>
+                </select>
+            </div>
+            <div class="dayRow">
+                <input type="time" class="dayStart" value="09:00" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
+                <span>to</span>
+                <input type="time" class="dayEnd" value="17:00" style="width:100px;padding:6px;border:1px solid #e2e8f0;border-radius:6px;">
+            </div>
+        </div>
+    `;
+    daysContainer.appendChild(dayBox);
+    
+    const statusSelect = dayBox.querySelector('.dayStatus');
+    const timeInputs = dayBox.querySelectorAll('.dayStart, .dayEnd');
+    const openCheckbox = dayBox.querySelector('.dayOpen');
+    
+    statusSelect.addEventListener('change', function() {
+        if(this.value === 'closed') {
+            timeInputs.forEach(input => input.disabled = true);
+            openCheckbox.checked = false;
+        } else {
+            timeInputs.forEach(input => input.disabled = false);
+            openCheckbox.checked = true;
+        }
+    });
 });
 
 // Holiday management
 function addHoliday() {
- const container = document.getElementById('holidaysContainer');
- const holidayItem = document.createElement('div');
- holidayItem.className = 'holidayItem';
- holidayItem.innerHTML = `
-  <input type="text" class="holidayName" placeholder="E.g., Eid ul-Fitr">
-  <input type="date" class="holidayDate" value="${new Date().toISOString().split('T')[0]}">
-  <button type="button" class="removeHoliday" onclick="removeHoliday(this)">×</button>
- `;
- container.appendChild(holidayItem);
+    const container = document.getElementById('holidaysContainer');
+    const holidayItem = document.createElement('div');
+    holidayItem.className = 'holidayItem';
+    holidayItem.innerHTML = `
+        <input type="text" class="holidayName" placeholder="E.g., Eid ul-Fitr">
+        <input type="date" class="holidayDate" value="${new Date().toISOString().split('T')[0]}">
+        <button type="button" class="removeHoliday" onclick="removeHoliday(this)">×</button>
+    `;
+    container.appendChild(holidayItem);
 }
 
 function removeHoliday(button) {
- button.parentElement.remove();
+    button.parentElement.remove();
 }
 
 // Product/Offer management
 let productCount = 0;
-function addOffer(){
- productCount++;
- const box = document.createElement("div");
- box.className = "offer-box";
- box.innerHTML = `
-  <h3><i class="fas fa-tag"></i> Product ${productCount}</h3>
-  <input type="file" class="productImg" accept="image/*" style="width:100%;margin:10px 0;">
-  <input class="productTitle" placeholder="Product Title" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
-  <textarea class="productDesc" placeholder="Product Description" rows="2" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;"></textarea>
-  
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;">
-    <input type="number" class="originalPrice" placeholder="Original Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
-    <input type="number" class="discountPrice" placeholder="Discounted Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
-  </div>
-  
-  <div class="badgeGrid">
-   <label><input type="checkbox" value="🔥 Hot Deal"> Hot Deal</label>
-   <label><input type="checkbox" value="⭐ Best Seller"> Best Seller</label>
-   <label><input type="checkbox" value="💸 Discount"> Discount</label>
-   <label><input type="checkbox" value="⏳ Limited Stock"> Limited Stock</label>
-   <label><input type="checkbox" value="🛒 In Stock"> In Stock</label>
-   <label><input type="checkbox" value="🚚 Free Delivery"> Free Delivery</label>
-  </div>
- `;
- offersForm.appendChild(box);
- 
- // Apply horizontal scrolling
- document.getElementById('offersForm').classList.add('offers-container');
+function addOffer() {
+    productCount++;
+    const box = document.createElement("div");
+    box.className = "offer-box";
+    box.innerHTML = `
+        <h3><i class="fas fa-tag"></i> Product ${productCount}</h3>
+        <input type="file" class="productImg" accept="image/*" style="width:100%;margin:10px 0;">
+        <input class="productTitle" placeholder="Product Title" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
+        <textarea class="productDesc" placeholder="Product Description" rows="2" style="margin:8px 0;padding:12px;border:1px solid #e2e8f0;border-radius:8px;"></textarea>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0;">
+            <input type="number" class="originalPrice" placeholder="Original Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
+            <input type="number" class="discountPrice" placeholder="Discounted Price" style="padding:12px;border:1px solid #e2e8f0;border-radius:8px;">
+        </div>
+        
+        <div class="badgeGrid">
+            <label><input type="checkbox" value="🔥 Hot Deal"> Hot Deal</label>
+            <label><input type="checkbox" value="⭐ Best Seller"> Best Seller</label>
+            <label><input type="checkbox" value="💸 Discount"> Discount</label>
+            <label><input type="checkbox" value="⏳ Limited Stock"> Limited Stock</label>
+            <label><input type="checkbox" value="🛒 In Stock"> In Stock</label>
+            <label><input type="checkbox" value="🚚 Free Delivery"> Free Delivery</label>
+        </div>
+    `;
+    offersForm.appendChild(box);
+    
+    // Apply horizontal scrolling
+    document.getElementById('offersForm').classList.add('offers-container');
 }
 
 // Image compression
-function resizeImage(file){
- return new Promise(res => {
-  const img = new Image();
-  img.onload = () => {
-   const canvas = document.createElement("canvas");
-   const max = 1024;
-   const ratio = Math.min(max/img.width, max/img.height, 1);
-   canvas.width = img.width * ratio;
-   canvas.height = img.height * ratio;
-   const ctx = canvas.getContext("2d");
-   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-   res(canvas.toDataURL("image/jpeg", 0.85));
-  };
-  img.src = URL.createObjectURL(file);
- });
+function resizeImage(file) {
+    return new Promise(res => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const max = 1024;
+            const ratio = Math.min(max/img.width, max/img.height, 1);
+            canvas.width = img.width * ratio;
+            canvas.height = img.height * ratio;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            res(canvas.toDataURL("image/jpeg", 0.85));
+        };
+        img.src = URL.createObjectURL(file);
+    });
 }
 
 // Payment Modal Functions
 function openPaymentModal() {
-  document.getElementById('paymentModal').style.display = 'flex';
+    document.getElementById('paymentModal').style.display = 'flex';
 }
 
 function closePaymentModal() {
-  document.getElementById('paymentModal').style.display = 'none';
+    document.getElementById('paymentModal').style.display = 'none';
 }
 
 async function savePaymentMethods() {
-  const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
-  const jazzcashType = document.getElementById('mobileWalletType').value;
-  const jazzcashNumber = document.getElementById('jazzcashNumber').value.trim();
-  
-  if(!whatsappNumber) {
-    alert('Please enter WhatsApp number for customer service');
-    return;
-  }
-  
-  const paymentMethods = {
-    whatsapp: { 
-      active: true, 
-      number: whatsappNumber,
-      greeting: "Hello! 👋 Welcome to " + (document.getElementById('businessName').value || 'our business') + ". How may I assist you today?"
-    },
-    jazzcash: { 
-      active: jazzcashNumber.length > 0, 
-      type: jazzcashType,
-      barcode: '',
-      number: jazzcashNumber
+    const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+    const jazzcashType = document.getElementById('mobileWalletType').value;
+    const jazzcashNumber = document.getElementById('jazzcashNumber').value.trim();
+    
+    if(!whatsappNumber) {
+        alert('Please enter WhatsApp number for customer service');
+        return;
     }
-  };
-  
-  // Save barcode if exists
-  const barcodeFile = document.getElementById('jazzcashBarcode').files[0];
-  if(barcodeFile) {
-    paymentMethods.jazzcash.barcode = await resizeImage(barcodeFile);
-  }
-  
-  localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
-  showSuccess('✅ Payment methods saved! WhatsApp configured professionally.');
-  closePaymentModal();
+    
+    const paymentMethods = {
+        whatsapp: { 
+            active: true, 
+            number: whatsappNumber,
+            greeting: "Hello! 👋 Welcome to " + (document.getElementById('businessName').value || 'our business') + ". How may I assist you today?"
+        },
+        jazzcash: { 
+            active: jazzcashNumber.length > 0, 
+            type: jazzcashType,
+            barcode: '',
+            number: jazzcashNumber
+        }
+    };
+    
+    // Save barcode if exists
+    const barcodeFile = document.getElementById('jazzcashBarcode').files[0];
+    if(barcodeFile) {
+        paymentMethods.jazzcash.barcode = await resizeImage(barcodeFile);
+    }
+    
+    localStorage.setItem('paymentMethods', JSON.stringify(paymentMethods));
+    showSuccess('✅ Payment methods saved! WhatsApp configured professionally.');
+    closePaymentModal();
 }
 
 // ========== FIXED GENERATE FUNCTION ==========
@@ -1090,7 +1090,7 @@ async function generate() {
 
         console.log("Saving card data:", cardData);
 
-        // Save to Supabase
+        // Save to Supabase - USING supabase, not db
         const { data: inserted, error } = await supabase
             .from("cards")
             .insert({
@@ -1159,63 +1159,63 @@ async function generate() {
 
 // Generate short ID (6 characters)
 function generateShortId() {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let shortId = '';
-  for (let i = 0; i < 6; i++) {
-    shortId += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return shortId;
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let shortId = '';
+    for (let i = 0; i < 6; i++) {
+        shortId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return shortId;
 }
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
-  // Make offers horizontal
-  document.getElementById('offersForm').classList.add('offers-container');
-  
-  // Add current date to holiday date fields
-  const today = new Date().toISOString().split('T')[0];
-  const holidayDateFields = document.querySelectorAll('.holidayDate');
-  holidayDateFields.forEach(field => {
-    if(!field.value) {
-      field.value = today;
-    }
-  });
-  
-  // Add one initial product
-  addOffer();
-  
-  // Form validation
-  const generateButton = document.getElementById('generateButton');
-  const requiredFields = ['fullName', 'phoneNumber', 'businessName'];
-  
-  function validateForm() {
-    let isValid = true;
-    requiredFields.forEach(fieldId => {
-      const field = document.getElementById(fieldId);
-      if (!field.value.trim()) {
-        isValid = false;
-        field.style.borderColor = '#ef4444';
-      } else {
-        field.style.borderColor = 'rgba(102, 126, 234, 0.3)';
-      }
+    // Make offers horizontal
+    document.getElementById('offersForm').classList.add('offers-container');
+    
+    // Add current date to holiday date fields
+    const today = new Date().toISOString().split('T')[0];
+    const holidayDateFields = document.querySelectorAll('.holidayDate');
+    holidayDateFields.forEach(field => {
+        if(!field.value) {
+            field.value = today;
+        }
     });
-    return isValid;
-  }
-  
-  // Validate on input
-  requiredFields.forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    field.addEventListener('input', validateForm);
-  });
-  
-  // Validate before generating
-  generateButton.addEventListener('click', function(e) {
-    if (!validateForm()) {
-      e.preventDefault();
-      showSuccess('❌ Please fill in all required fields (marked in red)');
-      return false;
+    
+    // Add one initial product
+    addOffer();
+    
+    // Form validation
+    const generateButton = document.getElementById('generateButton');
+    const requiredFields = ['fullName', 'phoneNumber', 'businessName'];
+    
+    function validateForm() {
+        let isValid = true;
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (!field.value.trim()) {
+                isValid = false;
+                field.style.borderColor = '#ef4444';
+            } else {
+                field.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+            }
+        });
+        return isValid;
     }
-  });
+    
+    // Validate on input
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        field.addEventListener('input', validateForm);
+    });
+    
+    // Validate before generating
+    generateButton.addEventListener('click', function(e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            showSuccess('❌ Please fill in all required fields (marked in red)');
+            return false;
+        }
+    });
 });
 </script>
 </body>
